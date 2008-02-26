@@ -9,4 +9,15 @@ class Array
     end
   end
   
+  def mean
+    return GSL::Stats.mean1(self)
+  end
+  
+  def variance
+    return GSL::Stats.variance1(self)
+  end
+  
+  def sd
+    return GSL::Stats::sd1(self)
+  end
 end
