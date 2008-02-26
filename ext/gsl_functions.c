@@ -278,6 +278,7 @@ void Init_gsl_functions() {
   Init_Poly();         /* Polynomials */
   Init_GSLRandom();    /* everything related to random numbers */
   Init_Siman();        /* Simulated Annealing */
+  Init_Similarity();   /* Similarity Functions */
   Init_Solver();       /* Root-Finding */
   Init_Sort();         /* Sorting */
   Init_Special();      /* Special Functions */
