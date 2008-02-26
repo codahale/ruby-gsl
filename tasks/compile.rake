@@ -8,8 +8,15 @@ CLEAN.include(
 )
 
 desc "Clean, then compile the extension."
-task :compile => [:clean] do
+task :recompile => [:clean] do
   Dir.chdir('./ext')
   system "ruby extconf.rb && make"
+  Dir.chdir("..")
+end
+
+desc "Compile the extension."
+task :compile do
+  Dir.chdir('./ext')
+  system "make"
   Dir.chdir("..")
 end
