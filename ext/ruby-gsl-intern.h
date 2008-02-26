@@ -33,7 +33,13 @@
   Data_Get_Struct(x, gsl_sf_result, p); \
   p->val = (y).val; \
   p->err = (y).err; }
-  
+
+#define COPYRUBYHASHARRAY(from,to) { \
+  long _l; \
+  to = (long *) ALLOCA_N(long, RARRAY(from)->len); \
+  for (_l = 0; _l < RARRAY(from)->len; _l++) \
+    (to)[_l] = NUM2LONG(rb_funcall(RARRAY(from)->ptr[_l], rb_intern("hash"), 0)); }
+
 #define COPYRUBYARRAY(from,to) { \
   long _l; \
   to = (double *) ALLOCA_N(double, RARRAY(from)->len); \
