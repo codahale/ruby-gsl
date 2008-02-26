@@ -28,4 +28,9 @@ class Array
   def tanimoto_coefficient(y)
     return GSL::Similarity.tanimoto_coefficient(self, y)
   end
+  
+  # Returns Dice's coefficient of the array and +y+.
+  def dice_coefficient(y)
+    return GSL::Similarity.dice_coefficient(self, y)
+  end
 end

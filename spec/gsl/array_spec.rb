@@ -37,4 +37,11 @@ describe Array do
       [1, 2, 3].tanimoto_coefficient([4, 5, 6]).should be_close(0.0, 0.0001)
     end
   end
+  
+  describe "calculating Dice's coefficient" do
+    it "should return a real number" do
+      [1, 2, 3].dice_coefficient([1, 2, 3]).should be_close(1.0, 0.0001)
+      [1, 2, 3].dice_coefficient([4, 5, 6]).should be_close(0.0, 0.0001)
+    end
+  end
 end
