@@ -2,6 +2,10 @@ require 'rake/gempackagetask'
 
 require "lib/gsl/version"
 
+CLEAN.include(
+  "pkg/**/*"
+)
+
 PKG_NAME = "ruby-gsl"
 PKG_VERSION   = GSL::VERSION::STRING
 PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
@@ -31,7 +35,6 @@ spec = Gem::Specification.new do |s|
   
   s.extensions = FileList["ext/extconf.rb"].to_a
   
-  s.autorequire = 'gsl'
   s.authors = ["Coda Hale"]
   s.email = "coda.hale@gmail.com"
 end
