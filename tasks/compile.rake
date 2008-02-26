@@ -18,5 +18,8 @@ desc "Compile the extension."
 task :compile do
   Dir.chdir('./ext')
   system "make"
+  if $?.exitstatus != 0
+    exit(1)
+  end
   Dir.chdir("..")
 end
