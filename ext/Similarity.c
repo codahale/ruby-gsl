@@ -10,27 +10,28 @@
 struct array_comparison {
   long intersection_size;
   long union_size;
+  long a_size;
+  long b_size;
 };
 
-static struct array_comparison compare_arrays(VALUE a, VALUE b) {
-  size_t a_size = RARRAY(a)->len;
-  size_t b_size = RARRAY(b)->len;
-  struct array_comparison result;
+typedef double (* fun_array_cmp)(const struct array_comparison);
+
+static VALUE compare_arrays(VALUE a, VALUE b, fun_array_cmp cmp) {
+  struct array_comparison result = { 0, 0, RARRAY(a)->len, RARRAY(b)->len };
   long * long_a;
   long * long_b;
   int i, j;
   
-  result.intersection_size = 0;
-  result.union_size = a_size + b_size;
+  result.union_size = result.a_size + result.b_size;
   
-  if((a_size > 0) && (b_size > 0))
+  if((result.a_size > 0) && (result.b_size > 0))
   {
     COPYRUBYHASHARRAY(a, long_a);
     COPYRUBYHASHARRAY(b, long_b);
     
-    for(i = 0; i < a_size; ++i)
+    for(i = 0; i < result.a_size; ++i)
     {
-      for(j = 0; j < b_size; ++j)
+      for(j = 0; j < result.b_size; ++j)
       {
         if(long_a[i] == long_b[j])
         {
@@ -41,27 +42,45 @@ static struct array_comparison compare_arrays(VALUE a, VALUE b) {
     
   }
   
-  return result;
+  return rb_float_new((*cmp)(result));
+}
+
+double tanimoto_coefficient(const struct array_comparison cmp) {
+  if(cmp.union_size > 0)
+  {
+    return (cmp.intersection_size / (double)(cmp.union_size - cmp.intersection_size));
+  }
+  else
+  {
+    return 0.0;
+  }
+}
+
+double dice_coefficient(const struct array_comparison cmp) {
+  if(cmp.union_size > 0)
+  {
+    return (2 * cmp.intersection_size) / (double)(cmp.a_size + cmp.b_size);
+  }
+  else
+  {
+    return 0.0;
+  }
 }
 
 // Calculates the Tanimoto coefficient between two sets.
 static VALUE Similarity_tanimoto_coefficient(VALUE self, VALUE data1, VALUE data2) {
-  struct array_comparison cmp = compare_arrays(data1, data2);
-  double result = 0.0;
-  
-  if(cmp.union_size > 0)
-  {
-    result = cmp.intersection_size / (double)(cmp.union_size - cmp.intersection_size);
-  }
-  
-  return rb_float_new(result);
+  return compare_arrays(data1, data2, tanimoto_coefficient);
 }
 
 
+static VALUE Similarity_dice_coefficient(VALUE self, VALUE data1, VALUE data2) {
+  return compare_arrays(data1, data2, dice_coefficient);
+}
 
 VALUE rbgsl_mSimilarity;
 void Init_Similarity() {
   rbgsl_mSimilarity = rb_define_module_under(rbgsl_mGSL, "Similarity");
 
   rb_define_module_function(rbgsl_mSimilarity, "tanimoto_coefficient", Similarity_tanimoto_coefficient, 2);
+  rb_define_module_function(rbgsl_mSimilarity, "dice_coefficient", Similarity_dice_coefficient, 2);
 }
