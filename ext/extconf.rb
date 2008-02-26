@@ -18,4 +18,4 @@ if CONFIG["host_os"] == "cygwin"
   $CFLAGS << " -DCYGWIN"
 end
 
-create_makefile "GSL"
+create_makefile "gsl_functions"

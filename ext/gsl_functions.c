@@ -187,7 +187,7 @@ VALUE rbgsl_eToleranceF;
 VALUE rbgsl_eToleranceX;
 VALUE rbgsl_eToleranceG;
 
-void Init_GSL() {
+void Init_gsl_functions() {
   rbgsl_mGSL = rb_define_module("GSL");
 
   rbgsl_eException = rb_define_class_under(rbgsl_mGSL, "GSLException", rb_eStandardError);
@@ -206,11 +206,6 @@ void Init_GSL() {
   rbgsl_eToleranceF = rb_define_class_under(rbgsl_mGSL, "ToleranceFError", rbgsl_eException);
   rbgsl_eToleranceX = rb_define_class_under(rbgsl_mGSL, "ToleranceXError", rbgsl_eException);
   rbgsl_eToleranceG = rb_define_class_under(rbgsl_mGSL, "ToleranceGError", rbgsl_eException);
-
-  rb_define_const(rbgsl_mGSL, "VERSION_MAJOR", INT2FIX(0));
-  rb_define_const(rbgsl_mGSL, "VERSION_MINOR", INT2FIX(2));
-  rb_define_const(rbgsl_mGSL, "RELEASE", INT2FIX(0));
-  rb_define_const(rbgsl_mGSL, "VERSION", rb_str_new2("0.2.0"));
 
   rb_define_module_function(rbgsl_mGSL, "strerror",  GSL_strerror, 1);
   rb_define_module_function(rbgsl_mGSL, "set_handler",  GSL_set_handler, 1);
