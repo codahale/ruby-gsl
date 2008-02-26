@@ -7,45 +7,57 @@
 #include "ruby-gsl.h"
 #include "ruby-gsl-intern.h"
 
-// Returns the number of elements two arrays have in common.
-static long intersection_size(long * a, size_t a_size, long * b, size_t b_size) {
-  size_t i, j, result = 0;
-  for(i = 0; i < a_size; ++i)
+struct array_comparison {
+  long intersection_size;
+  long union_size;
+};
+
+static struct array_comparison compare_arrays(VALUE a, VALUE b) {
+  size_t a_size = RARRAY(a)->len;
+  size_t b_size = RARRAY(b)->len;
+  struct array_comparison result;
+  long * long_a;
+  long * long_b;
+  int i, j;
+  
+  result.intersection_size = 0;
+  result.union_size = a_size + b_size;
+  
+  if((a_size > 0) && (b_size > 0))
   {
-    for(j = 0; j < b_size; ++j)
+    COPYRUBYHASHARRAY(a, long_a);
+    COPYRUBYHASHARRAY(b, long_b);
+    
+    for(i = 0; i < a_size; ++i)
     {
-      if(a[i] == b[j])
+      for(j = 0; j < b_size; ++j)
       {
-        result++;
+        if(long_a[i] == long_b[j])
+        {
+          result.intersection_size++;
+        }
       }
     }
+    
   }
+  
   return result;
 }
 
 // Calculates the Tanimoto coefficient between two sets.
 static VALUE Similarity_tanimoto_coefficient(VALUE self, VALUE data1, VALUE data2) {
-  long * my_data1;
-  long * my_data2;
-  size_t size1 = RARRAY(data1)->len,
-         size2 = RARRAY(data2)->len,
-         union_size = size1 + size2;
+  struct array_comparison cmp = compare_arrays(data1, data2);
+  double result = 0.0;
   
-  // Bail if either of the arrays are zero-length.
-  if((size1 == 0) || (size2 == 0))
+  if(cmp.union_size > 0)
   {
-    return rb_float_new(0);
+    result = cmp.intersection_size / (double)(cmp.union_size - cmp.intersection_size);
   }
   
-  // Create two arrays of the elements' hashes. (Which should be relatively
-  // unique.)
-  COPYRUBYHASHARRAY(data1, my_data1);
-  COPYRUBYHASHARRAY(data2, my_data2);
-  
-  // Return the Tanimoto coefficient.
-  long int_size = intersection_size(my_data1, size1, my_data2, size2);
-  return rb_float_new(int_size / (double)(union_size - int_size));
+  return rb_float_new(result);
 }
+
+
 
 VALUE rbgsl_mSimilarity;
 void Init_Similarity() {
