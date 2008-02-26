@@ -1,8 +1,13 @@
+// TODO: add Dice's coefficient http://en.wikipedia.org/wiki/Dice's_coefficient
+// TODO: add Sørensen index: http://en.wikipedia.org/wiki/Sørensen_similarity_index
+// TODO: add Jaro-Winkler distance: http://www.census.gov/geo/msb/stand/strcmp.c#Original
+
+
 #include "ruby.h"
 #include "ruby-gsl.h"
 #include "ruby-gsl-intern.h"
 
-// Calculates the Tanimoto difference between two sets.
+// Calculates the Tanimoto coefficient between two sets.
 static VALUE Similarity_tanimoto_coefficient(VALUE self, VALUE data1, VALUE data2) {
   long * my_data1;
   long * my_data2;
