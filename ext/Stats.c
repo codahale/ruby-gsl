@@ -101,6 +101,22 @@ static VALUE call_w_m_sd(fun_w_m_sd_t fun, VALUE w, VALUE vwstride, VALUE data,
     stride, size, NUM2DBL(mean), NUM2DBL(sd)));
 }
 
+static VALUE call_2(fun_w_t fun, VALUE data1, VALUE vstride1, VALUE data2, VALUE vstride2) {
+  double * my_data1;
+  double * my_data2;
+  size_t size, stride1, stride2;
+  
+  COPYRUBYARRAY(data1, my_data1);
+  stride1 = NUM2INT(vstride1);
+  
+  COPYRUBYARRAY(data2, my_data2);
+  stride2 = NUM2INT(vstride2);
+  
+  size = (RARRAY(data1)->len)/stride1;
+  
+  return rb_float_new((*fun)(my_data1, stride1, my_data2, stride2, size));
+}
+
 /* Mean, Standard Deviation, and Variance */
 
 static VALUE Stats_mean(VALUE self, VALUE data, VALUE stride) {
@@ -191,6 +207,16 @@ static VALUE Stats_skew_m_sd(VALUE self, VALUE data, VALUE stride,
 static VALUE Stats_kurtosis_m_sd(VALUE self, VALUE data, VALUE stride, 
   VALUE mean, VALUE sd) {
   return call_m_sd(gsl_stats_kurtosis_m_sd, data, stride, mean, sd);
+}
+
+/* Correlation */
+
+static VALUE Stats_correlation(VALUE self, VALUE a, VALUE b, VALUE stride) {
+  return call_2(gsl_stats_correlation, a, stride, b, stride);
+}
+
+static VALUE Stats_correlation1(VALUE self, VALUE a, VALUE b) {
+  return call_2(gsl_stats_correlation, a, INT2FIX(1), b, INT2FIX(1));
 }
 
 /* Autocorrelation */
@@ -408,7 +434,10 @@ void Init_Stats() {
   rb_define_module_function(rbgsl_mStats, "skew_m_sd", Stats_skew_m_sd, 4);
   rb_define_module_function(rbgsl_mStats, "kurtosis", Stats_kurtosis, 2);
   rb_define_module_function(rbgsl_mStats, "kurtosis_m_sd", Stats_kurtosis_m_sd, 4);
-
+  
+  rb_define_module_function(rbgsl_mStats, "correlation", Stats_correlation, 3);
+  rb_define_module_function(rbgsl_mStats, "correlation1", Stats_correlation1, 2);
+  
   rb_define_module_function(rbgsl_mStats, "lag1_autocorrelation", Stats_lag1_autocorrelation, 2);
   rb_define_module_function(rbgsl_mStats, "lag1_autocorrelation_m", Stats_lag1_autocorrelation_m, 3);
 

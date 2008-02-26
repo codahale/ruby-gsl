@@ -1,3 +1,5 @@
+BRANCH: added correlation functions
+
 0.2.0: using GSL 1.5
        sorting vectors
        fixes in Vector and Linalg_complex
