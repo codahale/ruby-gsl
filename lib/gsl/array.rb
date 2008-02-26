@@ -1,3 +1,5 @@
+require "gsl"
+
 class Array
   
   # Returns the array's correlation with +y+, another array of equal size.
