@@ -32,6 +32,16 @@ spec = Gem::Specification.new do |s|
   s.extensions = FileList["ext/extconf.rb"].to_a
   
   s.autorequire = 'gsl'
-  s.author = ["Coda Hale"]
+  s.authors = ["Coda Hale"]
   s.email = "coda.hale@gmail.com"
+end
+
+Rake::GemPackageTask.new(spec) do |pkg|
+  # pkg.need_zip = true
+  # pkg.need_tar = true
+end
+
+desc 'Install the package as a gem.'
+task :install => [:clean, :package] do
+  sh "sudo gem install pkg/*.gem --no-rdoc --no-ri"
 end
