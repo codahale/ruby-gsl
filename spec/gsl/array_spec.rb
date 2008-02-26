@@ -30,4 +30,11 @@ describe Array do
       [2, 2, 2].sd.should be_close(0.0, 0.0001)
     end
   end
+  
+  describe "calculating the Tanimoto coefficient" do
+    it "should return a real number" do
+      [1, 2, 3].tanimoto_coefficient([1, 2, 3]).should be_close(1.0, 0.0001)
+      [1, 2, 3].tanimoto_coefficient([4, 5, 6]).should be_close(0.0, 0.0001)
+    end
+  end
 end
