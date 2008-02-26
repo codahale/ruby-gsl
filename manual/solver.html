@@ -1,0 +1,356 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+One dimensional Root-Finding</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="min.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="dht.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">One dimensional Root-Finding</td> 
+</tr></tbody></table><hr><h1>
+One dimensional Root-Finding</h1>
+<hr>
+
+This chapter describes routines for finding roots of arbitrary
+one-dimensional functions. The library provides low level components
+for a variety of iterative solvers and convergence tests. These can be
+combined by the user to achieve the desired solution, with full access
+to the intermediate steps of the iteration. Each class of methods
+uses the same framework, so that you can switch between solvers at
+runtime without needing to recompile your program. Each instance of a
+solver keeps track of its own state, allowing the solvers to be used in
+multi-threaded programs.
+<p>
+The header file `gsl_roots.h' contains prototypes for the root finding
+functions and related declarations.  
+
+<h3>Overview</h3>
+
+One-dimensional root finding algorithms can be divided into two classes,
+root bracketing and root polishing. Algorithms which proceed by bracketing
+a root are guaranteed to converge. Bracketing algorithms begin with
+a bounded region known to contain a root. The size of this bounded
+region is reduced, iteratively, until it encloses the root to a desired
+tolerance. This provides a rigorous error estimate for the location of
+the root.
+<p>
+The technique of root polishing attempts to improve an initial guess to
+the root. These algorithms converge only if started "close enough" to a
+root, and sacrifice a rigorous error bound for speed. By approximating
+the behavior of a function in the vicinity of a root they attempt to
+find a higher order improvement of an initial guess. When the behavior
+of the function is compatible with the algorithm and a good initial
+guess is available a polishing algorithm can provide rapid convergence.
+<p>
+In GSL both types of algorithm are available in similar frameworks. The
+user provides a high-level driver for the algorithms, and the library
+provides the individual functions necessary for each of the steps. There
+are three main phases of the iteration. The steps are,
+<ul>
+<li> initialize solver state, s, for algorithm T 
+<li>update s using the
+iteration T  
+<li>test s for convergence, and repeat iteration if necessary
+</ul>
+The state for bracketing solvers is held in a gsl_root_fsolver struct. The
+updating procedure uses only function evaluations (not derivatives). The
+state for root polishing solvers is held in a gsl_root_fdfsolver
+struct. The updates require both the function and its derivative (hence
+the name fdf) to be supplied by the user.
+
+<h3>Caveats</h3>
+
+Note that root finding functions can only search for one root at a
+time. When there are several roots in the search area, the first root
+to be found will be returned; however it is difficult to predict which
+of the roots this will be. In most cases, no error will be reported if
+you try to find a root in an area where there is more than one.
+
+Care must be taken when a function may have a multiple root (such
+as f(x) = (x-x_0)^2 or f(x) = (x-x_0)^3). It is not possible to
+use root-bracketing algorithms on even-multiplicity roots. For these
+algorithms the initial interval must contain a zero-crossing, where the
+function is negative at one end of the interval and positive at the other
+end. Roots with even-multiplicity do not cross zero, but only touch it
+instantaneously. Algorithms based on root bracketing will still work
+for odd-multiplicity roots (e.g. cubic, quintic, ...). Root polishing
+algorithms generally work with higher multiplicity roots, but at reduced
+rate of convergence. In these cases the Steffenson algorithm can be used
+to accelerate the convergence of multiple roots.
+
+While it is not absolutely required that f have a root within the
+search region, numerical root finding functions should not be used
+haphazardly to check for the existence of roots. There are better ways
+to do this. Because it is easy to create situations where numerical root
+finders go awry, it is a bad idea to throw a root finder at a function
+you do not know much about. In general it is best to examine the function
+visually by plotting before searching for a root.
+
+
+<h3>Module Solver</h3>
+
+<h3>Class FSolver</h3>
+The class FSolver is defined under the module Solver.
+<p>
+<tt>GSL::Solver::FSolver::new</tt><br>
+<tt>Solver.new(T) -> s1</tt><br>
+It returns an instance of a solver of type T. 
+<br>
+The solver types are
+<ul>
+<li>Solver::FSolver::BISECTION
+The bisection algorithm is the simplest method of bracketing the roots
+of a function. It is the slowest algorithm provided by the library,
+with linear convergence.
+<br>
+On each iteration, the interval is bisected and the value of the function
+at the midpoint is calculated. The sign of this value is used to determine
+which half of the interval does not contain a root. That half is discarded
+to give a new, smaller interval containing the root. This procedure can
+be continued indefinitely until the interval is sufficiently small.
+<br>
+At any time the current estimate of the root is taken as the midpoint
+of the interval.
+
+<li>Solver::FSolver::FALSEPOS
+The false position algorithm is a method of finding roots based on
+linear interpolation. Its convergence is linear, but it is usually faster
+than bisection.
+<br>
+On each iteration a line is drawn between the endpoints (a,f(a)) and
+(b,f(b)) and the point where this line crosses the x-axis taken as a
+"midpoint". The value of the function at this point is calculated and its
+sign is used to determine which side of the interval does not contain a
+root. That side is discarded to give a new, smaller interval containing
+the root. This procedure can be continued indefinitely until the interval
+is sufficiently small.
+<br>
+The best estimate of the root is taken from the linear interpolation of
+the interval on the current iteration.
+<li>Solver::FSolver::BRENT
+The Brent-Dekker method (referred to here as Brent's method) combines
+an interpolation strategy with the bisection algorithm. This produces
+a fast algorithm which is still robust.
+<br>
+On each iteration Brent's method approximates the function using an
+interpolating curve. On the first iteration this is a linear interpolation
+of the two endpoints. For subsequent iterations the algorithm uses an
+inverse quadratic fit to the last three points, for higher accuracy. The
+intercept of the interpolating curve with the x-axis is taken as a guess
+for the root. If it lies within the bounds of the current interval then
+the interpolating point is accepted, and used to generate a smaller
+interval. If the interpolating point is not accepted then the algorithm
+falls back to an ordinary bisection step.
+<br>
+The best estimate of the root is taken from the most recent interpolation
+or bisection.
+
+</ul>
+
+<p>
+<tt>GSL::Solver::FSolver#name</tt><br>
+<tt>s1.name() -> aString</tt><br>
+This method returns the name ok the type of the solver,
+<p>
+<tt>GSL::Solver::FSolver#set</tt><br>
+<tt>s1.set(f, v_lower, x_upper) -> status</tt><br>
+
+This function initializes,
+or reinitializes, an existing solver s to use the function f and the
+initial search interval [x_lower, x_upper].
+
+<p>
+<tt>GSL::Solver::FSolver#iterate</tt><br>
+<tt>s1.iterate() -> status</tt><br>
+This method performs a single iteration of the solver s. 
+If the iteration encounters an unexpected problem then an error code 
+will be returned.
+<p>
+<tt>GSL::Solver::FSolver#x_lower</tt><br>
+<tt>s1.x_lower() -> aDouble</tt><br>
+<p>
+<tt>GSL::Solver::FSolver#x_upper</tt><br>
+<tt>s1.x_upper() -> aDouble</tt><br>
+These methods return the current bracketing interval for the solver s.
+<p>
+<tt>GSL::Solver::FSolver#root</tt><br>
+<tt>s1.root() -> aDouble</tt><br>
+<p>
+<tt>GSL::Solver::test_interval</tt><br>
+<tt>GSL::Solver::test_interval(x_lower, x_upper, epsabs, epsrel) -> status</tt><br>
+double x_lower, x_upper, epsabs, epsrel)
+This function tests for the convergence of the interval [x_lower, x_upper]
+with absolute error epsabs and relative error epsrel. The test returns
+GSL_SUCCESS if the following condition is achieved,
+<br>
+|a - b| < epsabs + epsrel min(|a|,|b|)
+<br>
+when the interval x = [a,b] does not include the origin. If the interval
+includes the origin then \min(|a|,|b|) is replaced by zero (which is the
+minimum value of |x| over the interval). This ensures that the relative
+error is accurately estimated for roots close to the origin.
+<br>
+This condition on the interval also implies that any estimate of the
+root r in the interval satisfies the same condition with respect to the
+true root r^*,
+<br>
+|r - r^*| < epsabs + epsrel r^*
+<br>
+assuming that the true root r^* is contained within the interval.
+<p>
+<tt>GSL::Solver::test_residual</tt><br>
+<tt>GSL::Solver::test_residual(f, epsabs)</tt><br>
+double f, epsabs<br>
+This function tests the residual value f against the absolute error
+bound epsabs. The test returns GSL_SUCCESS if the following condition
+is achieved,
+<br>
+|f| < epsabs
+<br>
+and returns GSL_CONTINUE otherwise. This criterion is suitable for
+situations where the precise location of the root, x, is unimportant
+provided a value can be found where the residual, |f(x)|, is small enough.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require "GSL"; include GSL
+include Solver
+
+a = 1
+b = 0
+c = -5
+f = Function.new { |x| (a*x + b) * x + c }
+
+  
+  status = GSL_CONTINUE
+  iter = 0
+  max_iter = 100
+
+  x_lo = 0.0
+  x_hi = 5.0
+  r = 0.0
+  r_exp = Math::sqrt(5.0)
+
+  s = FSolver.new(FSolver::BRENT)
+  s.set(f, x_lo, x_hi)
+
+  puts "\nUsing #{s} method"
+
+  printf "%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", 
+    "root", "err", "err(est)"
+
+  while (status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter) do
+    iter += 1
+    status = s.iterate
+    r = s.root
+    x_lo = s.x_lower
+    x_hi = s.x_upper
+    status = test_interval(x_lo, x_hi, 0, 0.001)
+
+    puts "Converged:" if status == GSL_SUCCESS
+
+    printf "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n", iter,  x_lo, x_hi,
+      r, r - r_exp,  x_hi - x_lo
+  end
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Class FDFSolver</h3>
+MISSING<br>
+
+<h3>Example</h3>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;#!/usr/local/bin/ruby
+
+# $Id: solver.html,v 1.1 2003/09/20 12:23:06 pernici Exp $
+
+require "GSL"
+include GSL
+
+# Test module Solver
+
+STDERR.puts "Running root-finding tests (fsolver)..."
+
+a = 1
+b = 0
+c = -5
+f = Function.new { |x| (a*x + b) * x + c }
+
+[Solver::FSolver::BISECTION, Solver::FSolver::BRENT, Solver::FSolver::FALSEPOS].each do |m|
+  
+  status = GSL_CONTINUE
+  iter = 0
+  max_iter = 100
+
+  x_lo = 0.0
+  x_hi = 5.0
+  r = 0.0
+  r_exp = Math::sqrt(5.0)
+
+  s = Solver::FSolver.new m
+  s.set f, x_lo, x_hi
+
+  puts "\nUsing #{s} method"
+
+  printf "%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", 
+    "root", "err", "err(est)"
+
+  while status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter
+    iter += 1
+    status = s.iterate
+    r = s.root
+    x_lo = s.x_lower
+    x_hi = s.x_upper
+    status = Solver::test_interval x_lo, x_hi, 0, 0.001
+
+    puts "Converged:" if status == GSL_SUCCESS
+
+    printf "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n", iter,  x_lo, x_hi,
+      r, r - r_exp,  x_hi - x_lo
+  end
+
+end
+
+STDERR.puts "\ndone."
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>References and Further Reading</h3>
+For information on the Brent-Dekker algorithm see the following two papers,
+<ul><li>
+ R. P. Brent, "An algorithm with guaranteed convergence for finding a zero of a function", Computer Journal, 14 (1971) 422-425
+<li> J. C. P. Bus and T. J. Dekker, 
+"Two Efficient Algorithms with Guaranteed Convergence for Finding 
+a Zero of a Function", 
+ACM Transactions of Mathematical Software, Vol. 1 No. 4 (1975) 330-345
+</ul>
+	
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="min.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="dht.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">One dimensional Root-Finding</td> 
+</tr></tbody></table><hr></body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: rnd3.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: rnd3.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL::Random
+
+# Test random number distributions
+# generate output suitable for graph(1) from GNU plotutils:
+# rnd3.rb | graph -Tps > g.ps
+
+STDERR.puts "Running tests for RND(3)..."
+
+x = y = 0
+a = []
+r = RNG.new
+puts "#m=1,S=2"
+printf "%g %g\n", x, y
+10.times do
+  a = RND::dir_2d(r)
+  x += a[0]
+  y += a[1]
+  printf "%g %g\n", x, y
+end
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Sorting</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="combinations.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Sorting</td> 
+</tr></tbody></table><hr>
+<h1>
+Sorting</h1>
+This chapter describes functions for sorting data, both directly
+and indirectly (using an index). All the functions use the heapsort
+algorithm. Heapsort is an O(N \log N) algorithm which operates
+in-place. It does not require any additional storage and provides
+consistent performance. The running time for its worst-case (ordered
+data) is not significantly longer than the average and best cases. Note
+that the heapsort algorithm does not preserve the relative ordering of
+equal elements -- it is an unstable sort. However the resulting order
+of equal elements will be consistent across different platforms when
+using these functions.
+
+<h3>Sorting vectors</h3>
+<h3>Module Sort</h3>
+
+The following functions will sort the elements of
+vectors of double type, either directly or indirectly. 
+The prototypes are available in the header file
+`gsl_sort_vector_double.h'. The complete set of prototypes of GSL 
+(including vectors of type float, etc. not covered in ruby-gsl) 
+can be included using the header files `gsl_sort.h' and `gsl_sort_vector.h'.
+<p>
+There are no functions for sorting complex vectors, since the
+ordering of complex numbers is not uniquely defined. To sort a complex
+vector by magnitude compute a real vector containing the magnitudes of
+the complex elements, and sort this vector indirectly. The resulting
+index gives the appropriate ordering of the original complex vector.
+<p>
+<tt>GSL::Sort#sort!</tt><br>
+<tt>v.sort!() -> v1</tt><br>
+GSL::Vector v<br>
+This method sorts the
+elements of the vector v into ascending numerical order.
+<p>
+<tt>GSL::Sort#sort_index</tt><br>
+<tt>v.sort_index() -> p</tt><br>
+GSL::Vector v; GSL::Permutation p<br>
+This method indirectly sorts the elements of the vector v into
+ascending order, storing the resulting permutation in p. The elements of
+p give the index of the vector element which would have been stored in
+that position if the vector had been sorted in place. The first element
+of p gives the index of the least element in v, and the last element of p
+gives the index of the greatest element in v. The vector v is not changed.
+
+<h3>Selecting the k-th smallest or largest elements</h3>
+The methods described in this section select the k-th smallest or
+largest elements of a data set of size N. The routines use an O(kN) direct
+insertion algorithm which is suited to subsets that are small compared
+with the total size of the dataset. For example, the routines are useful
+for selecting the 10 largest values from one million data points, but not
+for selecting the largest 100,000 values. If the subset is a significant
+part of the total dataset it may be faster to sort all the elements
+of the dataset directly with an O(N \log N) algorithm and obtain the
+smallest or largest values that way. 
+<p>
+<tt>GSL::Sort#sort_smallest</tt><br>
+<tt>v.sort_smallest(k) -> ary</tt><br>
+<tt>GSL::Sort#sort_largest</tt><br>
+<tt>v.sort_largest(k) -> ary</tt><br>
+GSL::Vector v; Array ary; integer k<br>
+
+These methods copy the k-th smallest
+or largest elements of the vector v into the array dest. The size of
+the subset k must be less than or equal to the length of the vector v.
+<p>
+The following functions find the indices of the k-th smallest or largest
+elements of a dataset,
+<p>
+<tt>GSL::Sort#sort_smallest_index</tt><br>
+<tt>v.sort_smallest_index(k) -> ary</tt><br>
+<tt>GSL::Sort#sort_largest_index</tt><br>
+<tt>v.sort_largest_index(k) -> ary</tt><br>
+GSL::Vector v; Array ary<br>
+
+These methods store the indices of
+k-th smallest or largest elements of the vector v in the array p. The size
+of the subset k must be less than or equal to the length of the vector v.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+
+v1 = Vector.new([3,2,6,4,1,2])
+v1_dup = v1.clone
+v1_dup.sort!
+assert v1_dup.to_a == [1.0, 2.0, 2.0, 3.0, 4.0, 6.0]
+perm1 = v1.sort_index
+assert perm1.to_a == [4, 1, 5, 0, 3, 2]
+assert v1_dup == Matrix.perm(perm1) * v1
+
+assert v1.sort_smallest(4) == [1.0, 2.0, 2.0, 3.0]
+assert v1.sort_largest(4) == [6.0, 4.0, 3.0, 2.0]
+
+a1 = v1.smallest_index(4)
+assert a1 == [4.0, 5.0, 1.0, 0.0]
+# a1 != perm1.to_a[0,4] (unstable sorting), but:
+a2 = []
+a1.size.times{|i| a2 &lt;&lt; v1[a1[i]]}
+a3 = []
+a1.size.times{|i| a3 &lt;&lt; v1[perm1.to_a[i]]}
+assert a2 == a3 &amp;&amp; a2 == [1.0, 2.0, 2.0, 3.0]
+
+a4 = v1.largest_index(4)
+assert a4 == [2.0, 3.0, 0.0, 1.0]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><h3>References and Further Reading</h3>
+
+The subject of sorting is covered extensively in Knuth's Sorting and Searching,
+<ul><li>
+ Donald E. Knuth, The Art of Computer Programming: Sorting and Searching 
+ (Vol 3, 3rd Ed, 1997), Addison-Wesley, ISBN 0201896850.
+</ul>
+The Heapsort algorithm is described in the following book,
+<ul><li>
+Robert Sedgewick, Algorithms in C, Addison-Wesley, ISBN 0201514257.
+</ul>
+	
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="combinations.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Sorting</td> 
+</tr></tbody></table><hr></body>
+</html>

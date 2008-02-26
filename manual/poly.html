@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Polynomials</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="special.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="complex.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Polynomials</td> 
+</tr></tbody></table><hr>
+<h1>
+Polynomials</h1>
+<ul>
+<li><a href="#p1">Module GSL::Poly</a>
+<li><a href="#p2">Divided Difference Representation of Polynomials</a>
+<li><a href="#p3">Quadratic equations</a>
+<li><a href="#p4">Cubic equations</a>
+<li><a href="#p5">General Polynomial Equations</a>
+</ul>
+<hr>
+This chapter describes functions for evaluating and solving polynomials. 
+There are routines for finding real and complex roots of quadratic and 
+cubic equations using analytic methods. An iterative polynomial solver 
+is also available for finding the roots of general polynomials with real 
+coefficients (of any order). The functions are declared in the header 
+file gsl_poly.h.
+
+<a name="p1"></a>
+<h2>Module GSL::Poly</h2>
+<a href="#complex_solve_cubic">complex_solve_cubic</a> ,&nbsp
+<a href="#complex_solve_quadratic">complex_solve_quadratic</a> ,&nbsp
+<a href="#evaluate">evaluate</a> ,&nbsp
+<a href="#solve_cubic">solve_cubic</a> ,&nbsp
+<a href="#solve_quadratic">solve_quadratic</a> ,&nbsp
+
+
+<h3>Polynomial Evaluation</h3>
+<a name="evaluate"></a>
+<tt>GSL::Poly::evaluate</tt><br>
+<tt>GSL::Poly::evaluate</tt><br>
+This function evaluates the polynomial <br>
+<tt>c[0] + c[1] x + c[2] x^2 + \dots + c[len-1] x^{len-1}</tt><br>
+using Horner's method for stability.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+
+c = [1, 2]
+assert Poly::evaluate(c, 3) == 7 
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="p2"></a>
+<h3>Divided Difference Representation of Polynomials</h3>
+The functions described here manipulate polynomials stored in 
+Newton's divided-difference representation. The use of divided-differences 
+is described in Abramowitz & Stegun sections 25.1.4, 25.2.26.
+
+<h3>Class GSL::Poly::DD</h3>
+<h3>Class methods</h3>
+<tt>GSL::Poly::DD.new</tt><br>
+<tt>GSL::Poly::DD.new(xa, ya) -> d1</tt><br>
+To initialize a divided-difference representation 
+of the interpolating polynomial for the points (xa, ya) stored in the arrays 
+xa and ya of length <tt>size</tt>. On output the divided-differences of (xa,ya) 
+are stored in the object d1, which contains an array of length <tt>size</tt>.
+
+<h3>Methods</h3>
+<a href="#evaluate">evaluate</a> ,&nbsp
+<a href="#get">get</a> ,&nbsp
+<a href="#taylor">taylor</a> ,&nbsp
+<p>
+<a name="evaluate"></a>
+<tt>GSL::Poly::DD#evaluate</tt><br>
+<tt>d1.evaluate(x)</tt><br>
+This function evaluates at the point x the polynomial stored in 
+divided-difference form in the arrays dd and xa of length size contained 
+in the object d1.
+<p>
+<a name="get"></a>
+<tt>GSL::Poly::DD#get</tt><br>
+<tt>d1.get -> anArray</tt><br>
+where <tt>anArray</tt> represents the divided-difference representation.
+<p>
+<a name="taylor"></a>
+<tt>GSL::Poly::DD#taylor</tt><br>
+<tt>d1.taylor(xp) -> anArray</tt><br>
+This function converts the divided-difference representation of a polynomial 
+to a Taylor expansion. The divided-difference representation is supplied 
+in the arrays dd and xa of length size. On output the Taylor coefficients 
+of the polynomial expanded about the point xp are stored in the array c 
+also of length size. A workspace of length size must be provided in the array w.
+
+<p>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+
+xa = [0, 2, 4, 6]
+ya = [0, 10, 0, -10]
+p = Poly::DD.new(xa, ya)
+x01 = (ya[0] - ya[1])/(xa[0] - xa[1])
+x12 = (ya[1] - ya[2])/(xa[1] - xa[2])
+x012 = (x01 - x12).to_f/(xa[0] - xa[2])
+assert p.get[0] == 0 &amp;&amp; p.get[1] == x01 &amp;&amp; p.get[2] == x012
+p p.taylor(0)
+10.times {|i| p p.evaluate(i)}
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="p3"></a>
+<h3>Quadratic equations</h3>
+<a name="solve_quadratic"></a>
+<tt>GSL::Poly::solve_quadratic</tt><br>
+<tt>GSL::Poly::solve_quadratic(a, b, c) -> anArray</tt><br>
+a, b, c are doubles.
+This function finds the real roots of the quadratic equation,<br>
+<tt>a x^2 + b x + c = 0</tt><br>
+The number of real roots (either zero or two) is returned
+in the array anArray in ascending order. 
+<p>
+The number of roots found depends on the sign of the discriminant 
+b^2 - 4 a c. This will be subject to rounding and cancellation errors 
+when computed in double precision, and will also be subject to errors 
+if the coefficients of the polynomial are inexact. These errors may cause 
+a discrete change in the number of roots. However, for polynomials with 
+small integer coefficients the discriminant can always be computed exactly.
+<p>
+<a name="complex_solve_quadratic"></a>
+<tt>GSL::Poly::complex_solve_quadratic</tt><br>
+<tt>GSL::Poly::complex_solve_quadratic(a, b, c) -> anArray</tt><br>
+a, b, c are doubles. 
+This function finds the complex roots of the quadratic equation,<br>
+<tt>a z^2 + b z + c = 0</tt><br>
+The number of complex roots is returned (always two) and the locations 
+of the roots are stored in z0 and z1. The roots are returned in ascending 
+order, sorted first by their real components and then by their imaginary i
+components.	
+<p>
+<a name="p4"></a>
+<h3>Cubic equations</h3>
+<a name="solve_cubic"></a>
+<tt>GSL::Poly::solve_cubic</tt><br>
+<tt>GSL::Poly::solve_cubic(a, b, c) -> anArray</tt><br>
+a, b, c are doubles.
+This function finds the real roots of the cubic equation,<br>
+<tt>x^3 + a x^2 + b x + c = 0</tt><br>
+with a leading coefficient of unity. The number of real roots (either one 
+or three) is returned, and their locations are stored in the array anArray
+in ascending order.
+<p>
+<a name="complex_solve_cubic"></a>
+<tt>GSL::Poly::complex_solve_cubic</tt><br>
+<tt>GSL::Poly::complex_solve_cubic(a, b, c) -> anArray</tt><br>
+a, b, c are doubles.
+This function finds the complex roots of the cubic equation,<br>
+<tt>z^3 + a z^2 + b z + c = 0</tt><br>
+The number of complex roots is returned (always three) and the locations 
+of the roots are stored in anArray in ascending order, sorted first by their 
+real components and then by their imaginary components.
+<p>
+
+<a name="p5"></a>
+<h3>General Polynomial Equations</h3>
+The roots of polynomial equations cannot be found analytically beyond 
+the special cases of the quadratic, cubic and quartic equation. 
+The algorithm described in this section uses an iterative method to find 
+the approximate locations of roots of higher order polynomials.
+
+<h3>Class Workspace</h3>
+<tt>GSL::Poly::Workspace.new(n)</tt><br>
+n in an integer.
+This function allocates space for a gsl_poly_complex_workspace struct 
+and a workspace suitable for solving a polynomial with n coefficients 
+using the routine GSL::Poly::complex_solve.
+<p>
+<tt>GSL::Poly::Workspace#solve</tt><br>
+<tt>w.solve([a0,a1,...,a_{n-1}])</tt><br>
+a0,a1,...,a_{n-1} are doubles.
+This function computes the roots of the general polynomial <br>
+<tt>P(x) = a_0 + a_1 x + a_2 x^2 + ... + a_{n-1} x^{n-1}</tt><br>
+using balanced-QR reduction of the companion matrix. The parameter n specifies 
+the length of the coefficient array. The coefficient of the highest order 
+term must be non-zero. The function requires a workspace w of the appropriate 
+size. The n-1 roots are returned in the packed complex array z of length 
+2(n-1), alternating real and imaginary parts.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+eps = 1.0e-15
+
+a = Poly::solve_quadratic(1, -2, 1)
+assert a == [1.0, 1.0]
+assert Poly::solve_quadratic(1, -3, 2) == [1.0, 2.0]
+b = Poly::complex_solve_quadratic(1, 0, 1) 
+assert b == [Complex.new2(0, -1), Complex.new2(0, 1)]
+
+assert Poly::solve_cubic(-5, 8, -4) == [1.0, 2.0, 2.0]
+assert Poly::solve_cubic(-2,1,-2)[0] == 2.0
+
+d = Poly::complex_solve_cubic(-2,1,-2)
+d1 = [Complex.new2(0, -1), Complex.new2(0, 1),  Complex.new2(2,0)]
+3.times{|i| d[i] =~ d1[i]}
+
+w = Poly::Workspace.new(5)
+w1 = [0,1, 0,-1, 3,0, 2,0]
+w.solve([6,-5,7,-5,1]).each_with_index{|e,i| e =~ w1[i]}
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>References and Further Reading</h3>
+
+The balanced-QR method and its error analysis is described in the
+following papers.
+<ul><li>
+R.S. Martin, G. Peters and J.H. Wilkinson, "The QR Algorithm for Real
+Hessenberg Matrices", Numerische Mathematik, 14 (1970), 219--231.
+<li>
+B.N. Parlett and C. Reinsch, "Balancing a Matrix for Calculation
+of Eigenvalues and Eigenvectors", Numerische Mathematik, 13 (1969),
+293--304.  
+<li>
+A. Edelman and H. Murakami, "Polynomial roots from companion
+matrix eigenvalues", Mathematics of Computation, Vol. 64 No. 210 (1995),
+763--776.
+</ul>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="special.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="complex.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Polynomials</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

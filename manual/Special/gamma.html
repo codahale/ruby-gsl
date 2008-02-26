@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Gamma Function</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="gegenbauer.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="fermiDirac.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Gamma Function</td> 
+</tr></tbody></table><hr>
+<h1>
+Gamma Function</h1>
+The Gamma function is defined by the following integral,<br>
+\Gamma(x) = \int_0^t dt  t^{x-1} \exp(-t)<br>
+Further information on the Gamma function can be found in 
+Abramowitz & Stegun, Chapter 6.
+
+<h3>Module Gamma</h3>
+<a href="#beta">beta</a> ,&nbsp
+<a href="#beta_inc">beta_inc</a> ,&nbsp
+<a href="#choose">choose</a> ,&nbsp
+<a href="#doublefact">doublefact</a> ,&nbsp
+<a href="#fact">fact</a> ,&nbsp
+<a href="#gamma">gamma</a> ,&nbsp
+<a href="#gamma_inc_P">gamma_inc_P</a> ,&nbsp
+<a href="#gamma_inc_P_e">gamma_inc_P_e</a> ,&nbsp
+<a href="#gamma_inc_Q">gamma_inc_Q</a> ,&nbsp
+<a href="#gammainv">gammainv</a> ,&nbsp
+<a href="#gammastar">gammastar</a> ,&nbsp
+<a href="#lnbeta">lnbeta</a> ,&nbsp
+<a href="#lnchoose">lnchoose</a> ,&nbsp
+<a href="#lndoublefact">lndoublefact</a> ,&nbsp
+<a href="#lnfact">lnfact</a> ,&nbsp
+<a href="#lngamma">lngamma</a> ,&nbsp
+<a href="#lnpoch">lnpoch</a> ,&nbsp
+<a href="#poch">poch</a> ,&nbsp
+<a href="#pochrel">pochrel</a> ,&nbsp
+<a href="#taylorcoeff">taylorcoeff</a> ,&nbsp
+<p>
+<a name="gamma"></a>
+<tt>GSL::Special::Gamma::gamma</tt><br>
+<tt>GSL::Special::Gamma::gamma_e</tt><br>
+<tt>Gamma::gamma(d1) -> d2</tt><br>
+These routines compute the Gamma function \Gamma(x), subject to x not 
+being a negative integer. The function is computed using the real Lanczos 
+method. The maximum value of x such that \Gamma(x) is not considered an 
+overflow is given by the macro GSL_SF_GAMMA_XMAX and is 171.0.
+<p>
+<a name="lngamma"></a>
+<tt>GSL::Special::Gamma::lngamma</tt><br>
+<tt>GSL::Special::Gamma::lngamma_e</tt><br>
+<tt>Gamma::lngamma(d1) -> d2</tt><br>
+These routines compute the logarithm of the Gamma function, \log(\Gamma(x)), 
+subject to x not a being negative integer. For x<0 the real part of 
+\log(\Gamma(x)) is returned, which is equivalent to \log(|\Gamma(x)|). 
+The function is computed using the real Lanczos method.
+<p>
+<a name="gammastar"></a>
+<tt>GSL::Special::Gamma::gammastar</tt><br>
+<tt>GSL::Special::Gamma::gammastar_e</tt><br>
+<tt>Gamma::gammastar(d1) -> d2</tt><br>
+These routines compute the regulated Gamma Function \Gamma^*(x) for x > 0. 
+The regulated gamma function is given by,
+<pre>
+\Gamma^*(x) = \Gamma(x)/(\sqrt{2\pi} x^{(x-1/2)} \exp(-x))
+            = (1 + (1/12x) + ...)  for x \to \infty
+</pre>
+and is a useful suggestion of Temme.
+<p>
+<a name="gammainv"></a>
+<tt>GSL::Special::Gamma::gammainv</tt><br>
+<tt>GSL::Special::Gamma::gammainv_e</tt><br>
+<tt>Gamma::gammainv(d1) -> d2</tt><br>
+These routines compute the reciprocal of the gamma function, 1/\Gamma(x) 
+using the real Lanczos method.
+<p>
+<tt>GSL::Special::Gamma::lngamma_complex_e</tt><br>
+MISSING
+This routine computes \log(\Gamma(z)) for complex z=z_r+i z_i and z not a negative integer, using the complex Lanczos method. The returned parameters are lnr = \log|\Gamma(z)| and arg = \arg(\Gamma(z)) in (-\pi,\pi]. Note that the phase part (arg) is not well-determined when |z| is very large, due to inevitable roundoff in restricting to (-\pi,\pi]. This will result in a GSL_ELOSS error when it occurs. The absolute value part (lnr), however, never suffers from loss of precision.
+<p>
+<a name="taylorcoeff"></a>
+<tt>GSL::Special::Gamma::taylorcoeff</tt><br>
+<tt>GSL::Special::Gamma::taylorcoeff_e</tt><br>
+<tt>Gamma::taylorcoeff(n, d1) -> d2</tt><br>
+n is an integer.
+These routines compute the Taylor coefficient x^n / n! for x >= 0, n >= 0.
+<p>
+<a name="fact"></a>
+<tt>GSL::Special::Gamma::fact</tt><br>
+<tt>GSL::Special::Gamma::fact_e</tt><br>
+<tt>Gamma::fact(n) -> d1</tt><br>
+n is a positive integer.
+These routines compute the factorial n!. The factorial is related to the 
+Gamma function by n! = \Gamma(n+1).
+<p>
+<a name="doublefact"></a>
+<tt>GSL::Special::Gamma::doublefact</tt><br>
+<tt>GSL::Special::Gamma::doublefact_e</tt><br>
+<tt>Gamma::doublefact(n) -> d1</tt><br>
+These routines compute the double factorial n!! = n(n-2)(n-4) \dots.
+<p>
+<a name="lnfact"></a>
+<tt>GSL::Special::Gamma::lnfact</tt><br>
+<tt>GSL::Special::Gamma::lnfact_e</tt><br>
+<tt>Gamma::lnfact(n) -> d1</tt><br>
+These routines compute the logarithm of the factorial of n, \log(n!). 
+The algorithm is faster than computing \ln(\Gamma(n+1)) via Gamma::lngamma 
+for n < 170, but defers for larger n.
+<p>
+<a name="lndoublefact"></a>
+<tt>GSL::Special::Gamma::lndoublefact</tt><br>
+<tt>GSL::Special::Gamma::lndoublefact_e</tt><br>
+<tt>Gamma::lndoublefact(n) -> d1</tt><br>
+These routines compute the logarithm of the double factorial of n, \log(n!!).
+<p>
+<a name="choose"></a>
+<tt>GSL::Special::Gamma::choose</tt><br>
+<tt>GSL::Special::Gamma::choose</tt><br>
+<tt>Gamma::choose(m, n) -> d1</tt><br>
+m and n integers; m >= n >= 0.
+These routines compute the combinatorial factor n choose m = n!/(m!(n-m)!)
+<p>
+<a name="lnchoose"></a>
+<tt>GSL::Special::Gamma::lnchoose</tt><br>
+<tt>GSL::Special::Gamma::lnchoose_e</tt><br>
+<tt>Gamma::lnchoose(m, n) -> d1</tt><br>
+These routines compute the logarithm of n choose m. This is equivalent to the sum \log(n!) - \log(m!) - \log((n-m)!).
+<p>
+<a name="poch"></a>
+<tt>GSL::Special::Gamma::poch</tt><br>
+<tt>GSL::Special::Gamma::poch_e</tt><br>
+<tt>Gamma::poch(a,x) -> d1</tt><br>
+a and x are doubles.
+These routines compute the Pochhammer symbol (a)_x := \Gamma(a + x)/\Gamma(x), 
+subject to a and a+x not being negative integers. The Pochhammer symbol 
+is also known as the Apell symbol.
+<p>
+<a name="lnpoch"></a>
+<tt>GSL::Special::Gamma::lnpoch</tt><br>
+<tt>GSL::Special::Gamma::lnpoch_e</tt><br>
+<tt>Gamma::lnpoch(a,x) -> d1</tt><br>
+These routines compute the logarithm of the Pochhammer symbol, \log((a)_x) = \log(\Gamma(a + x)/\Gamma(a)) for a > 0, a+x > 0.
+<p>
+<tt>GSL::Special::Gamma::lnpoch_sgn_e</tt><br>
+MISSING
+These routines compute the sign of the Pochhammer symbol and the 
+logarithm of its magnitude. The computed parameters are result = \log(|(a)_x|) 
+and sgn = sgn((a)_x) where (a)_x := \Gamma(a + x)/\Gamma(a), subject to 
+a, a+x not being negative integers.
+<p>
+<a name="pochrel"></a>
+<tt>GSL::Special::Gamma::pochrel</tt><br>
+<tt>GSL::Special::Gamma::pochrel_e</tt><br>
+<tt>Gamma::pochrel(a, x) -> d1</tt><br>
+These routines compute the relative Pochhammer symbol 
+((a,x) - 1)/x where (a,x) = (a)_x := \Gamma(a + x)/\Gamma(a).
+<p>
+<a name="gamma_inc_Q"></a>
+<tt>GSL::Special::Gamma::gamma_inc_Q</tt><br>
+<tt>GSL::Special::Gamma::gamma_inc_Q_e</tt><br>
+<tt>Gamma::gamma_inc_Q(a, x) -> d1</tt><br>
+These routines compute the normalized incomplete Gamma Function 
+Q(a,x) = 1/\Gamma(a) \int_x\infty dt t^{a-1} \exp(-t) for a > 0, x >= 0.
+<p>
+<a name="gamma_inc_P"></a>
+<tt>GSL::Special::Gamma::gamma_inc_P</tt><br>
+<tt>GSL::Special::Gamma::gamma_inc_P_e</tt><br>
+<tt>Gamma::gamma_inc_P(a, x) -> d1</tt><br>
+These routines compute the complementary normalized incomplete Gamma 
+Function P(a,x) = 1/\Gamma(a) \int_0^x dt t^{a-1} \exp(-t) for a > 0, x >= 0.
+<p>
+Note that Abramowitz & Stegun call P(a,x) the incomplete gamma function
+(section 6.5).
+<p>
+<a name="beta"></a>
+<tt>GSL::Special::Gamma::beta</tt><br>
+<tt>GSL::Special::Gamma::beta_e</tt><br>
+<tt>Gamma::beta(a, b) -> d1</tt><br>
+a and b are doubles.
+These routines compute the Beta Function, <br>
+B(a,b) = \Gamma(a)\Gamma(b)/\Gamma(a+b) for a > 0, b > 0.
+<p>
+<a name="lnbeta"></a>
+<tt>GSL::Special::Gamma::lnbeta</tt><br>
+<tt>GSL::Special::Gamma::lnbeta_e</tt><br>
+<tt>Gamma::lnbeta(a, b) -> d1</tt><br>
+These routines compute the logarithm of the Beta Function, 
+\log(B(a,b)) for a > 0, b > 0.
+<p>
+<a name="beta_inc"></a>
+<tt>GSL::Special::Gamma::beta_inc</tt><br>
+<tt>GSL::Special::Gamma::beta_inc_e</tt><br>
+<tt>Gamma::beta(a, b) -> d1</tt><br>
+These routines compute the normalized incomplete Beta function 
+B_x(a,b)/B(a,b) for a > 0, b > 0, and 0 <= x <= 1.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+include GSL::Special
+include Math
+eps = 1.0e-15
+
+puts "gamma"
+x = 6
+r = Gamma::gamma(x)
+assert r == 120
+
+puts "lngamma:"
+x = 5.7
+r = Gamma::lngamma(x)
+p r
+assert fcmp(r, log(Gamma::gamma(x)), eps) == 0 
+r = Gamma::lngamma_e(x)
+p r.val; p r.err
+
+puts "gammastar"
+x = 6.0
+r = Gamma::gammastar(x)
+assert r == (Gamma::gamma(x)/(sqrt(2*M_PI) * pow(x,x-1.0/2) * exp(-x)))
+
+puts "gammainv"
+r = Gamma::gammainv(x)
+assert r == 1/Gamma::gamma(x)
+
+puts "taylorcoeff"
+r = Gamma::taylorcoeff(4, x)
+assert r == pow(x,4)/24
+
+puts "fact"
+r = Gamma::fact(6)
+assert r == 720
+
+puts "doublefact"
+r = Gamma::doublefact(6)
+assert r == 6*4*2
+
+puts "lnfact"
+r = Gamma::lnfact(6)
+assert r == log(Gamma::fact(6))
+r =  Gamma::lnfact(100)
+assert r == log(Gamma::fact(100))
+r =  Gamma::lnfact_e(100)
+assert r.val == log(Gamma::fact(100))
+
+puts "lndoublefact"
+r = Gamma::lndoublefact(6)
+assert r == log(Gamma::doublefact(6))
+
+puts "choose"
+r = Gamma::choose(4,2)
+assert r == 6.0
+
+puts "lnchoose"
+r = Gamma::lnchoose(4,2)
+assert fcmp(r, log(6.0), eps) == 0
+
+puts "poch"
+x = 4.5; y = 3
+r = Gamma::poch(x,y)
+assert fcmp(r, Gamma::gamma(x + y)/Gamma::gamma(x), eps) == 0
+assert fcmp(r, x*(x+1)*(x+2), 10*eps) == 0
+
+puts "Gamma::lnpoch"
+r = Gamma::lnpoch(x,y)
+assert r == log(Gamma::poch(x,y))
+
+puts "pochrel"
+r = Gamma::pochrel(x,y)
+assert r == ((Gamma::poch(x,y) - 1)/y)
+
+puts "gamma_inc_Q"
+r = Gamma::gamma_inc_Q(x,y)
+p r
+
+puts "gamma_inc_P"
+r = Gamma::gamma_inc_P(x,y)
+assert (r == 1 - Gamma::gamma_inc_Q(x,y))
+
+puts "beta"
+r = Gamma::beta(x,y)
+assert r == Gamma::gamma(x)*Gamma::gamma(y)/Gamma::gamma(x+y)
+
+puts "lnbeta"
+r = Gamma::lnbeta(x,y)
+assert r = log(Gamma::beta(x,y))
+
+puts "beta_inc"
+r = Gamma::beta_inc(x,y, 0.5)
+p r
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="gegenbauer.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="fermiDirac.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Gamma Function</td> 
+</tr></tbody></table><hr>
+</body>
+</ht
+ml>

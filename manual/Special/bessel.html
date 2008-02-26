@@ -1,0 +1,721 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Bessel Functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="clausen.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="airy.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Bessel Functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Bessel Functions</h1>
+<ul>
+<li><a href="#p1">Module Bessel</a>
+<li><a href="#p2">Regular cylindric Bessel functions</a>
+<li><a href="#p3">Irregular Cylindrical Bessel Functions</a>
+<li><a href="#p4">Regular Modified Cylindrical Bessel Functions</a>
+<li><a href="#p5">Irregular Modified Cylindrical Bessel Functions</a>
+<li><a href="#p6">Regular Spherical Bessel Functions</a>
+<li><a href="#p7">Irregular Spherical Bessel Functions</a>
+<li><a href="#p8">Regular Modified Spherical Bessel Functions</a>
+<li><a href="#p9">Irregular Modified Spherical Bessel Functions</a>
+<li><a href="#p10">Regular Bessel Function - Fractional Order</a>
+<li><a href="#p11">Irregular Bessel Functions - Fractional Order</a>
+<li><a href="#p12">Regular Modified Bessel Functions - Fractional Order</a>
+<li><a href="#p13">Irregular Modified Bessel Functions - Fractional Order</a>
+<li><a href="#p14">Zeros of Regular Bessel Functions</a>
+</ul>
+<hr>
+The routines described in this section compute the Cylindrical Bessel 
+functions J_n(x), Y_n(x), Modified cylindrical Bessel functions I_n(x), 
+K_n(x), Spherical Bessel functions j_l(x), y_l(x), and Modified Spherical 
+Bessel functions i_l(x), k_l(x). For more information see Abramowitz & Stegun, 
+Chapters 9 and 10. 
+<p>
+<a name="p1"></a>
+<h2>Module Bessel</h2>
+<a href="#J0">J0</a> ,&nbsp
+<a href="#J1">J1</a> ,&nbsp
+<a href="#Jn">Jn</a> ,&nbsp
+<a href="#Jn_array">Jn_array</a> ,&nbsp
+<a href="#Y0">Y0</a> ,&nbsp
+<a href="#Y1">Y1</a> ,&nbsp
+<a href="#Yn">Yn</a> ,&nbsp
+<a href="#Yn_array">Yn_array</a> ,&nbsp
+<a href="#IO">IO</a> ,&nbsp
+<a href="#I1">I1</a> ,&nbsp
+<a href="#In">In</a> ,&nbsp
+<a href="#In_array">In_array</a> ,&nbsp
+<a href="#I0_scaled">I0_scaled</a> ,&nbsp
+<a href="#I1_scaled">I1_scaled</a> ,&nbsp
+<a href="#In_scaled">In_scaled</a> ,&nbsp
+<a href="#In_scaled_array">In_scaled_array</a> ,&nbsp
+<a href="#K0">K0</a> ,&nbsp
+<a href="#K1">K1</a> ,&nbsp
+<a href="#Kn">Kn</a> ,&nbsp
+<a href="#Kn_array">Kn_array</a> ,&nbsp
+<a href="#K0_scaled">K0_scaled</a> ,&nbsp
+<a href="#K1_scaled">K1_scaled</a> ,&nbsp
+<a href="#Kn_scaled_array">Kn_scaled_array</a> ,&nbsp
+<a href="#j0">j0</a> ,&nbsp
+<a href="#j1">j1</a> ,&nbsp
+<a href="#j2">j2</a> ,&nbsp
+<a href="#jl">jl</a> ,&nbsp
+<a href="#jl_array">jl_array</a> ,&nbsp
+<a href="#jl_steed_array">jl_steed_array</a> ,&nbsp
+<a href="#y0">y0</a> ,&nbsp
+<a href="#y1">y1</a> ,&nbsp
+<a href="#y2">y2</a> ,&nbsp
+<a href="#yl">yl</a> ,&nbsp
+<a href="#yl_array">yl_array</a> ,&nbsp
+<a href="#i0_scaled">i0_scaled</a> ,&nbsp
+<a href="#i1_scaled">i1_scaled</a> ,&nbsp
+<a href="#i2_scaled">i2_scaled</a> ,&nbsp
+<a href="#il_scaled">il_scaled</a> ,&nbsp
+<a href="#il_scaled_array">il_scaled_array</a> ,&nbsp
+<a href="#k0_scaled">k0_scaled</a> ,&nbsp
+<a href="#k1_scaled">k1_scaled</a> ,&nbsp
+<a href="#k2_scaled">k2_scaled</a> ,&nbsp
+<a href="#kl_scaled">kl_scaled</a> ,&nbsp
+<a href="#kl_scaled_array">kl_scaled_array</a> ,&nbsp
+<a href="#Jnu">Jnu</a> ,&nbsp
+<a href="#Ynu">Ynu</a> ,&nbsp
+<a href="#Inu">Inu</a> ,&nbsp
+<a href="#Inu_scaled">Inu_scaled</a> ,&nbsp
+<a href="#Knu">Knu</a> ,&nbsp
+<a href="#Knu_scaled">Knu_scaled</a> ,&nbsp
+<a href="#lnKnu">lnKnu</a> ,&nbsp
+<a href="#zero_J0">zero_J0</a> ,&nbsp
+<a href="#zero_J1">zero_J1</a> ,&nbsp
+<a href="#zero_Jnu">zero_Jnu</a> ,&nbsp
+<p>
+
+<a name="p2"></a>
+<h3>Regular cylindric Bessel functions</h3>
+<a name="J0"></a>
+<tt>GSL::Special::Bessel::J0</tt><br>
+<tt>GSL::Special::Bessel::J0_e</tt><br>
+<tt>Bessel::J0(d1) -> d2</tt><br>
+These routines compute the regular cylindrical Bessel function of zeroth 
+order, J_0(x).
+<p>
+<a name="J1"></a>
+<tt>GSL::Special::Bessel::J1</tt><br>
+<tt>GSL::Special::Bessel::J1_e</tt><br>
+<tt>Bessel::J1(d1) -> d2</tt><br>
+These routines compute the regular cylindrical Bessel function of first 
+order, J_1(x).
+<p>
+<a name="Jn"></a>
+<tt>GSL::Special::Bessel::Jn</tt><br>
+<tt>GSL::Special::Bessel::Jn_e</tt><br>
+<tt>Bessel::Jn(n, d1) -> d2</tt><br>
+n is an integer. 
+These routines compute the regular cylindrical Bessel function of order n, 
+J_n(x).
+<p>
+<a name="Jn_array"></a>
+<tt>GSL::Special::Bessel::Jn_array</tt><br>
+<tt>Bessel::Jn_array(nmin, nmax, x) -> result_array</tt><br>
+This routine computes the values of the regular cylindrical Bessel functions 
+J_n(x) for n from nmin to nmax inclusive, storing the results in the array 
+result_array. The values are computed using recurrence relations, for 
+efficiency, and therefore may differ slightly from the exact values.
+
+<a name="p3"></a>
+<h3>Irregular Cylindrical Bessel Functions</h3>
+<a name="Y0"></a>
+<tt>GSL::Special::Bessel::Y0</tt><br>
+<tt>GSL::Special::Bessel::Y0_e</tt><br>
+<tt>Bessel::Y0(d1) -> d2</tt><br>
+These routines compute the irregular cylindrical Bessel function of zeroth 
+order, Y_0(x), for x>0.
+<p>
+<a name="Y1"></a>
+<tt>GSL::Special::Bessel::Y1</tt><br>
+<tt>GSL::Special::Bessel::Y1_e</tt><br>
+<tt>Bessel::Y1(d1) -> d2</tt><br>
+These routines compute the irregular cylindrical Bessel function of first 
+order, Y_1(x), for x>0.
+<p>
+<a name="Yn"></a>
+<tt>GSL::Special::Bessel::Yn</tt><br>
+<tt>GSL::Special::Bessel::Yn_e</tt><br>
+<tt>Bessel::Yn(n, d1) -> d2</tt><br>
+n is an integer.
+These routines compute the irregular cylindrical Bessel function of order n, 
+Y_n(x), for x>0.
+<p>
+<a name="Yn_array"></a>
+<tt>GSL::Special::Bessel::Yn_array</tt><br>
+<tt>Bessel::Yn_array(nmin, nmax, x) -> result_array</tt><br>
+This routine computes the values of the irregular cylindrical Bessel 
+functions Y_n(x) for n from nmin to nmax inclusive, storing the results 
+in the array result_array. The domain of the function is x>0. The values are 
+computed using recurrence relations, for efficiency, and therefore may 
+differ slightly from the exact values.
+
+<a name="p4"></a>
+<h3>Regular Modified Cylindrical Bessel Functions</h3>
+<a name="IO"></a>
+<tt>GSL::Special::Bessel::IO</tt><br>
+<tt>GSL::Special::Bessel::IO_e</tt><br>
+<tt>Bessel::IO(d1) -> d2</tt><br>
+These routines compute the regular modified cylindrical Bessel function 
+of zeroth order, I_0(x).
+<p>
+<a name="I1"></a>
+<tt>GSL::Special::Bessel::I1</tt><br>
+<tt>GSL::Special::Bessel::I1_e</tt><br>
+<tt>Bessel::I1(d1) -> d2</tt><br>
+These routines compute the regular modified cylindrical Bessel function 
+of first order, I_1(x).
+<p>
+<a name="In"></a>
+<tt>GSL::Special::Bessel::In</tt><br>
+<tt>GSL::Special::Bessel::In_e</tt><br>
+<tt>Bessel::In(n, d1) -> d2</tt><br>
+n is an integer.
+These routines compute the regular modified cylindrical Bessel function 
+of order n, I_n(x).
+<p>
+<a name="In_array"></a>
+<tt>GSL::Special::Bessel::In_array</tt><br>
+<tt>Bessel::In_array(nmin, nmax, x) -> result_array</tt><br>
+This routine computes the values of the regular modified cylindrical 
+Bessel functions I_n(x) for n from nmin to nmax inclusive, storing the
+results in the array result_array. The start of the range nmin must be
+positive or zero. The values are computed using recurrence relations, 
+for efficiency, and therefore may differ slightly from the exact values.
+<p>
+<a name="I0_scaled"></a>
+<tt>GSL::Special::Bessel::I0_scaled</tt><br>
+<tt>GSL::Special::Bessel::I0_scaled_e</tt><br>
+<tt>Bessel::I0_scaled(d1) -> d2</tt><br>
+These routines compute the scaled regular modified cylindrical Bessel 
+function of zeroth order \exp(-|x|) I_0(x).
+<p>
+<a name="I1_scaled"></a>
+<tt>GSL::Special::Bessel::I1_scaled</tt><br>
+<tt>GSL::Special::Bessel::I1_scaled_e</tt><br>
+<tt>Bessel::I1_scaled(d1) -> d2</tt><br>
+These routines compute the scaled regular modified cylindrical Bessel 
+function of first order \exp(-|x|) I_1(x).
+<p>
+<a name="In_scaled"></a>
+<tt>GSL::Special::Bessel::In_scaled</tt><br>
+<tt>GSL::Special::Bessel::In_scaled_e</tt><br>
+<tt>Bessel::In_scaled(n, d1) -> d2</tt><br>
+These routines compute the scaled regular modified cylindrical Bessel function 
+of order n, \exp(-|x|) I_n(x)
+<p>
+<a name="In_scaled_array"></a>
+<tt>GSL::Special::Bessel::In_scaled_array</tt><br>
+<tt>Bessel::In_scaled_array(nmin, nmax, x) -> result_array</tt><br>
+This routine computes the values of the scaled regular cylindrical Bessel 
+functions \exp(-|x|) I_n(x) for n from nmin to nmax inclusive, storing 
+the results in the array result_array. The start of the range nmin must 
+be positive or zero. The values are computed using recurrence relations, 
+for efficiency, and therefore may differ slightly from the exact values.
+
+<a name="p5"></a>
+<h3>Irregular Modified Cylindrical Bessel Functions</h3>
+<a name="K0"></a>
+<tt>GSL::Special::Bessel::K0</tt><br>
+<tt>GSL::Special::Bessel::K0_e</tt><br>
+<tt>Bessel::K0(d1) -> d2</tt><br>
+These routines compute the irregular modified cylindrical Bessel function
+of zeroth order, K_0(x), for x > 0.
+<p>
+<a name="K1"></a>
+<tt>GSL::Special::Bessel::K1</tt><br>
+<tt>GSL::Special::Bessel::K1_e</tt><br>
+<tt>Bessel::K1(d1) -> d2</tt><br>
+These routines compute the irregular modified cylindrical Bessel function
+of first order, K_1(x), for x > 0.
+<p>
+<a name="Kn"></a>
+<tt>GSL::Special::Bessel::Kn</tt><br>
+<tt>GSL::Special::Bessel::Kn_e</tt><br>
+<tt>Bessel::Kn(n, d1) -> d2</tt><br>
+n is an integer.
+These routines compute the irregular modified cylindrical Bessel function
+of order n, K_n(x), for x > 0.
+<p>
+<a name="Kn_array"></a>
+<tt>GSL::Special::Bessel::Kn_array</tt><br>
+<tt>Bessel::Kn_array(nmin, nmax, x) -> result_array</tt><br>
+This routine computes the values of the irregular modified cylindrical
+Bessel functions K_n(x) for n from nmin to nmax inclusive, storing the 
+results in the array result_array. The start of the range nmin must be
+positive or zero. The domain of the function is x>0. The values are 
+computed using recurrence relations, for efficiency, and therefore may
+differ slightly from the exact values.
+<p>
+<a name="K0_scaled"></a>
+<tt>GSL::Special::Bessel::K0_scaled</tt><br>
+<tt>GSL::Special::Bessel::K0_scaled_e</tt><br>
+<tt>Bessel::K0_scaled(d1) -> d2</tt><br>
+These routines compute the scaled irregular modified cylindrical Bessel 
+function of zeroth order \exp(x) K_0(x) for x>0.
+<p>
+<a name="K1_scaled"></a>
+<tt>GSL::Special::Bessel::K1_scaled</tt><br>
+<tt>GSL::Special::Bessel::K1_scaled_e</tt><br>
+<tt>Bessel::K1_scaled(d1) -> d2</tt><br>
+These routines compute the scaled irregular modified cylindrical Bessel
+function of first order \exp(x) K_1(x) for x>0.
+<p>
+<a name="Kn_scaled"></a>
+<tt>GSL::Special::Bessel::Kn_scaled</tt><br>
+<tt>GSL::Special::Bessel::Kn_scaled_e</tt><br>
+<tt>Bessel::Kn_scaled(n, d1) -> d2</tt><br>
+These routines compute the scaled irregular modified cylindrical Bessel 
+function of order n, \exp(x) K_n(x), for x>0.
+<p>
+<a name="Kn_scaled_array"></a>
+<tt>GSL::Special::Bessel::Kn_scaled_array</tt><br>
+<tt>Bessel::Kn_scaled_array(nmin, nmax, x) -> result_array</tt><br>
+This routine computes the values of the scaled irregular cylindrical 
+Bessel functions \exp(x) K_n(x) for n from nmin to nmax inclusive, storing 
+the results in the array result_array. The start of the range nmin must 
+be positive or zero. The domain of the function is x>0. The values are 
+computed using recurrence relations, for efficiency, and therefore may 
+differ slightly from the exact values.
+
+<a name="p6"></a>
+<h3>Regular Spherical Bessel Functions</h3>
+<a name="j0"></a>
+<tt>GSL::Special::Bessel::j0</tt><br>
+<tt>GSL::Special::Bessel::j0_e</tt><br>
+<tt>Bessel::j0(d1) -> d2</tt><br>
+These routines compute the regular spherical Bessel function of zeroth 
+order, j_0(x) = \sin(x)/x.
+
+<p>
+<a name="j1"></a>
+<tt>GSL::Special::Bessel::j1</tt><br>
+<tt>GSL::Special::Bessel::j1_e</tt><br>
+<tt>Bessel::j1(d1) -> d2</tt><br>
+These routines compute the regular spherical Bessel function of first 
+order, j_1(x) = (\sin(x)/x - \cos(x))/x.
+<p>
+<a name="j2"></a>
+<tt>GSL::Special::Bessel::j2</tt><br>
+<tt>GSL::Special::Bessel::j2_e</tt><br>
+<tt>Bessel::j2(d1) -> d2</tt><br>
+These routines compute the regular spherical Bessel function of second 
+order, j_2(x) = ((3/x^2 - 1)\sin(x) - 3\cos(x)/x)/x.
+<p>
+<a name="jl"></a>
+<tt>GSL::Special::Bessel::jl</tt><br>
+<tt>GSL::Special::Bessel::jl_e</tt><br>
+<tt>Bessel::jl(l, d1) -> d2</tt><br>
+These routines compute the regular spherical Bessel function of order l, 
+j_l(x), for l >= 0 and x >= 0.
+<p>
+<a name="jl_array"></a>
+<tt>GSL::Special::Bessel::jl_array</tt><br>
+<tt>Bessel::jl_array(lmax, d1) -> result_array</tt><br>
+This routine computes the values of the regular spherical Bessel 
+functions j_l(x) for l from 0 to lmax inclusive for lmax >= 0 and x >= 0, 
+storing the results in the array result_array.
+The values are computed using recurrence relations, for efficiency, and 
+therefore may differ slightly from the exact values.
+<p>
+<a name="jl_steed_array"></a>
+<tt>GSL::Special::Bessel::jl_steed_array</tt><br>
+<tt>Bessel::jl_steed_array(lmax, d1) -> result_array</tt><br>
+This routine uses Steed's method to compute the values of the regular 
+spherical Bessel functions j_l(x) for l from 0 to lmax inclusive for 
+lmax >= 0 and x >= 0, storing the results in the array result_array. 
+The Steed/Barnett algorithm is described in Comp. Phys. Comm. 21, 297 (1981). 
+Steed's method is more stable than the recurrence used in the other functions 
+but is also slower.
+
+<a name="p7"></a>
+<h3>Irregular Spherical Bessel Functions</h3>
+<a name="y0"></a>
+<tt>GSL::Special::Bessel::y0</tt><br>
+<tt>GSL::Special::Bessel::y0_e</tt><br>
+<tt>Bessel::y0(d1) -> d2</tt><br>
+These routines compute the irregular spherical Bessel function of zeroth 
+order, y_0(x) = -\cos(x)/x.
+<p>
+<a name="y1"></a>
+<tt>GSL::Special::Bessel::y1</tt><br>
+<tt>GSL::Special::Bessel::y1_e</tt><br>
+<tt>Bessel::y1(d1) -> d2</tt><br>
+These routines compute the irregular spherical Bessel function of first
+order, y_1(x) = -(\cos(x)/x + \sin(x))/x.
+<p>
+<a name="y2"></a>
+<tt>GSL::Special::Bessel::y2</tt><br>
+<tt>GSL::Special::Bessel::y2_e</tt><br>
+<tt>Bessel::y2(d1) -> d2</tt><br>
+These routines compute the irregular spherical Bessel function of second 
+order, y_2(x) = (-3/x^2 + 1/x)\cos(x) - (3/x^2)\sin(x).
+<p>
+<a name="yl"></a>
+<tt>GSL::Special::Bessel::yl</tt><br>
+<tt>GSL::Special::Bessel::yl_e</tt><br>
+These routines compute the irregular spherical Bessel function of order l, 
+y_l(x), for l >= 0.
+<p>
+<a name="yl_array"></a>
+<tt>GSL::Special::Bessel::yl_array</tt><br>
+<tt>Bessel::yl_array(lmax, d1) -> result_array</tt><br>
+This routine computes the values of the irregular spherical Bessel 
+functions y_l(x) for l from 0 to lmax inclusive for lmax >= 0, storing 
+the results in the array result_array. The values are computed using 
+recurrence relations, for efficiency, and therefore may differ slightly 
+from the exact values.
+
+<a name="p8"></a>
+<h3>Regular Modified Spherical Bessel Functions</h3>
+The regular modified spherical Bessel functions i_l(x) are related to 
+the modified Bessel functions of fractional order, <br>
+<tt>i_l(x) = \sqrt{\pi/(2x)} I_{l+1/2}(x)</tt><br>
+<p>
+<a name="i0"></a>
+<tt>GSL::Special::Bessel::i0_scaled</tt><br>
+<tt>GSL::Special::Bessel::i0_scaled_e</tt><br>
+<tt>i0_scaled(d1) -> d2</tt><br>
+These routines compute the scaled regular modified spherical Bessel function 
+of zeroth order, \exp(-|x|) i_0(x).
+<p>
+<a name="i1_scaled"></a>
+<tt>GSL::Special::Bessel::i1_scaled</tt><br>
+<tt>GSL::Special::Bessel::i1_scaled_e</tt><br>
+<tt>i1_scaled(d1) -> d2</tt><br>
+These routines compute the scaled regular modified spherical Bessel 
+function of first order, \exp(-|x|) i_1(x).
+<p>
+<a name="i2_scaled"></a>
+<tt>GSL::Special::Bessel::i2_scaled</tt><br>
+<tt>GSL::Special::Bessel::i2_scaled_e</tt><br>
+<tt>i2_scaled(d1) -> d2</tt><br>
+These routines compute the scaled regular modified spherical Bessel 
+function of second order, \exp(-|x|) i_2(x)
+<p>
+<a name="il_scaled"></a>
+<tt>GSL::Special::Bessel::il_scaled</tt><br>
+<tt>GSL::Special::Bessel::il_scaled_e</tt><br>
+<tt>i2_scaled(l, d1) -> d2</tt><br>
+These routines compute the scaled regular modified spherical Bessel 
+function of order l, \exp(-|x|) i_l(x)
+<p>
+<a name="il_scaled_array"></a>
+<tt>GSL::Special::Bessel::il_scaled_array</tt><br>
+<tt>Bessel::il_scaled_array(lmax, d1) -> result_array</tt><br>
+This routine computes the values of the scaled regular modified cylindrical 
+Bessel functions \exp(-|x|) i_l(x) for l from 0 to lmax inclusive for 
+lmax >= 0, storing the results in the array result_array. The values are 
+computed using recurrence relations, for efficiency, and therefore may differ 
+slightly from the exact values.
+
+<a name="p9"></a>
+<h3>Irregular Modified Spherical Bessel Functions</h3>
+The irregular modified spherical Bessel functions k_l(x) are related to 
+the irregular modified Bessel functions of fractional order, <br>
+<tt>k_l(x) = \sqrt{\pi/(2x)} K_{l+1/2}(x).</tt><br>
+<p>
+<a name="k0_scaled"></a>
+<tt>GSL::Special::Bessel::k0_scaled</tt><br>
+<tt>GSL::Special::Bessel::k0_scaled_e</tt><br>
+<tt>Bessel::k0_scaled(d1) -> d2</tt><br>
+These routines compute the scaled irregular modified spherical Bessel 
+function of zeroth order, \exp(x) k_0(x), for x>0.
+<p>
+<a name="k1_scaled"></a>
+<tt>GSL::Special::Bessel::k1_scaled</tt><br>
+<tt>GSL::Special::Bessel::k1_scaled_e</tt><br>
+<tt>Bessel::k1_scaled(d1) -> d2</tt><br>
+These routines compute the scaled irregular modified spherical Bessel 
+function of first order, \exp(x) k_1(x), for x>0.
+<p>
+<a name="k2_scaled"></a>
+<tt>GSL::Special::Bessel::k2_scaled</tt><br>
+<tt>GSL::Special::Bessel::k2_scaled_e</tt><br>
+<tt>Bessel::k2_scaled(d1) -> d2</tt><br>
+These routines compute the scaled irregular modified spherical Bessel 
+function of second order, \exp(x) k_2(x), for x>0.
+<p>
+<a name="kl_scaled"></a>
+<tt>GSL::Special::Bessel::kl_scaled</tt><br>
+<tt>GSL::Special::Bessel::kl_scaled_e</tt><br>
+<tt>Bessel::kl_scaled(l, d1) -> d2</tt><br>
+These routines compute the scaled irregular modified spherical Bessel 
+function of order l, \exp(x) k_l(x), for x>0.
+<p>
+<a name="kl_scaled_array"></a>
+<tt>GSL::Special::Bessel::kl_scaled_array</tt><br>
+<tt>Bessel::kl_scaled_array(lmax, d1) -> result_array</tt><br>
+This routine computes the values of the scaled irregular modified spherical 
+Bessel functions \exp(x) k_l(x) for l from 0 to lmax inclusive for 
+lmax >= 0 and x>0, storing the results in the array result_array. The values 
+are computed using recurrence relations, for efficiency, and therefore 
+may differ slightly from the exact values.
+
+<a name="p10"></a>
+<h3>Regular Bessel Function - Fractional Order</h3>
+<a name="Jnu"></a>
+<tt>GSL::Special::Bessel::Jnu</tt><br>
+<tt>GSL::Special::Bessel::Jnu_e</tt><br>
+<tt>Bessel::Jnu(nu, d1) -> d2</tt><br>
+These routines compute the regular cylindrical Bessel function of fractional 
+order nu, J_\nu(x).i<br>
+<tt>j_n(x) = \sqrt(\pi/(2 x)) Jnu(nu + 1/2,x)</tt><br>
+<p>
+<tt>GSL::Special::Bessel::bessel_sequence_Jnu</tt><br>
+MISSING<br>
+This function computes the regular cylindrical Bessel function of fractional order \nu, J_\nu(x), evaluated at a series of x values. The array v of length size contains the x values. They are assumed to be strictly ordered and positive. 
+
+<a name="p11"></a>
+<h3>Irregular Bessel Functions - Fractional Order</h3>
+<a name="Ynu"></a>
+<tt>GSL::Special::Bessel::Ynu</tt><br>
+<tt>GSL::Special::Bessel::Ynu_e</tt><br>
+<tt>Bessel::Ynu(nu, d1) -> d2</tt><br>
+These routines compute the irregular cylindrical Bessel function of 
+fractional order nu, Y_\nu(x).<br>
+<tt>y_n(x) = \sqrt(\pi/(2 x)) Ynu(nu + 1/2,x)</tt><br>
+
+<a name="p12"></a>
+<h3>Regular Modified Bessel Functions - Fractional Order</h3>
+<a name="Inu"></a>
+<tt>GSL::Special::Bessel::Inu</tt><br>
+<tt>GSL::Special::Bessel::Inu_e</tt><br>
+<tt>Bessel::Inu(nu, d1) -> d2</tt><br>
+These routines compute the regular modified Bessel function of fractional 
+order nu, I_\nu(x) for x>0, \nu>0.<br>
+<tt>i_n(x) = \sqrt(\pi/(2 x)) Inu(nu + 1/2,x)</tt><br>
+<p>
+<a name="Inu_scaled"></a>
+<tt>GSL::Special::Bessel::Inu_scaled</tt><br>
+<tt>GSL::Special::Bessel::Inu_scaled_e</tt><br>
+<tt>Bessel::Inu_scaled(nu, d1) -> d2</tt><br>
+These routines compute the scaled regular modified Bessel function of 
+fractional order nu, \exp(-|x|)I_\nu(x) for x>0, \nu>0.
+
+<a name="p13"></a>
+<h3>Irregular Modified Bessel Functions - Fractional Order</h3>
+<a name="Knu"></a>
+<tt>GSL::Special::Bessel::Knu</tt><br>
+<tt>GSL::Special::Bessel::Knu_e</tt><br>
+<tt>Bessel::Knu(nu, d1) -> d2</tt><br>
+These routines compute the irregular modified Bessel function of fractional 
+order nu, K_\nu(x) for x>0, \nu>0.<br>
+<tt>k_n(x) = \sqrt(\pi/(2 x)) Knu(nu + 1/2,x)</tt><br>
+<p>
+<a name="lnKnu"></a>
+<tt>GSL::Special::Bessel::lnKnu</tt><br>
+<tt>GSL::Special::Bessel::lnKnu_e</tt><br>
+<tt>Bessel::lnKnu(nu, d1) -> d2</tt><br>
+These routines compute the logarithm of the irregular modified Bessel 
+function of fractional order nu, \ln(K_\nu(x)) for x>0, \nu>0.
+<p>
+<a name="Knu_scaled"></a>
+<tt>GSL::Special::Bessel::Knu_scaled</tt><br>
+<tt>GSL::Special::Bessel::Knu_scaled_e</tt><br>
+<tt>Bessel::Knu_scaled(nu, d1) -> d2</tt><br>
+These routines compute the scaled irregular modified Bessel function of 
+fractional order nu, \exp(+|x|) K_\nu(x) for x>0, \nu>0.
+
+<a name="p14"></a>
+<h3>Zeros of Regular Bessel Functions</h3>
+<a name="zero_J0"></a>
+<tt>GSL::Special::Bessel::zero_J0</tt><br>
+<tt>GSL::Special::Bessel::zero_J0_e</tt><br>
+<tt>Bessel::zero_J0(s) -> d1</tt><br>
+s is a positive integer.
+These routines compute the location of the s-th positive zero of the Bessel 
+function J_0(x).
+<p>
+<a name="zero_J1"></a>
+<tt>GSL::Special::Bessel::zero_J1</tt><br>
+<tt>GSL::Special::Bessel::zero_J1_e</tt><br>
+<tt>Bessel::zero_J1(s) -> d1</tt><br>
+These routines compute the location of the s-th positive zero of the 
+Bessel function J_1(x).
+<p>
+<a name="zero_Jnu"></a>
+<tt>GSL::Special::Bessel::zero_Jnu</tt><br>
+<tt>GSL::Special::Bessel::zero_Jnu_e</tt><br>
+<tt>Bessel::zero_J1(nu, s) -> d1</tt><br>
+These routines compute the location of the s-th positive zero of the 
+Bessel function J_\nu(x).
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+include GSL::Special; include Math
+require 'gsl_util'
+
+puts "Regular cylindric Bessel functions"
+x = 5.0
+r0 = Bessel::J0(x); p r0
+r = Bessel::J0_e(x)
+p r.val, r.err
+
+r1 = Bessel::J1(x); p r1
+assert Bessel::Jn(1,x) == Bessel::J1(x)
+r2 = Bessel::Jn(2,x); p r2
+assert Bessel::Jn(-1,x) == -Bessel::J1(x) &amp;&amp; Bessel::Jn(0,x) == Bessel::J0(x)
+a = Bessel::Jn_array(0, 2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] =~ [a1[i], 1.0e-16] }
+
+puts "Irregular Cylindrical Bessel Functions"
+r0 = Bessel::Y0(x); p r0
+p Bessel::Y0_e(x).err
+r1 = Bessel::Y1(x); p r1
+r2 = Bessel::Yn(2,x); p r2
+a = Bessel::Yn_array(0, 2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] == a1[i]}
+
+puts "Regular Modified Cylindrical Bessel Functions"
+r0 = Bessel::I0(x); p r0
+p Bessel::I0_e(x).err
+r1 = Bessel::I1(x); p r1
+r2 = Bessel::In(2,x); p r2
+a = Bessel::In_array(0, 2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] =~ [ a1[i], 1.0e-14] }
+
+assert Bessel::I0_scaled(x) =~ Bessel::I0(x) * exp(-x)
+assert Bessel::I1_scaled(x) =~ Bessel::I1(x) * exp(-x)
+assert Bessel::In_scaled(2,x) =~ Bessel::In(2,x) * Math.exp(-x)
+assert Bessel::In_scaled_array(0,2,x)[2] =~ Bessel::In_scaled(2,x)
+
+puts "Irregular Modified Cylindrical Bessel Functions"
+r0 = Bessel::K0(x); p r0
+p Bessel::K0_e(x).err
+r1 = Bessel::K1(x); p r1
+r2 = Bessel::Kn(2,x); p r2
+a = Bessel::Kn_array(0, 2, x)
+a1 = [r0, r1, r2]
+3.times {|i| a[i] == a1[i] }
+
+assert Bessel::K0_scaled(x) =~ Bessel::K0(x) * Math.exp(x)
+assert Bessel::K1_scaled(x) =~ Bessel::K1(x) * Math.exp(x)
+assert Bessel::Kn_scaled(2,x) =~ Bessel::Kn(2,x) * Math.exp(x)
+assert Bessel::Kn_scaled_array(0,2,x)[2] =~ [Bessel::Kn_scaled(2,x), 1.0e-13]
+
+puts "Regular Spherical Bessel Functions"
+r0 = Bessel::j0(x)
+p Bessel::j0_e(x).err
+assert r0 =~ sin(x)/x
+r1 = Bessel::j1(x)
+assert r1 =~  (sin(x)/x - cos(x))/x
+r2 = Bessel::j2(x)
+assert r2 =~  ((3/x**2 - 1)*sin(x) - 3*cos(x)/x)/x
+r2a = Bessel::jl(2,x);
+assert r2 =~ r2a
+a = Bessel::jl_array(2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] =~ [ a1[i], 1.0e-16] }
+
+a = Bessel::jl_steed_array(2, x)
+3.times {|i| assert a[i] =~ [a1[i], 1.0e-16] }
+
+puts "Irregular Spherical Bessel Functions"
+r0 = Bessel::y0(x)
+p Bessel::y0_e(x).err
+assert r0 =~ -cos(x)/x
+r1 = Bessel::y1(x)
+assert r1 =~ -(cos(x)/x + sin(x))/x
+r2 = Bessel::y2(x)
+assert r2 =~ [ (-3/x**3 + 1/x)*cos(x) - (3/x**2)*sin(x), 1.0e-16]
+r2a = Bessel::yl(2,x);
+assert r2 == r2a
+a = Bessel::yl_array(2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] == a1[i]}
+
+puts "Regular Modified Spherical Bessel Functions"
+r0 = Bessel::i0_scaled(x)
+p r0*exp(x)
+r1 = Bessel::i1_scaled(x)
+p r1*exp(x)
+r2 = Bessel::i2_scaled(x)
+p r2*exp(x)
+r2a = Bessel::il_scaled(2,x)
+assert r2 == r2a
+a = Bessel::il_scaled_array(2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] == a1[i]}
+
+puts "Irregular Modified Spherical Bessel Functions"
+r0 = Bessel::k0_scaled(x)
+p r0*exp(-x)
+r1 = Bessel::k1_scaled(x)
+p r1*exp(-x)
+r2 = Bessel::k2_scaled(x)
+p r2*exp(-x)
+r2a = Bessel::kl_scaled(2,x)
+assert r2 == r2a
+a = Bessel::kl_scaled_array(2, x)
+a1 = [r0, r1, r2]
+3.times {|i| assert a[i] == a1[i]}
+
+puts "Regular Bessel Function - Fractional Order"
+r1 = Bessel::Jnu(0.5,x)
+assert r1*sqrt(M_PI/(2*x)) =~ Bessel::j0(x)
+
+puts "Irregular Bessel Functions - Fractional Order"
+r1 = Bessel::Ynu(0.5,x)
+assert r1*sqrt(M_PI/(2*x)) =~ Bessel::y0(x)
+
+puts "Regular Modified Bessel Functions - Fractional Order"
+r1 = Bessel::Inu(0.5,x)
+assert r1*sqrt(M_PI/(2*x)) =~ [Bessel::i0_scaled(x)*exp(x), 1.0e-14]
+assert  r1 == Bessel::Inu_scaled(0.5,x)*exp(x)
+
+puts "Irregular Modified Bessel Functions - Fractional Order"
+r1 = Bessel::Knu(0.5,x)
+assert  r1*sqrt(M_PI/(2*x)) == (Bessel::k0_scaled(x)*exp(-x))
+assert log(r1) == Bessel::lnKnu(0.5,x)
+assert Bessel::Knu_scaled(0.5,x) == r1*exp(x)
+
+puts "Zeros of Regular Bessel Functions"
+r0 = Bessel::zero_J0(1); p r0
+r1 = Bessel::zero_J1(1); p r1
+r2 = Bessel::zero_Jnu(2,1); p r2
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="clausen.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="airy.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Bessel Functions</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

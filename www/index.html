@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html lang="en">
+<head>
+<title>ruby-gsl</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta name="author" content="Arno Erpenbeck">
+<meta name="keywords" content=
+"ruby-gsl,ruby,programming,language,GSL,library,extension,numeric,scientific">
+<meta name="description" content=
+"wrapper of the GNU scientific library GSL for the Ruby programming language">
+<meta name="DC.Title" content="ruby-gsl">
+<meta name="DC.Creator" content="Arno Erpenbeck">
+<meta name="DC.Publisher" content="Arno Erpenbeck">
+<meta name="DC.Subject" content="Ruby extension library for GSL">
+<meta name="DC.Description" content=
+"wrapper of the GNU scientific library GSL for the Ruby programming language">
+<meta name="DC.Date" content="2004-11-13">
+<meta name="DC.Type" content="Text">
+<meta name="DC.Format" content="text/html">
+<meta name="DC.Identifier" content="http://ruby-gsl.sourceforge.net/index.html">
+<meta name="DC.Language" content="en">
+<meta name="DC.Relation" content="Start">
+<meta name="DC.Rights" content="All rights reserved">
+<link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
+<body>
+
+<h1 align="center">ruby-gsl</h1>
+
+<hr class="sep">
+
+<div class="header"><h2>What is it?</h2></div>
+
+<div class="text">ruby-gsl is a wrapper of the GNU Scientific Library for the Ruby programming language.</div>
+
+<div class="text">The GNU Scientific Library is a collection of routines for numerical
+computing.<br>To find out more about GSL, please go to <a href=
+"http://sources.redhat.com/gsl/">http://sources.redhat.com/gsl/</a>.</div>
+
+<div class="text">Ruby is an interpreted scripting language for quick and easy
+object-oriented programming.<br>To find out more about Ruby, please go to <a
+href="http://www.ruby-lang.org">http://www.ruby-lang.org/</a>.</div>
+
+<hr class="sep">
+
+<div class="header"><h2>Where can I get it?</h2></div>
+
+<div class="text">Go to the ruby-gsl page on <a href="https://sourceforge.net/projects/ruby-gsl/">sourceforge.net</a></div>
+
+<div class="text">Download the current version 0.2.0: <a href="http://prdownloads.sourceforge.net/ruby-gsl/ruby-gsl-0.2.0.tar.gz?download">ruby-gsl-0.2.0.tar.gz</a></div>
+
+<div class="text">Download the previous version 0.1.9: <a href="http://prdownloads.sourceforge.net/ruby-gsl/ruby-gsl-0.1.9.tar.gz?download">ruby-gsl-0.1.9.tar.gz</a></div>
+
+<hr class="sep">
+
+<div class="header"><h2>What can I do with it?</h2></div>
+
+<div class="text">Have a look at the <a href="samples.html">samples</a>, to see
+what you can do with ruby-gsl!</div>
+
+<div class="text">Things implemented in ver. 0.2.0:</div>
+
+<ul>
+<li>some error handling (ch. 3 in the GSL documentation)</li>
+
+<li>basic mathematical functions (ch. 4)</li>
+
+<li>complex numbers (ch. 5)</li>
+
+<li>functions for polynomial evaluation/roots (ch. 6)</li>
+
+<li>most "special functions" (ch. 7)</li>
+
+<li>vectors and matrices (ch. 8)</li>
+
+<li>permutations (ch. 9)</li>
+
+<li>combinations (ch. 10)</li>
+
+<li>BLAS support (ch. 12)</li>
+
+<li>linear algebra (ch. 13)</li>
+
+<li>eigensystems (ch. 14)</li>
+
+<li>some support for numerical integration (ch. 16)</li>
+
+<li>random number generation (ch. 17)</li>
+
+<li>quasi-random sequences (ch. 18)</li>
+
+<li>most random number distributions (ch. 19)</li>
+
+<li>most statistical functions (ch. 20)</li>
+
+<li>histograms (ch. 21)</li>
+
+<li>Monte Carlo integration (ch. 23)</li>
+
+<li>Simualted Annealing (currently broken) (ch. 24)</li>
+
+<li>interpolation (ch. 26)</li>
+
+<li>numerical differentiation (ch. 27)</li>
+
+<li>Chebyshev approximation (ch. 28)</li>
+
+<li>series acceleration (ch. 29)</li>
+
+<li>Discrete Hankel Transforms (ch. 30)</li>
+
+<li>1-dimensional root-finding (bracketing-based) (ch. 31)</li>
+
+<li>1-dimensional minimization (ch. 32)</li>
+
+<li>some functions for least-squares fitting (ch. 35)</li>
+
+<li>physical constants (ch. 37)</li>
+</ul>
+
+<div class="text">View the <a href="doc.html">documentation</a> generated with
+<a href="http://raa.ruby-lang.org/list.rhtml?name=rude4c">rude4c</a> from the C
+source code.</div>
+
+<hr class="sep">
+
+<div class="header"><h2>What else is there to know?</h2></div>
+
+<div class="text">We tried to keep the names/arguments/etc. as close to the
+original GSL functions so that reading the GSL documentation should suffice
+to use ruby-gsl. However in some places it might be more appropriate to
+convert some functions to a more rubyesque way.</div>
+
+<div class="text">As of version 0.1.2 we included source from Yoshiki
+Tsunesada's Ruby/GSL. This way we will have some nice and complete GSL
+wrapper some day...</div>
+
+<div class="text">If you have any questions or spot errors please feel free to
+contact me.</div>
+
+<div class="text">Arno Erpenbeck, November 2004<br>
+<a href="https://sourceforge.net/sendmessage.php?touser=755035">aerpenbeck at users.sourceforge.net</a>
+</div>
+
+<br>
+<hr>
+<table border="0" width="100%">
+<tr>
+<td><a href="http://sourceforge.net"><img src="http://sourceforge.net/sflogo.php?group_id=78627&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"></a></td>
+<td align="right"><a href="http://validator.w3.org/check/referer"><img
+border="0" src="http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01!"
+height="31" width="88"></a>&nbsp;<a href="http://jigsaw.w3.org/css-validator/"><img style="border:0;width:88px;height:31px" src="http://jigsaw.w3.org/css-validator/images/vcss" alt="Valid CSS!"></a></td>
+</tr>
+</table>
+</body>
+</html>
+

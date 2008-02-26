@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: hist2d.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: hist2d.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+include GSL::Histogram
+
+# Test 2D histogramms
+
+STDERR.puts "Running tests for 2D histograms..."
+
+h = Hist2D.new 10, 10
+h.set_ranges_uniform 0.0, 1.0, 0.0, 1.0
+h.accumulate 0.3, 0.3, 1
+h.accumulate 0.8, 0.1, 5
+h.accumulate 0.7, 0.9, 0.5
+
+#puts "\nA simple 2D Histogram:"
+#h.fprintf(STDOUT, "%g", "%g")
+#h2 = Hist2D.new(10, 10)
+#Hist2D::memcpy(h2, h)
+#puts "\nDeep copy:"
+#h2.fprintf(STDOUT, "%g", "%g")
+
+r = Random::RNG.new
+p = Hist2D_PDF.new h
+i = 0
+
+while (i < 1000)
+  i += 1
+  u = r.uniform
+  v = r.uniform
+
+  x, y = p.sample(u, v)
+  
+  printf "%g %g\n", x, y
+end
+
+STDERR.printf "\n  xmean: %f\n", h.xmean
+STDERR.printf "  ymean: %f\n", h.ymean
+STDERR.printf "  xsigma: %f\n", h.xsigma
+STDERR.printf "  ysigma: %f\n", h.ysigma
+STDERR.printf "  cov: %f\n", h.cov
+STDERR.printf "  sum: %f\n", h.sum
+
+# h.fprintf(STDOUT, "%g", "%g")
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

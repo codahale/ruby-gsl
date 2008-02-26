@@ -1,0 +1,663 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Extending Ruby</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href=".html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href=".html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Extending Ruby</td> 
+</tr></tbody></table><hr>
+<h1>
+Extending Ruby</h1>
+<ul>
+<li><a href="#l1">Defining classes and modules</a>
+<li><a href="#l2">Defining methods and constants</a>
+<li><a href="#l3">Calling Ruby methods from C</a>
+<li><a href="#l4">C Datatype wrapping</a>
+<li><a href="#l5">Memory allocation</a>
+</ul>
+
+<a name="l0"></a>
+<h3>Ruby object data-type</h3>
+All objects in Ruby  are represented by C type `VALUE'. 
+<p>
+<tt>TYPE(VALUE obj)</tt><br>
+shows the data type of <tt>obj</tt>.<br>
+In ruby-gsl the following data types are often used:
+<pre>
+T_FLOAT         floating point number
+T_FIXNUM        Fixnum(31bit integer)
+T_BIGNUM        multi precision integer
+T_ARRAY         array
+</pre>
+
+<h4>Converting Ruby data into C data</h4>
+<pre>
+NUM2INT(obj)	Ruby number into C integer; includes a type check
+FIX2INT(obj)	Ruby number into C integer
+NUM2DBL(obj)	Ruby number to double
+RARRAY(ary)	Ruby array to the C structure RArray
+</pre>
+<tt>RARRAY(ary)->len</tt><br>
+Length of the array<br>
+<tt>RARRAY(ary)->ptr</tt><br>
+Returns the pointer to the first array element.
+
+<pre>
+static VALUE Vector_new(VALUE klass, VALUE arg) {
+  gsl_vector * v = NULL;
+  size_t i, n;
+
+  switch (TYPE(arg)) {
+    case T_FIXNUM:
+    case T_BIGNUM:
+      n = NUM2INT(arg);
+      v = gsl_vector_alloc(n);
+      break;
+    case T_ARRAY:
+      n = RARRAY(arg)->len;
+      v = gsl_vector_alloc(n);
+      for (i = 0; i < n; i++)
+        gsl_vector_set(v, i, NUM2DBL(rb_ary_entry(arg, i)));
+      break;
+    default:
+      rb_raise(rb_eArgError, "Illegal argument for constructor");
+  }
+
+  return Data_Wrap_Struct(klass, 0, gsl_vector_free, v);;
+}
+</pre>
+
+<tt>rb_define_singleton_method(rbgsl_cVector, "new", Vector_new, 1);</tt><br>
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+
+v = Vector.new(2)
+v[0] = 1; v[1] = 3
+assert v == Vector.new([1,3])
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="l1"></a>
+<h3>Defining classes and modules</h3>
+<tt>VALUE rb_define_class_under(VALUE klass, char *name, VALUE superclass);</tt><br>
+ Defines a class under the class or module <tt>klass</tt>.<br>
+<pre>
+void Init_Complex() {
+  rbgsl_cComplex = rb_define_class_under(rbgsl_mGSL, "Complex",  rb_cObject);
+  ...
+}
+</pre>
+GSL::Complex has superclass Object.
+<p>
+<tt>VALUE rb_define_module_under(VALUE klass, char *k1);</tt><br>
+ Defines the module <tt>k1</tt> under the class or module  <tt>klass</tt>
+<pre>
+void Init_Poly() {
+  rbgsl_mPoly = rb_define_module_under(rbgsl_mGSL, "Poly");</tt>
+  ...
+}
+</pre>
+The prototypes of the extern variables <tt>rbgsl_cComplex</tt> and
+<tt>rbgsl_mPoly</tt> are given in the header file ruby-gsl.h .<br>
+
+<p>
+Unlike the other modules and classes, the module GSL::Math is an extension
+of the Ruby standard library module Math. The extern variable <tt>rb_mMath</tt>
+is defined in this module (see math.c in the Ruby sources):<br>
+<pre>
+void Init_Math()
+{
+    rb_mMath = rb_define_module("Math");
+ ...
+}
+</pre>
+Its prototype is in <tt>ruby.h</tt>;
+it is used in the ruby-gsl source file Math.c
+<pre>
+void Init_GSLMath() {
+  rb_define_module_function(rb_mMath, "asinh", Math_asinh, 1);
+  ...
+}
+</pre>
+    
+The prototypes of the functions <tt>Init_GSLMath</tt>, <tt>Init_Complex</tt> 
+and <tt>Init_Poly</tt> are in the header file ruby-gsl-intern.h .
+These module initializing functions are called by the function
+<tt>Init_GSL</tt> in the source file GSL.c 
+<pre>
+VALUE rbgsl_mGSL;
+void Init_GSL() {
+  rbgsl_mGSL = rb_define_module("GSL");
+  Init_GSLMath();
+  Init_Complex();
+  Init_Poly();
+  ...
+}
+</pre>
+Requiring GSL, the shared object file GSL.so is linked to Ruby, and all
+the modules called in <tt>Init_GSL()</tt> can be included.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+
+puts "Modules"
+assert Math.class == Module &amp;&amp; Math.ancestors.map{|e| e.to_s} == ["Math"] 
+modules = %w{Poly Special::Airy Blas Linalg Eigen Integration Random Random::RND Stats Histogram MonteCarlo 
+    Interpolation Diff Sum Solver Fit Const}
+modules.each{|m| mod = eval(m); assert mod.class == Module; 
+	assert mod.ancestors.map{|e| e.to_s} == ["GSL::" + m]
+      }
+
+puts "Classes"     
+classes = %w{Complex Matrix Vector Permutation Combination Function Random::RNG Random::QRNG 
+     Histogram::Hist Histogram::Hist_PDF Histogram::Hist2D Histogram::Hist_PDF 
+     MonteCarlo::Function MonteCarlo::Plain MonteCarlo::Miser MonteCarlo::Vegas
+     Interpolation::Interp Interpolation::Accel Interpolation::Spline Chebyshev
+     Sum::Levin Sum::LevinTrunc Solver::FSolver Minimizer}
+classes.each{|c| cl = eval(c); assert cl.class == Class;
+            assert cl.ancestors == [eval("GSL::" + c), Object, GSL, Kernel]
+	    assert cl.ancestors.map{|e| e.to_s} == ["GSL::" + c] + %w{Object GSL Kernel}}
+
+assert Complex.superclass == Object
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="l2"></a>
+<h3>Defining methods and constants</h3>
+
+<h4>Instance methods</h4>
+<tt>void rb_define_method(VALUE klass, char * mf, 
+        VALUE (*f)(), int n)</tt><br>
+Defines the instance method <tt>mf</tt> in the class or module <tt>klass</tt> 
+implemented by the C function f; mf has arity <tt>n</tt>, i.e.<br>
+<ul>
+<li> n &gt;= 0<br>
+  <tt>mf</tt> has <tt>n</tt> parameters;<br>
+<pre>
+static VALUE Math_pow(VALUE self, VALUE x, VALUE y) {
+  return rb_float_new(pow(NUM2DBL(x), NUM2DBL(y)));
+}
+</pre>  
+<tt>rb_define_module_function(rb_mMath, "pow", Math_pow, 2);</tt><br>
+
+<li> n = -1<br>
+ <tt>mf</tt> has variable number of parameters; <br>
+<pre>
+static VALUE Vector_set(int argc, VALUE * argv, VALUE obj) {
+  gsl_vector * v;
+  size_t i, size, size0;
+  double x;
+  VALUE ary;
+
+  switch (TYPE(argv[0])) {
+    case T_FIXNUM:
+    case T_BIGNUM:
+      i = NUM2INT(argv[0]);
+      x = NUM2DBL(argv[1]);
+
+      Data_Get_Struct(obj, gsl_vector, v);
+
+      gsl_vector_set(v, i, x);
+      break;
+    case T_ARRAY:
+      ary = argv[0];
+      Data_Get_Struct(obj, gsl_vector, v);
+      size0 = v->size;
+      size = RARRAY(ary)->len;
+      if (size > size0)
+        rb_raise(rb_eArgError, "wrong number of elements");
+      for (i = 0; i < size; i++)
+        gsl_vector_set(v, i, NUM2DBL(rb_ary_entry(ary, i)));
+      break;
+  }
+  return obj;
+}
+</pre>  
+
+<tt>rb_define_method(rbgsl_cVector, "set", Vector_set, -1);</tt><br>
+</ul>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+
+assert Math::pow(2,3) == 8
+
+v = Vector.new([1,2,3])
+v.set(2,4)
+assert v.to_a == [1,2,4]
+ary = [4,5,3]
+v.set(ary)
+assert v.to_a == ary
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>With <tt>v.set(2,4)</tt> Vector_set is called with <tt>argc = 2</tt>.<br>
+With <tt>v.set(ary)</tt> Vector_set is called with <tt>argc = 1</tt>.<br>
+
+<h4>Singleton methods</h4>
+<tt>void rb_define_singleton_method(VALUE klass, char *smf, VALUE (*f)(), 
+  int n);</tt><br>
+defines the singleton method <tt>smf</tt> in the class <tt>klass</tt>;
+<tt>smf</tt> has arity n .<br>
+<pre>
+VALUE Complex_new2(VALUE class, VALUE x, VALUE y) {
+  gsl_complex * ptr;
+  VALUE c = Data_Make_Struct(class, gsl_complex, 0, free, ptr);
+  ptr->dat[0] = NUM2DBL(x);
+  ptr->dat[1] = NUM2DBL(y);
+  return c;
+}
+</pre>
+<tt>rb_define_singleton_method(rbgsl_cComplex, "new2", Complex_new2, 
+    2);</tt><br>
+
+<h4>Module functions</h4>
+<tt>void rb_define_module_function(VALUE klass, char *mf, VALUE (*f)(),
+  int n);</tt><br>
+  defines the singleton method <tt>mf</tt> in the class <tt>klass</tt>;
+  <tt>mf</tt> has arity n .<br>
+  
+<a name="eval"></a>
+<pre>
+static VALUE Poly_evaluate(VALUE self, VALUE c, VALUE x) {
+  double * my_c;
+  COPYRUBYARRAY(c, my_c);
+  return rb_float_new(gsl_poly_eval(my_c, RARRAY(c)->len, NUM2DBL(x)));
+}
+</pre>
+<tt>rb_define_module_function(rbgsl_mPoly, "evaluate", Poly_evaluate, 
+   2);</tt><br>
+
+<h4>Defining constants</h4>
+<tt>void rb_define_const(VALUE klass, char *c, VALUE v);</tt><br>
+<tt>rb_define_const(rb_mMath, "M_E", rb_float_new(M_E));</tt><br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+
+c = Complex.new2(0,1);		assert c*c == Complex.new2(-1,0)
+p = [1, 3]; 			assert Poly::evaluate(p, 3) == 10 
+assert Math::M_E =~ [2.718, 1.0e-3]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="l3"></a>
+<h3>Calling Ruby methods from C</h3>
+
+<tt>ID</tt> is the
+integer number to represent Ruby's identifiers such as method names.
+<p>
+<tt>ID rb_intern(const char *name)</tt><br>
+It returns the symbol value of type ID for a given <tt>name</tt>. 
+<p>
+<tt>rb_funcall(VALUE recv, ID id, int argc, ...);</tt><br>
+Invokes on the receiver <tt>recv</tt> the method specified 
+by the symbol <tt>id</tt>; this method has 
+ <tt>argc</tt> arguments, which are listed in <tt>...</tt> 
+<pre>
+VALUE Complex_new(VALUE class, VALUE z) {
+  gsl_complex * ptr;
+  VALUE c = Data_Make_Struct(class, gsl_complex, 0, free, ptr);
+  ptr->dat[0] = NUM2DBL(rb_funcall(z, rb_intern("real"), 0));
+  ptr->dat[1] = NUM2DBL(rb_funcall(z, rb_intern("image"), 0));
+  return c;
+}
+</pre>
+<tt>rb_define_singleton_method(rbgsl_cComplex, "new", Complex_new, 1);</tt><br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+require "complex"
+include Math
+
+c = Complex(1.0, 2.0)
+c1 = GSL::Complex.new2(1.0, 2.0)
+c2 =  GSL::Complex.new(c)
+assert c1 == c2
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<p>
+<tt>rb_funcall2(VALUE recv, ID id, int argc, VALUE *args);</tt><br>
+Invokes the method given by <tt>id</tt> in the object <tt>recv</tt> with
+the given number of argumentd <tt>argc</tt> and the arguments 
+themselves given in the C array <tt>args</tt> .
+<pre>
+static VALUE MFunction_eval(int argc, VALUE * argv, VALUE self) {
+  mystruct_t * ptr;
+  VALUE res;
+  Data_Get_Struct(self, mystruct_t, ptr);
+  res = rb_funcall2(ptr->proc, ID_call, argc, argv);
+  return res;
+}
+</pre>
+<tt>rb_define_method(rbgsl_cMFunction, "eval", MFunction_eval, -1);</tt><br>
+See next example.
+<p>
+<tt>void rb_obj_call_init(VALUE obj, int argc, VALUE * argv);</tt><br>
+It initializes a Ruby object pointer <tt>obj</tt> from a C array of
+<tt>argc</tt> Ruby object pointers <tt>argv</tt>; see example 
+<a href="#init">here</a> .
+
+<a name="l4"></a>
+<h3>C Datatype wrapping</h3>
+
+<tt>VALUE Data_Get_Struct(VALUE obj, c-type, c-type * ptr);</tt><br>
+<tt>obj</tt> refers to a C structure; 
+this macro passes it to the pointer <tt>ptr</tt>.
+<pre>
+static VALUE Complex_real(VALUE self) {
+  gsl_complex * ptr;
+  Data_Get_Struct(self, gsl_complex, ptr);
+  return rb_float_new(ptr->dat[0]);
+}
+</pre>
+<tt> rb_define_method(rbgsl_cComplex, "real", Complex_real, 0);</tt><br>
+<p>
+<h4>Wrapping a C datatype</h4>
+<tt>VALUE Data_Wrap_Struct(VALUE klass, void (*mark)(), void (*free)(), 
+  void *ptr);</tt><br>
+Wraps the C datatype <tt>ptr</tt>, registers the garbage collector marking
+function and freeing function and returns a VALUE pointer to a Ruby object.
+The C-type of the returning object is T_DATA and its Ruby class is
+<tt>klass</tt>.
+<pre>
+static VALUE Vector_set_basis2(VALUE obj, VALUE ii) {
+  gsl_vector * v, * w;
+
+  Data_Get_Struct(obj, gsl_vector, v);
+  w = gsl_vector_alloc(v->size);
+
+  gsl_vector_set_basis(w, NUM2INT(ii));
+
+  return Data_Wrap_Struct(rbgsl_cVector, 0, gsl_vector_free, w);
+}
+</pre>
+When the C-structure does not reference a Ruby object, as <tt>gsl_vector</tt>
+in this example, there is null marking function, and the freeing function
+is a standard C freeing function.
+<pre>
+typedef struct mystruct {
+  VALUE proc;
+  VALUE params;
+  gsl_monte_function * func;
+} mystruct_t;
+
+/* Mark the hidden references so that the GC does not delete it. */
+static void MFunction_mark(mystruct_t * ptr) {
+  rb_gc_mark(ptr->proc);
+  rb_gc_mark(ptr->params);
+}
+
+static void MFunction_free(mystruct_t * ptr) {
+  if (ptr->func)
+    free(ptr->func);
+  if (ptr)
+    free(ptr);
+}
+
+<a name="init"></a>
+static VALUE MFunction_new(VALUE klass, VALUE dim, VALUE param, VALUE proc) {
+  mystruct_t * ptr;
+  VALUE res;
+
+  res = Data_Make_Struct(klass, mystruct_t, MFunction_mark, MFunction_free, ptr);
+  ptr->proc = proc;
+  ptr->params = param;
+  {
+     VALUE tmp[3];
+     tmp[0] = dim;
+     tmp[1] = param;
+     tmp[2] = proc;
+     rb_obj_call_init(res, 3, tmp);
+  }
+
+  ptr->func = (gsl_monte_function *) malloc(sizeof(gsl_monte_function));
+  ptr->func->params = ptr; // we abuse the params to point to the Proc object
+  ptr->func->f = &MFunction_function;
+  ptr->func->dim = NUM2INT(dim);
+
+  return res;
+}
+</pre>
+<tt>rb_define_singleton_method(rbgsl_cMFunction, "new", MFunction_new, 
+   3);</tt><br>
+In this case the C structure <tt>mystruct</tt> has members referencing
+Ruby objects, so that a marking function must be provided.
+Presently this is the only case in which a marking function is provided
+in ruby-gsl.
+
+<h4>Allocating a C Datatype wrapper</h4>
+<tt>VALUE Data_Make_Struct(VALUE klass, c-type, void (*mark)(), 
+ void (*free)(), c-type *);</tt><br>
+ Allocates a structure of the indicated type first, then proceeds as 
+ <tt>Data_Wrap_Struct</tt> .
+<pre>
+VALUE Complex_new2(VALUE class, VALUE x, VALUE y) {
+  gsl_complex * ptr;
+  VALUE c = Data_Make_Struct(class, gsl_complex, 0, free, ptr);
+  ptr->dat[0] = NUM2DBL(x);
+  ptr->dat[1] = NUM2DBL(y);
+  return c;
+}
+</pre>
+<tt>rb_define_singleton_method(rbgsl_cComplex, "new2", Complex_new2, 
+  2);</tt><br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+
+c = Complex.new2(1,2)
+assert c.real == 1
+
+v = Vector.new([0,0,0,0])
+v1 = v.set_basis(2)
+assert v1.to_a == [0,0,1,0]
+
+struct = Struct.new("Params", :a, :b, :c)
+params = struct.new(1, 2, 3)
+p2 = Proc.new {|x, p| p.a * x[0] + p.b * x[0] * x[1]}
+dim2 = 2
+f2 = MonteCarlo::Function.new(dim2, params, p2)
+assert f2.eval([1,2], params) == 5
+plain2 = MonteCarlo::Plain.new(dim2)
+xl2 = [0,0]; xu2 = [1,1];  calls2 = 100000
+rng2 = Random::RNG.new
+p plain2.integrate(f2, xl2, xu2, calls2, rng2)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h4>Copying arrays</h4>
+<tt>COPYRUBYARRAY(from,to)</tt><br>
+It copies the Ruby array <tt>from</tt> into 
+<tt>double * to;</tt>, allocating memory for it. <br>
+See example <a href="#eval">here</a>.<br>
+<p>
+<a name="COPYCARRAY"></a>
+<tt>COPYCARRAY(from,to,size)</tt><br>
+It allocates the Ruby array <tt>to</tt> copying them from <tt>size</tt> 
+elements of the C array <tt>double * from;</tt> 
+<pre>
+static VALUE Sort_sort_smallest(VALUE obj, VALUE vk) {
+  gsl_vector * a;
+  double * dest;
+  size_t k, n;
+  VALUE ary;
+  k  = FIX2INT(vk);
+  Data_Get_Struct(obj, gsl_vector, a);
+  n = a->size;
+  dest = ALLOC_N(double, k);
+  gsl_sort_vector_smallest(dest, k, a);
+  COPYCARRAY(dest, ary, k);
+  return ary;
+}
+</pre>
+<tt> rb_define_method(rbgsl_cVector, "sort_smallest", 
+   Sort_sort_smallest, 1);</tt><br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+
+v1 = Vector.new([3,2,6,4,1,2])
+assert v1.sort_smallest(4) == [1.0, 2.0, 2.0, 3.0]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="l5"></a>
+<h3>Memory allocation</h3>
+<tt>type * ALLOC(c-type);</tt><br>
+Allocates memory for an object of <tt>c-type</tt>. 
+<p>
+<tt>type * ALLOC_N(c-type, size_t n);</tt><br>
+Allocates memory for <tt>n</tt> objects of <tt>c-type</tt>.
+
+<pre>
+VALUE PolyDD_new(VALUE class, VALUE xa, VALUE ya) {
+  int i;
+  long dim = RARRAY(xa)->len;
+  double * my_ya;
+  VALUE obj;
+  poly_dd_struct * ptr = ALLOC(poly_dd_struct);
+  COPYRUBYARRAY(ya, my_ya);
+  ptr->xa = ALLOC_N(double, dim);
+  for (i = 0; i < dim; i++)
+    ptr->xa[i] = NUM2DBL(RARRAY(xa)->ptr[i]);
+  ptr->dd = ALLOC_N(double, dim);
+  ptr->size = dim;
+  gsl_poly_dd_init(ptr->dd, ptr->xa, my_ya, dim);
+  obj = Data_Wrap_Struct(class, 0, PolyDD_free, ptr);
+  return obj;
+}
+</pre>
+<tt>rb_define_singleton_method(rbgsl_cPolyDD, "new", PolyDD_new, 2);</tt>
+
+<p>
+<tt>type * ALLOCA_N(c-type, size_t n);</tt><br>
+Allocates memory for <tt>n</tt> objects of <tt>c-type</tt> on the stack.
+This memory will be automatically freed when the function that invokes 
+<tt>ALLOCA_N</tt> returns.
+<pre>
+static VALUE PolyDD_taylor(VALUE self, VALUE xp) {
+  poly_dd_struct * ptr;
+  int ret;
+  double * c, * w;
+  VALUE ary;
+  Data_Get_Struct(self, poly_dd_struct, ptr);
+  w = ALLOCA_N(double, ptr->size);
+  c = ALLOCA_N(double, ptr->size);
+  ret = gsl_poly_dd_taylor(c, NUM2DBL(xp), ptr->dd, ptr->xa, ptr->size, w);
+  if (ret != GSL_SUCCESS)
+    rb_raise(rb_eStandardError, "Error while computing Taylor expansion");
+  COPYCARRAY(c, ary, ptr->size);
+  return ary;
+}
+</pre>
+<tt>rb_define_method(rbgsl_cPolyDD, "taylor", PolyDD_taylor, 1);</tt><br>
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+
+xa = [0, 2, 4, 6]
+ya = [0, 10, 0, -10]
+p = Poly::DD.new(xa, ya)
+x01 = (ya[0] - ya[1])/(xa[0] - xa[1])
+x12 = (ya[1] - ya[2])/(xa[1] - xa[2])
+x012 = (x01 - x12).to_f/(xa[0] - xa[2])
+p p.taylor(0)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Manipulating Ruby data</h3>
+<tt>rb_ary_new();</tt><br>
+Creates a Ruby array with no elements.
+<p>
+<tt>rb_ary_push(VALUE ary, VALUE val)</tt><br>
+Pushes the object <tt>val</tt> in the Ruby array <tt>ary</tt>.
+<pre>
+static VALUE Complex_to_a(VALUE self) {
+  gsl_complex * ptr;
+  VALUE ary;
+  int i;
+  Data_Get_Struct(self, gsl_complex, ptr);
+  ary = rb_ary_new();
+  for (i = 0; i < 2; i++)
+    rb_ary_push(ary, rb_float_new(ptr->dat[i]));
+  return ary;
+}
+</pre>
+
+<tt>rb_ary_new3(long n, ...)</tt><br>
+ Creates an n-element array from the n arguments.
+<pre>
+static VALUE Vector_minmax(VALUE obj) {
+  gsl_vector * v;
+  double min, max;
+  Data_Get_Struct(obj, gsl_vector, v);
+  gsl_vector_minmax(v, &min, &max);
+  return rb_ary_new3(2, rb_float_new(min), rb_float_new(max));
+}
+</pre>
+
+
+<tt>rb_ary_new2(long len)</tt><br>
+Creates an array with no elements, allocating internal buffer
+  for len elements. It is used in
+  <a href="#COPYCARRAY">COPYCARRAY</a> .
+      
+<pre>
+#define COPYCARRAY(from,to,size) { \
+  long _l;\
+  to = rb_ary_new2(size); \
+  for (_l = 0; _l < (size); _l++) \
+    rb_ary_store(to, _l, rb_float_new((from)[_l])); \
+  RARRAY(to)->len = (size); }
+</pre>
+
+<tt>rb_define_method(rbgsl_cComplex, "to_a", Complex_to_a, 0);</tt><br>
+
+<p>
+
+<tt>VALUE rb_ary_entry(VALUE ary, long offset)</tt><br>
+Gets the <tt>offset</tt>-element of the Ruby array <tt>ary</tt> .
+<pre>
+static VALUE Complex_load_data(VALUE self, VALUE ary) {
+  gsl_complex *ptr;
+  int i;
+  Data_Get_Struct(self, gsl_complex, ptr);
+  for (i = 0; i < 2; i++)
+    ptr->dat[i] = NUM2DBL(rb_ary_entry(ary, i));
+  return Qtrue;
+}
+</pre>
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+
+c1 = Complex.new2(3,4)
+assert c1.to_a == [3,4]
+
+v1 = Vector.new([7,1,8,9])
+assert v1.minmax == [1,9]
+
+c1._load_data([5,8])
+assert c1 = Complex.new2(5,8)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href=".html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href=".html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Extending Ruby</td> 
+</tr></tbody></table><hr></body>
+</html>

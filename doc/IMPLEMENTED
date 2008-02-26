@@ -1,0 +1,1448 @@
++
+  GSL
+    set_handler 1 [function]
+    strerror 1 [function]
+    ERR_INTERN
+    ERR_OFF
+    ERR_RUBY
+    GSL_CONTINUE
+    GSL_EBADFUNC
+    GSL_EBADLEN
+    GSL_EBADTOL
+    GSL_ECACHE
+    GSL_EDIVERGE
+    GSL_EDOM
+    GSL_EFACTOR
+    GSL_EFAILED
+    GSL_EFAULT
+    GSL_EINVAL
+    GSL_ELOSS
+    GSL_EMAXITER
+    GSL_ENOMEM
+    GSL_ENOPROG
+    GSL_ENOPROGJ
+    GSL_ENOTSQR
+    GSL_EOF
+    GSL_EOVRFLW
+    GSL_ERANGE
+    GSL_EROUND
+    GSL_ERUNAWAY
+    GSL_ESANITY
+    GSL_ESING
+    GSL_ETABLE
+    GSL_ETOL
+    GSL_ETOLF
+    GSL_ETOLG
+    GSL_ETOLX
+    GSL_EUNDRFLW
+    GSL_EUNIMPL
+    GSL_EUNSUP
+    GSL_EZERODIV
+    GSL_FAILURE
+    GSL_SUCCESS
+    RELEASE
+    VERSION
+    VERSION_MAJOR
+    VERSION_MINOR
+    Block
+      alloc 1 [singleton]
+      calloc 1 [singleton]
+      fprintf 2 [method]
+      fread 1 [method]
+      fscanf 1 [method]
+      fwrite 1 [method]
+      new 1 [singleton]
+      size 0 [method]
+    Chebyshev
+      calc_deriv 1 [method] (deriv)
+      calc_integ 1 [method] (integ)
+      eval 1 [method]
+      eval_err 1 [method]
+      eval_mode 2 [method]
+      eval_mode_e 2 [method]
+      eval_n 2 [method]
+      eval_n_err 2 [method]
+      initialize 4 [method]
+      new 4 [singleton]
+    Combination
+      data 0 [method] (to_a)
+      each 0 [method]
+      fprintf 2 [method]
+      fread 1 [method]
+      fscanf 1 [method]
+      fwrite 1 [method]
+      get 1 [method]
+      init_first 0 [method]
+      init_last 0 [method]
+      initialize 2 [method]
+      k 0 [method]
+      n 0 [method]
+      new 2 [singleton]
+      new2 2 [singleton]
+      next 0 [method]
+      prev 0 [method]
+      reverse_each 0 [method]
+      valid 0 [method]
+    Complex
+      abs 0 [method]
+      abs2 0 [method]
+      add 1 [method]
+      add_imag 1 [method]
+      add_real 1 [method]
+      arccos 1 [singleton]
+      arccos_real 1 [singleton]
+      arccosh 1 [singleton]
+      arccosh_real 1 [singleton]
+      arccot 1 [singleton]
+      arccoth 1 [singleton]
+      arccsc 1 [singleton]
+      arccsc_real 1 [singleton]
+      arccsch 1 [singleton]
+      arcsec 1 [singleton]
+      arcsec_real 1 [singleton]
+      arcsech 1 [singleton]
+      arcsin 1 [singleton]
+      arcsin_real 1 [singleton]
+      arcsinh 1 [singleton]
+      arctan 1 [singleton]
+      arctanh 1 [singleton]
+      arctanh_real 1 [singleton]
+      arg 0 [method]
+      conjugate 0 [method]
+      cos 1 [singleton]
+      cos_e 1 [singleton]
+      cosh 1 [singleton]
+      cot 1 [singleton]
+      coth 1 [singleton]
+      csc 1 [singleton]
+      csch 1 [singleton]
+      div 1 [method]
+      div_imag 1 [method]
+      div_real 1 [method]
+      exp 1 [singleton]
+      image 0 [method] (imag)
+      initialize 2 [method]
+      inverse 0 [method]
+      log 1 [singleton]
+      log10 1 [singleton]
+      logabs 0 [method]
+      logb 2 [singleton]
+      logsin_e 1 [singleton]
+      mul 1 [method]
+      mul_imag 1 [method]
+      mul_real 1 [method]
+      negative 0 [method]
+      new 1 [singleton]
+      new2 2 [singleton]
+      new3 2 [singleton]
+      pow 2 [singleton]
+      pow_real 2 [singleton]
+      real 0 [method]
+      sec 1 [singleton]
+      sech 1 [singleton]
+      sin 1 [singleton]
+      sin_e 1 [singleton]
+      sinh 1 [singleton]
+      sqrt 1 [singleton]
+      sqrt_real 1 [singleton]
+      sub 1 [method]
+      sub_imag 1 [method]
+      sub_real 1 [method]
+      tan 1 [singleton]
+      tanh 1 [singleton]
+      to_s 0 [method]
+    Const
+      CGS
+        ACRE
+        ANGSTROM
+        ASTRONOMICAL_UNIT
+        BAR
+        BARN
+        BOHR_MAGNETON
+        BOHR_RADIUS
+        BOLTZMANN
+        BTU
+        CALORIE
+        CANADIAN_GALLON
+        CARAT
+        CUP
+        CURIE
+        DAY
+        ELECTRON_CHARGE
+        ELECTRON_MAGNETIC_MOMENT
+        ELECTRON_VOLT
+        FARADAY
+        FATHOM
+        FLUID_OUNCE
+        FOOT
+        FOOTCANDLE
+        FOOTLAMBERT
+        GAUSS
+        GRAM_FORCE
+        GRAVITATIONAL_CONSTANT
+        GRAV_ACCEL
+        HECTARE
+        HORSEPOWER
+        HOUR
+        INCH
+        INCH_OF_MERCURY
+        INCH_OF_WATER
+        KILOMETERS_PER_HOUR
+        KILOPOUND_FORCE
+        KNOT
+        LAMBERT
+        LIGHT_YEAR
+        LITER
+        LUMEN
+        LUX
+        MASS_ELECTRON
+        MASS_MUON
+        MASS_NEUTRON
+        MASS_PROTON
+        METER_OF_MERCURY
+        METRIC_TON
+        MICRON
+        MIL
+        MILE
+        MILES_PER_HOUR
+        MINUTE
+        MOLAR_GAS
+        NAUTICAL_MILE
+        NUCLEAR_MAGNETON
+        OUNCE_MASS
+        PARSEC
+        PHOT
+        PINT
+        PLANCKS_CONSTANT_H
+        PLANCKS_CONSTANT_HBAR
+        POINT
+        POISE
+        POUNDAL
+        POUND_FORCE
+        POUND_MASS
+        PROTON_MAGNETIC_MOMENT
+        PSI
+        QUART
+        RAD
+        ROENTGEN
+        RYDBERG
+        SOLAR_MASS
+        SPEED_OF_LIGHT
+        STANDARD_GAS_VOLUME
+        STD_ATMOSPHERE
+        STILB
+        STOKES
+        TABLESPOON
+        TEASPOON
+        TEXPOINT
+        THERM
+        TON
+        TORR
+        TROY_OUNCE
+        UK_GALLON
+        UK_TON
+        UNIFIED_ATOMIC_MASS
+        US_GALLON
+        VACUUM_PERMEABILITY
+        VACUUM_PERMITTIVITY
+        WEEK
+        YARD
+      MKS
+        ACRE
+        ANGSTROM
+        ASTRONOMICAL_UNIT
+        BAR
+        BARN
+        BOHR_MAGNETON
+        BOHR_RADIUS
+        BOLTZMANN
+        BTU
+        CALORIE
+        CANADIAN_GALLON
+        CARAT
+        CUP
+        CURIE
+        DAY
+        ELECTRON_CHARGE
+        ELECTRON_MAGNETIC_MOMENT
+        ELECTRON_VOLT
+        FARADAY
+        FATHOM
+        FLUID_OUNCE
+        FOOT
+        FOOTCANDLE
+        FOOTLAMBERT
+        GAUSS
+        GRAM_FORCE
+        GRAVITATIONAL_CONSTANT
+        GRAV_ACCEL
+        HECTARE
+        HORSEPOWER
+        HOUR
+        INCH
+        INCH_OF_MERCURY
+        INCH_OF_WATER
+        KILOMETERS_PER_HOUR
+        KILOPOUND_FORCE
+        KNOT
+        LAMBERT
+        LIGHT_YEAR
+        LITER
+        LUMEN
+        LUX
+        MASS_ELECTRON
+        MASS_MUON
+        MASS_NEUTRON
+        MASS_PROTON
+        METER_OF_MERCURY
+        METRIC_TON
+        MICRON
+        MIL
+        MILE
+        MILES_PER_HOUR
+        MINUTE
+        MOLAR_GAS
+        NAUTICAL_MILE
+        NUCLEAR_MAGNETON
+        OUNCE_MASS
+        PARSEC
+        PHOT
+        PINT
+        PLANCKS_CONSTANT_H
+        PLANCKS_CONSTANT_HBAR
+        POINT
+        POISE
+        POUNDAL
+        POUND_FORCE
+        POUND_MASS
+        PROTON_MAGNETIC_MOMENT
+        PSI
+        QUART
+        RAD
+        ROENTGEN
+        RYDBERG
+        SOLAR_MASS
+        SPEED_OF_LIGHT
+        STANDARD_GAS_VOLUME
+        STD_ATMOSPHERE
+        STILB
+        STOKES
+        TABLESPOON
+        TEASPOON
+        TEXPOINT
+        THERM
+        TON
+        TORR
+        TROY_OUNCE
+        UK_GALLON
+        UK_TON
+        UNIFIED_ATOMIC_MASS
+        US_GALLON
+        VACUUM_PERMEABILITY
+        VACUUM_PERMITTIVITY
+        WEEK
+        YARD
+      Num
+        AVOGADRO
+        FINE_STRUCTURE
+    DHT
+      apply 2 [method]
+      initialize 3 [method]
+      k_sample 1 [method]
+      new 3 [singleton]
+      x_sample 1 [method]
+    Diff
+      backward 2 [function]
+      central 2 [function]
+      forward 2 [function]
+    Eigen
+      symmv_sort 3 [function]
+      SORT_ABS_ASC
+      SORT_ABS_DESC
+      SORT_VAL_ASC
+      SORT_VAL_DESC
+    Fit
+      linear 2 [function]
+      linear_est 6 [function]
+      mul 2 [function]
+      mul_est 6 [function]
+      wlinear 3 [function]
+      wmul 3 [function]
+    Function
+      alloc 0 [singleton]
+      arity 0 [method]
+      eval 1 [method] (call)
+      integration_qag 6 [method]
+      integration_qagi 3 [method]
+      integration_qagil 4 [method]
+      integration_qagiu 4 [method]
+      integration_qagp 4 [method]
+      integration_qags 5 [method]
+      integration_qawc 6 [method]
+      integration_qawf 4 [method]
+      integration_qawo 5 [method]
+      integration_qaws 6 [method]
+      integration_qng 4 [method]
+      new 0 [singleton]
+      new2 1 [singleton]
+      proc 0 [method]
+      set 0 [method]
+    GSLException
+    Histogram
+      Hist
+        accumulate 2 [method] (acc)
+        add 1 [method]
+        bins 0 [method]
+        clone 0 [method]
+        div 1 [method]
+        dump 0 [method]
+        each 0 [method]
+        each_bin 0 [method]
+        equal_bins_p 1 [method]
+        find 1 [method]
+        fprintf 3 [method]
+        fread 1 [method]
+        fscanf 1 [method]
+        fwrite 1 [method]
+        get 1 [method]
+        get_range 1 [method]
+        increment 1 [method] (inc)
+        initialize 0 [method]
+        max 0 [method]
+        max_bin 0 [method]
+        max_val 0 [method]
+        mean 0 [method]
+        memcpy 2 [function]
+        min 0 [method]
+        min_bin 0 [method]
+        min_val 0 [method]
+        mul 1 [method]
+        new 1 [singleton]
+        new2 3 [singleton]
+        reset 0 [method]
+        scale 1 [method]
+        set_range 2 [method]
+        set_ranges 1 [method]
+        set_ranges_uniform 2 [method]
+        shift 1 [method]
+        sigma 0 [method]
+        sub 1 [method]
+        sum 0 [method]
+      Hist2D
+        accumulate 3 [method] (acc)
+        add 1 [method]
+        clone 0 [method]
+        cov 0 [method]
+        div 1 [method]
+        dump 0 [method]
+        equal_bins_p 1 [method]
+        find 2 [method]
+        fprintf 3 [method]
+        fread 1 [method]
+        fscanf 2 [method]
+        fwrite 1 [method]
+        get 2 [method]
+        get_xrange 1 [method]
+        get_yrange 1 [method]
+        increment 2 [method] (inc)
+        initialize 0 [method]
+        max_bin 0 [method]
+        max_val 0 [method]
+        memcpy 2 [function]
+        min_bin 0 [method]
+        min_val 0 [method]
+        mul 1 [method]
+        new 2 [singleton]
+        new2 6 [singleton]
+        nx 0 [method]
+        ny 0 [method]
+        reset 0 [method]
+        scale 1 [method]
+        set_ranges 2 [method]
+        set_ranges_uniform 4 [method]
+        set_xrange 2 [method]
+        set_yrange 2 [method]
+        shift 1 [method]
+        sub 1 [method]
+        sum 0 [method]
+        xmax 0 [method]
+        xmean 0 [method]
+        xmin 0 [method]
+        xsigma 0 [method]
+        ymax 0 [method]
+        ymean 0 [method]
+        ymin 0 [method]
+        ysigma 0 [method]
+      Hist2D_PDF
+        initialize 0 [method]
+        new 1 [singleton]
+        sample 2 [method]
+      Hist_PDF
+        initialize 0 [method]
+        new 1 [singleton]
+        sample 1 [method]
+    Integration
+      COSINE
+      GAUSS15
+      GAUSS21
+      GAUSS31
+      GAUSS41
+      GAUSS51
+      GAUSS61
+      SINE
+      QAWOTable
+        alloc 4 [singleton]
+        new 4 [singleton]
+        set -1 [method]
+        set_length 1 [method]
+        to_a 0 [method]
+      QAWSTable
+        alloc 4 [singleton]
+        new 4 [singleton]
+        set -1 [method]
+        to_a 0 [method]
+    Interpolation
+      Accel
+        bsearch 4 [method]
+        find 2 [method]
+        initialize 0 [method]
+        new 0 [singleton]
+        reset 0 [method]
+      Interp
+        eval 4 [method]
+        eval_deriv 4 [method]
+        eval_deriv2 4 [method]
+        eval_deriv2_e 5 [method]
+        eval_deriv_e 5 [method]
+        eval_e 5 [method]
+        eval_integ 5 [method]
+        eval_integ_e 6 [method]
+        init 2 [method]
+        initialize 2 [method]
+        min_size 0 [method]
+        name 0 [method] (to_s)
+        new 2 [singleton]
+        AKIMA
+        AKIMA_PERIODIC
+        CSPLINE
+        CSPLINE_PERIODIC
+        LINEAR
+        POLYNOMIAL
+      Spline
+        eval 2 [method]
+        eval_deriv 2 [method]
+        eval_deriv2 2 [method]
+        eval_deriv2_e 3 [method]
+        eval_deriv_e 3 [method]
+        eval_e 3 [method]
+        eval_integ 3 [method]
+        eval_integ_e 4 [method]
+        init 2 [method]
+        initialize 2 [method]
+        min_size 0 [method]
+        name 0 [method] (to_s)
+        new 2 [singleton]
+    Math
+      acosh 1 [function]
+      asinh 1 [function]
+      atanh 1 [function]
+      expm1 1 [function]
+      hypot 2 [function]
+      log1p 1 [function]
+      pow 2 [function]
+      pow_2 1 [function]
+      pow_3 1 [function]
+      pow_4 1 [function]
+      pow_5 1 [function]
+      pow_6 1 [function]
+      pow_7 1 [function]
+      pow_8 1 [function]
+      pow_9 1 [function]
+      pow_int 2 [function]
+      M_1_PI
+      M_2_PI
+      M_2_SQRTPI
+      M_E
+      M_EULER
+      M_LN10
+      M_LN2
+      M_LNPI
+      M_LOG10E
+      M_LOG2E
+      M_PI
+      M_PI_2
+      M_PI_4
+      M_SQRT1_2
+      M_SQRT2
+      M_SQRT3
+      M_SQRTPI
+    Matrix
+      add 1 [method]
+      add_constant 1 [method]
+      alloc -1 [singleton]
+      calloc 2 [singleton]
+      clone 0 [method]
+      column 1 [method] (col get_column get_col)
+      diagonal 0 [method]
+      div_elements 1 [method]
+      eigen_symm 0 [method]
+      eigen_symmv 0 [method]
+      fprintf 2 [method]
+      fread 1 [method]
+      fscanf 1 [method]
+      fwrite 1 [method]
+      get 2 [method]
+      inspect 0 [method]
+      isnull 0 [method]
+      max 0 [method]
+      max_index 0 [method]
+      min 0 [method]
+      min_index 0 [method]
+      minmax 0 [method]
+      minmax_index 0 [method]
+      mul 1 [method]
+      mul_elements 1 [method]
+      new -1 [singleton]
+      print 0 [method]
+      printf 1 [method]
+      row 1 [method] (get_row)
+      scale 1 [method]
+      set -1 [method]
+      set_all 1 [method]
+      set_col 2 [method]
+      set_identity 0 [method]
+      set_row 2 [method]
+      set_zero 0 [method]
+      size1 0 [method] (size)
+      size2 0 [method]
+      sub 1 [method]
+      submatrix 4 [method]
+      swap 1 [method]
+      swap_columns 2 [method] (swap_cols)
+      swap_rowcol 2 [method]
+      swap_rows 2 [method]
+      transpose_memcpy 0 [method] (transpose)
+    Minimizer
+      initialize 1 [method]
+      iterate 0 [method]
+      minimum 0 [method] (min)
+      name 0 [method] (to_s)
+      new 1 [singleton]
+      set 4 [method]
+      set_with_values 7 [method] (set2)
+      test_interval 4 [function]
+      x_lower 0 [method]
+      x_upper 0 [method]
+      BRENT
+      GOLDENSECTION
+    MonteCarlo
+      Function
+        eval -1 [method]
+        eval2 1 [method]
+        new 1 [singleton]
+      Plain
+        initialize 1 [method]
+        integrate 5 [method]
+        new 1 [singleton]
+    Permutation
+      data 0 [method] (to_a)
+      dump 0 [method]
+      each 0 [method]
+      fprintf 2 [method]
+      fread 1 [method]
+      fscanf 1 [method]
+      fwrite 1 [method]
+      get 1 [method]
+      initialize 1 [method]
+      inverse 0 [method]
+      memcpy 2 [function]
+      new 1 [singleton]
+      new2 1 [singleton]
+      next 0 [method]
+      prev 0 [method]
+      reset 1 [method]
+      reverse 0 [method]
+      size 0 [method]
+      swap 2 [method]
+      undump 0 [method]
+      valid 0 [method]
+    Poly
+      complex_solve_cubic 3 [function]
+      complex_solve_quadratic 3 [function]
+      evaluate 2 [function]
+      solve_cubic 3 [function]
+      solve_quadratic 3 [function]
+      DD
+        evaluate 1 [method]
+        get 0 [method]
+        initialize 2 [method]
+        new 2 [singleton]
+        taylor 1 [method]
+      Workspace
+        initialize 1 [method]
+        new 1 [singleton]
+        solve 1 [method]
+    Random
+      Discrete
+        get 1 [method]
+        get_pdf 1 [method]
+        initialize 2 [method]
+        new 2 [singleton]
+      QRNG
+        clone 0 [method]
+        dim 0 [method]
+        get 0 [method]
+        initialize 2 [method]
+        memcpy 2 [function]
+        name 0 [method] (to_s)
+        new 2 [singleton]
+        reset 0 [method]
+        size 0 [method]
+        NIEDERREITER_2
+        SOBOL
+      RND
+        bernoulli 2 [function]
+        bernoulli_pdf 2 [function]
+        beta 3 [function]
+        beta_pdf 3 [function]
+        binomial 3 [function]
+        binomial_pdf 3 [function]
+        bivariate_gaussian 4 [function]
+        bivariate_gaussian_pdf 5 [function]
+        cauchy 2 [function]
+        cauchy_pdf 2 [function]
+        chisq 2 [function]
+        chisq_pdf 2 [function]
+        choose 3 [function]
+        dir_2d 1 [function]
+        dir_2d_trig_method 1 [function]
+        dir_3d 1 [function]
+        dir_nd 2 [function]
+        erlang 3 [function]
+        erlang_pdf 3 [function]
+        exponential 2 [function]
+        exponential_pdf 2 [function]
+        exppow 3 [function]
+        exppow_pdf 3 [function]
+        fdist 3 [function] (F)
+        fdist_pdf 3 [function] (F_pdf)
+        flat 3 [function]
+        flat_pdf 3 [function]
+        gamma 3 [function]
+        gamma_int 2 [function]
+        gamma_pdf 3 [function]
+        gaussian 2 [function]
+        gaussian_pdf 2 [function]
+        gaussian_ratio_method 2 [function]
+        gaussian_tail 3 [function]
+        gaussian_tail_pdf 3 [function]
+        geometric 2 [function]
+        geometric_pdf 2 [function]
+        gumbel1 3 [function]
+        gumbel1_pdf 3 [function]
+        gumbel2 3 [function]
+        gumbel2_pdf 3 [function]
+        hypergeometric 4 [function]
+        hypergeometric_pdf 4 [function]
+        landau 1 [function]
+        landau_pdf 1 [function]
+        laplace 2 [function]
+        laplace_pdf 2 [function]
+        levy 3 [function]
+        levy_skew 4 [function]
+        logarithmic 2 [function]
+        logarithmic_pdf 2 [function]
+        logistic 2 [function]
+        logistic_pdf 2 [function]
+        lognormal 3 [function]
+        lognormal_pdf 3 [function]
+        negative_binomial 3 [function]
+        negative_binomial_pdf 3 [function]
+        pareto 3 [function]
+        pareto_pdf 3 [function]
+        pascal 3 [function]
+        pascal_pdf 3 [function]
+        poisson 2 [function]
+        poisson_pdf 2 [function]
+        rayleigh 2 [function]
+        rayleigh_pdf 2 [function]
+        rayleigh_tail 3 [function]
+        rayleigh_tail_pdf 3 [function]
+        sample 3 [function]
+        shuffle 2 [function]
+        tdist 2 [function] (t)
+        tdist_pdf 2 [function] (t_pdf)
+        ugaussian 1 [function]
+        ugaussian_pdf 1 [function]
+        ugaussian_ratio_method 1 [function]
+        ugaussian_tail 2 [function]
+        ugaussian_tail_pdf 2 [function]
+        weibull 3 [function]
+        weibull_pdf 3 [function]
+      RNG
+        clone 0 [method]
+        get 0 [method]
+        initialize 1 [method]
+        max 0 [method]
+        memcpy 2 [function]
+        min 0 [method]
+        name 0 [method] (to_s)
+        new 0 [singleton]
+        new2 1 [singleton]
+        print_state 0 [method] (dump)
+        set 1 [method]
+        size 0 [method]
+        uniform 0 [method]
+        uniform_int 1 [method]
+        uniform_pos 0 [method]
+        BOROSH13
+        CMRG
+        COVEYOU
+        FISHMAN18
+        FISHMAN20
+        FISHMAN2X
+        GFSR4
+        KNUTHRAN
+        KNUTHRAN2
+        LECUYER21
+        MINSTD
+        MRG
+        MT19937
+        R250
+        RAN0
+        RAN1
+        RAN2
+        RAN3
+        RAND
+        RAND48
+        RANDOM128_BSD
+        RANDOM128_GLIBC2
+        RANDOM128_LIBC5
+        RANDOM256_BSD
+        RANDOM256_GLIBC2
+        RANDOM256_LIBC5
+        RANDOM32_BSD
+        RANDOM32_GLIBC2
+        RANDOM32_LIBC5
+        RANDOM64_BSD
+        RANDOM64_GLIBC2
+        RANDOM64_LIBC5
+        RANDOM8_BSD
+        RANDOM8_GLIBC2
+        RANDOM8_LIBC5
+        RANDOM_BSD
+        RANDOM_GLIBC2
+        RANDOM_LIBC5
+        RANDU
+        RANF
+        RANLUX
+        RANLUX389
+        RANLXD1
+        RANLXD2
+        RANLXS0
+        RANLXS1
+        RANLXS2
+        RANMAR
+        SLATEC
+        TAUS
+        TRANSPUTER
+        TT800
+        UNI
+        UNI32
+        VAX
+        WATERMAN14
+        ZUF
+    Result
+      err 0 [method]
+      initialize 2 [method]
+      new 0 [singleton]
+      new2 2 [singleton]
+      val 0 [method]
+    Result10
+      e10 0 [method]
+      err 0 [method]
+      initialize 0 [method]
+      new 0 [singleton]
+      val 0 [method]
+    Solver
+      test_delta 4 [function]
+      test_interval 4 [function]
+      test_residual 2 [function]
+      FDFSolver
+        initialize 1 [method]
+        iterate 0 [method]
+        name 0 [method] (to_s)
+        new 1 [singleton]
+        root 0 [method]
+        set 3 [method]
+        NEWTON
+        SECANT
+        STEFFENSON
+      FSolver
+        initialize 1 [method]
+        iterate 0 [method]
+        name 0 [method] (to_s)
+        new 1 [singleton]
+        root 0 [method]
+        set 3 [method]
+        x_lower 0 [method]
+        x_upper 0 [method]
+        BISECTION
+        BRENT
+        FALSEPOS
+    Special
+      PREC_APPROX
+      PREC_DOUBLE
+      PREC_SINGLE
+      Airy
+        Ai 2 [function]
+        Ai_deriv 2 [function]
+        Ai_deriv_e 2 [function]
+        Ai_deriv_scaled 2 [function]
+        Ai_deriv_scaled_e 2 [function]
+        Ai_e 2 [function]
+        Ai_scaled 2 [function]
+        Ai_scaled_e 2 [function]
+        Bi 2 [function]
+        Bi_deriv 2 [function]
+        Bi_deriv_e 2 [function]
+        Bi_deriv_scaled 2 [function]
+        Bi_deriv_scaled_e 2 [function]
+        Bi_e 2 [function]
+        Bi_scaled 2 [function]
+        Bi_scaled_e 2 [function]
+        zero_Ai 1 [function]
+        zero_Ai_deriv 1 [function]
+        zero_Ai_deriv_e 1 [function]
+        zero_Ai_e 1 [function]
+        zero_Bi 1 [function]
+        zero_Bi_deriv 1 [function]
+        zero_Bi_deriv_e 1 [function]
+        zero_Bi_e 1 [function]
+      Bessel
+        I0 1 [function]
+        I0_e 1 [function]
+        I0_scaled 1 [function]
+        I0_scaled_e 1 [function]
+        I1 1 [function]
+        I1_e 1 [function]
+        I1_scaled 1 [function]
+        I1_scaled_e 1 [function]
+        In 2 [function]
+        In_array 3 [function]
+        In_e 2 [function]
+        In_scaled 2 [function]
+        In_scaled_array 3 [function]
+        In_scaled_e 2 [function]
+        Inu 2 [function]
+        Inu_e 2 [function]
+        Inu_scaled 2 [function]
+        Inu_scaled_e 2 [function]
+        J0 1 [function]
+        J0_e 1 [function]
+        J1 1 [function]
+        J1_e 1 [function]
+        Jn 2 [function]
+        Jn_array 3 [function]
+        Jn_e 2 [function]
+        Jnu 2 [function]
+        Jnu_e 2 [function]
+        K0 1 [function]
+        K0_e 1 [function]
+        K0_scaled 1 [function]
+        K0_scaled_e 1 [function]
+        K1 1 [function]
+        K1_e 1 [function]
+        K1_scaled 1 [function]
+        K1_scaled_e 1 [function]
+        Kn 2 [function]
+        Kn_array 3 [function]
+        Kn_e 2 [function]
+        Kn_scaled 2 [function]
+        Kn_scaled_array 3 [function]
+        Kn_scaled_e 2 [function]
+        Knu 2 [function]
+        Knu_e 2 [function]
+        Knu_scaled 2 [function]
+        Knu_scaled_e 2 [function]
+        Y0 1 [function]
+        Y0_e 1 [function]
+        Y1 1 [function]
+        Y1_e 1 [function]
+        Yn 2 [function]
+        Yn_array 3 [function]
+        Yn_e 2 [function]
+        Ynu 2 [function]
+        Ynu_e 2 [function]
+        i0_scaled 1 [function]
+        i0_scaled_e 1 [function]
+        i1_scaled 1 [function]
+        i1_scaled_e 1 [function]
+        i2_scaled 1 [function]
+        i2_scaled_e 1 [function]
+        il_scaled 2 [function]
+        il_scaled_array 2 [function]
+        il_scaled_e 2 [function]
+        j0 1 [function]
+        j0_e 1 [function]
+        j1 1 [function]
+        j1_e 1 [function]
+        j2 1 [function]
+        j2_e 1 [function]
+        jl 2 [function]
+        jl_array 2 [function]
+        jl_e 2 [function]
+        jl_steed_array 2 [function]
+        k0_scaled 1 [function]
+        k0_scaled_e 1 [function]
+        k1_scaled 1 [function]
+        k1_scaled_e 1 [function]
+        k2_scaled 1 [function]
+        k2_scaled_e 1 [function]
+        kl_scaled 2 [function]
+        kl_scaled_array 2 [function]
+        kl_scaled_e 2 [function]
+        lnKnu 2 [function]
+        lnKnu_e 2 [function]
+        y0 1 [function]
+        y0_e 1 [function]
+        y1 1 [function]
+        y1_e 1 [function]
+        y2 1 [function]
+        y2_e 1 [function]
+        yl 2 [function]
+        yl_array 2 [function]
+        yl_e 2 [function]
+        zero_J0 1 [function]
+        zero_J0_e 1 [function]
+        zero_J1 1 [function]
+        zero_J1_e 1 [function]
+        zero_Jnu 2 [function]
+        zero_Jnu_e 2 [function]
+      Clausen
+        clausen 1 [function]
+        clausen_e 1 [function]
+      Conical
+        P_0 2 [function]
+        P_0_e 2 [function]
+        P_1 2 [function]
+        P_1_e 2 [function]
+        P_cyl_reg 3 [function]
+        P_cyl_reg_e 3 [function]
+        P_half 2 [function]
+        P_half_e 2 [function]
+        P_mhalf 2 [function]
+        P_mhalf_e 2 [function]
+        P_sph_reg 3 [function]
+        P_sph_reg_e 3 [function]
+      Coulomb
+        CL_array 3 [function]
+        CL_e 2 [function]
+        hydrogenicR 4 [function]
+        hydrogenicR_1 2 [function]
+        hydrogenicR_1_e 2 [function]
+        hydrogenicR_e 4 [function]
+      Coupling
+        wigner_3j 6 [function]
+        wigner_3j_e 6 [function]
+        wigner_6j 6 [function]
+        wigner_6j_e 6 [function]
+        wigner_9j 9 [function]
+        wigner_9j_e 9 [function]
+      Dawson
+        dawson 1 [function]
+        dawson_e 1 [function]
+      Debye
+        D1 1 [function]
+        D1_e 1 [function]
+        D2 1 [function]
+        D2_e 1 [function]
+        D3 1 [function]
+        D3_e 1 [function]
+        D4 1 [function]
+        D4_e 1 [function]
+      Dilog
+        complex_dilog_e 2 [function]
+        dilog 1 [function]
+        dilog_e 1 [function]
+      Elementary
+        multiply 2 [function]
+        multiply_e 2 [function]
+        multiply_err_e 4 [function]
+      EllInt
+        D 4 [function]
+        D_e 4 [function]
+        E 3 [function]
+        E_e 3 [function]
+        Ecomp 2 [function]
+        Ecomp_e 2 [function]
+        F 3 [function]
+        F_e 3 [function]
+        Kcomp 2 [function]
+        Kcomp_e 2 [function]
+        P 4 [function]
+        P_e 4 [function]
+        RC 3 [function]
+        RC_e 3 [function]
+        RD 4 [function]
+        RD_e 4 [function]
+        RF 4 [function]
+        RF_e 4 [function]
+        RJ 5 [function]
+        RJ_e 5 [function]
+      EllJac
+        e 2 [function]
+      Error
+        erf 1 [function]
+        erf_Q 1 [function]
+        erf_Q_e 1 [function]
+        erf_Z 1 [function]
+        erf_Z_e 1 [function]
+        erf_e 1 [function]
+        erfc 1 [function]
+        erfc_e 1 [function]
+        log_erf 1 [function]
+        log_erf_e 1 [function]
+      Exp
+        exp 1 [function]
+        exp_e 1 [function]
+        exp_e10_e 1 [function]
+        exp_err_e 2 [function]
+        exp_err_e10_e 2 [function]
+        exp_mult 2 [function]
+        exp_mult_e 2 [function]
+        exp_mult_e10_e 2 [function]
+        exp_mult_err_e 4 [function]
+        exp_mult_err_e10_e 4 [function]
+        expm1 1 [function]
+        expm1_e 1 [function]
+        exprel 1 [function]
+        exprel_2 1 [function]
+        exprel_2_e 1 [function]
+        exprel_e 1 [function]
+        exprel_n 2 [function]
+        exprel_n_e 2 [function]
+      ExpInt
+        Chi 1 [function]
+        Chi_e 1 [function]
+        Ci 1 [function]
+        Ci_e 1 [function]
+        E1 1 [function]
+        E1_e 1 [function]
+        E2 1 [function]
+        E2_e 1 [function]
+        Ei 1 [function]
+        Ei3 1 [function]
+        Ei3_e 1 [function]
+        Ei_e 1 [function]
+        Shi 1 [function]
+        Shi_e 1 [function]
+        Si 1 [function]
+        Si_e 1 [function]
+        atanint 1 [function]
+        atanint_e 1 [function]
+      FermiDirac
+        F0 1 [function]
+        F0_e 1 [function]
+        F1 1 [function]
+        F1_e 1 [function]
+        F2 1 [function]
+        F2_e 1 [function]
+        F3half 1 [function]
+        F3half_e 1 [function]
+        Fhalf 1 [function]
+        Fhalf_e 1 [function]
+        Finc_0 2 [function]
+        Finc_0_e 2 [function]
+        Fint 2 [function]
+        Fint_e 2 [function]
+        Fm1 1 [function]
+        Fm1_e 1 [function]
+        Fmhalf 1 [function]
+        Fmhalf_e 1 [function]
+      Gamma
+        beta 2 [function]
+        beta_e 2 [function]
+        beta_inc 3 [function]
+        beta_inc_e 3 [function]
+        choose 2 [function]
+        choose_e 2 [function]
+        doublefact 1 [function]
+        doublefact_e 1 [function]
+        fact 1 [function]
+        fact_e 1 [function]
+        gamma 1 [function]
+        gamma_e 1 [function]
+        gamma_inc_P 2 [function]
+        gamma_inc_P_e 2 [function]
+        gamma_inc_Q 2 [function]
+        gamma_inc_Q_e 2 [function]
+        gammainv 1 [function]
+        gammainv_e 1 [function]
+        gammastar 1 [function]
+        gammastar_e 1 [function]
+        lnbeta 2 [function]
+        lnbeta_e 2 [function]
+        lnchoose 2 [function]
+        lnchoose_e 2 [function]
+        lndoublefact 1 [function]
+        lndoublefact_e 1 [function]
+        lnfact 1 [function]
+        lnfact_e 1 [function]
+        lngamma 1 [function]
+        lngamma_e 1 [function]
+        lnpoch 2 [function]
+        lnpoch_e 2 [function]
+        poch 2 [function]
+        poch_e 2 [function]
+        pochrel 2 [function]
+        pochrel_e 2 [function]
+        taylorcoeff 2 [function]
+        taylorcoeff_e 2 [function]
+      Gegenbauer
+        poly_1 2 [function]
+        poly_1_e 2 [function]
+        poly_2 2 [function]
+        poly_2_e 2 [function]
+        poly_3 2 [function]
+        poly_3_e 2 [function]
+        poly_array 3 [function]
+        poly_n 3 [function]
+        poly_n_e 3 [function]
+      Hyperg
+        F01 2 [function]
+        F01_e 2 [function]
+        F11 3 [function]
+        F11_e 3 [function]
+        F11_int 3 [function]
+        F11_int_e 3 [function]
+        F20 3 [function]
+        F20_e 3 [function]
+        F21 4 [function]
+        F21_conj 4 [function]
+        F21_conj_e 4 [function]
+        F21_conj_renorm 4 [function]
+        F21_conj_renorm_e 4 [function]
+        F21_e 4 [function]
+        F21_renorm 4 [function]
+        F21_renorm_e 4 [function]
+        U 3 [function]
+        U_e 3 [function]
+        U_int 3 [function]
+        U_int_e 3 [function]
+      Laguerre
+        L1 2 [function]
+        L1_e 2 [function]
+        L2 2 [function]
+        L2_e 2 [function]
+        L3 2 [function]
+        L3_e 2 [function]
+        Ln 3 [function]
+        Ln_e 3 [function]
+      Lambert
+        W0 1 [function]
+        W0_e 1 [function]
+        Wm1 1 [function]
+        Wm1_e 1 [function]
+      Legendre
+        H3d 3 [function]
+        H3d_0 2 [function]
+        H3d_0_e 2 [function]
+        H3d_1 2 [function]
+        H3d_1_e 2 [function]
+        H3d_e 3 [function]
+        P1 1 [function]
+        P1_e 1 [function]
+        P2 1 [function]
+        P2_e 1 [function]
+        P3 1 [function]
+        P3_e 1 [function]
+        Pl 2 [function]
+        Pl_e 2 [function]
+        Plm 3 [function]
+        Plm_e 3 [function]
+        Q0 1 [function]
+        Q0_e 1 [function]
+        Q1 1 [function]
+        Q1_e 1 [function]
+        Ql 2 [function]
+        Ql_e 2 [function]
+        sphPlm 3 [function]
+        sphPlm_e 3 [function]
+      Log
+        log 1 [function]
+        log_1px 1 [function]
+        log_1px_e 1 [function]
+        log_1px_mx 1 [function]
+        log_1px_mx_e 1 [function]
+        log_abs 1 [function]
+        log_abs_e 1 [function]
+        log_e 1 [function]
+      Psi
+        psi 1 [function]
+        psi_1_int 1 [function]
+        psi_1_int_e 1 [function]
+        psi_1piy 1 [function]
+        psi_1piy_e 1 [function]
+        psi_e 1 [function]
+        psi_int 1 [function]
+        psi_int_e 1 [function]
+        psi_n 2 [function]
+        psi_n_e 2 [function]
+      Synchrotron
+        S1 1 [function]
+        S1_e 1 [function]
+        S2 1 [function]
+        S2_e 1 [function]
+      Transport
+        J2 1 [function]
+        J2_e 1 [function]
+        J3 1 [function]
+        J3_e 1 [function]
+        J4 1 [function]
+        J4_e 1 [function]
+        J5 1 [function]
+        J5_e 1 [function]
+      Trig
+        angle_restrict_pos 1 [function]
+        angle_restrict_symm 1 [function]
+        complex_cos_e 2 [function]
+        complex_logsin_e 2 [function]
+        complex_sin_e 2 [function]
+        cos 1 [function]
+        cos_e 1 [function]
+        cos_err_e 2 [function]
+        hypot 2 [function]
+        hypot_e 2 [function]
+        lncosh 1 [function]
+        lncosh_e 1 [function]
+        lnsinh 1 [function]
+        lnsinh_e 1 [function]
+        polar2rect 2 [function]
+        rect2polar 2 [function]
+        sin 1 [function]
+        sin_e 1 [function]
+        sin_err_e 2 [function]
+        sinc 1 [function]
+        sinc_e 1 [function]
+      Zeta
+        eta 1 [function]
+        eta_e 1 [function]
+        eta_int 1 [function]
+        eta_int_e 1 [function]
+        hzeta 2 [function]
+        hzeta_e 2 [function]
+        zeta 1 [function]
+        zeta_e 1 [function]
+        zeta_int 1 [function]
+        zeta_int_e 1 [function]
+    Stats
+      absdev 2 [function]
+      absdev_m 3 [function]
+      covariance 4 [function]
+      covariance_m 6 [function]
+      kurtosis 2 [function]
+      kurtosis_m_sd 4 [function]
+      lag1_autocorrelation 2 [function]
+      lag1_autocorrelation_m 3 [function]
+      max 2 [function]
+      max_index 2 [function]
+      mean 2 [function]
+      mean1 1 [function]
+      median 2 [function]
+      median_from_sorted_data 2 [function]
+      min 2 [function]
+      min_index 2 [function]
+      minmax 2 [function]
+      minmax_index 2 [function]
+      pvariance 4 [function]
+      quantile 3 [function]
+      quantile_from_sorted_data 3 [function]
+      sd 2 [function]
+      sd1 1 [function]
+      sd1_m 2 [function]
+      sd1_with_fixed_mean 2 [function]
+      sd_m 3 [function]
+      sd_with_fixed_mean 3 [function]
+      skew 2 [function]
+      skew_m_sd 4 [function]
+      ttest 4 [function]
+      variance 2 [function]
+      variance1 1 [function]
+      variance1_m 2 [function]
+      variance1_with_fixed_mean 2 [function]
+      variance_m 3 [function]
+      variance_with_fixed_mean 3 [function]
+      wabsdev 4 [function]
+      wabsdev_m 5 [function]
+      wkurtosis 4 [function]
+      wkurtosis_m_sd 6 [function]
+      wmean 4 [function]
+      wsd 4 [function]
+      wsd_m 5 [function]
+      wsd_with_fixed_mean 5 [function]
+      wskew 4 [function]
+      wskew_m_sd 6 [function]
+      wvariance 4 [function]
+      wvariance_m 5 [function]
+      wvariance_with_fixed_mean 5 [function]
+    Sum
+      Levin
+        accel 1 [method]
+        initialize 1 [method]
+        minmax 3 [method]
+        new 1 [singleton]
+        size 0 [method]
+        step 3 [method]
+        sum_plain 0 [method]
+        terms_used 0 [method]
+      LevinTrunc
+        accel 1 [method]
+        initialize 1 [method]
+        minmax 3 [method]
+        new 1 [singleton]
+        size 0 [method]
+        step 2 [method]
+        sum_plain 0 [method]
+        terms_used 0 [method]
+    Vector
+      add 1 [method]
+      add_const 1 [method]
+      alloc 1 [singleton]
+      calloc 1 [singleton]
+      clone 0 [method]
+      div 1 [method]
+      each 0 [method]
+      fprintf 2 [method]
+      fread 1 [method]
+      fscanf 1 [method]
+      fwrite 1 [method]
+      get 1 [method]
+      inspect 0 [method]
+      isnull 0 [method]
+      max 0 [method]
+      max_index 0 [method]
+      memcpy 2 [function]
+      min 0 [method]
+      min_index 0 [method]
+      minmax 0 [method]
+      minmax_index 0 [method]
+      mul 1 [method]
+      new 1 [singleton]
+      owner 0 [method]
+      print 0 [method]
+      printf 1 [method]
+      reverse 0 [method]
+      scale 1 [method]
+      set -1 [method]
+      set_all 1 [method]
+      set_basis 1 [method]
+      set_zero 0 [method]
+      size 0 [method]
+      stride 0 [method]
+      sub 1 [method]
+      subvector 2 [method]
+      subvector_with_stride 3 [method]
+      swap 2 [function]
+      swap_elements 2 [method]
+      to_a 0 [method]

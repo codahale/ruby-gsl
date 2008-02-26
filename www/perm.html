@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: perm.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: perm.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+# Test permutations
+
+DUMP = "perm.dump"
+File.delete(DUMP) if File.exists?(DUMP)
+
+STDERR.puts "Running permutation tests..."
+
+perm = Permutation.new 10
+puts "\n  size  = #{perm.size}"
+print "  perm  = "
+perm.fprintf STDOUT, " %u"
+perm.swap(2, 4).swap(3, 5)
+print "\n  swap  = "
+#puts perm.to_a.join(" ")
+perm.dump
+perm.next
+print "\n  next  = "
+perm.dump
+perm.prev
+print "\n  prev  = "
+perm.dump
+print "\n  valid: ", perm.is_valid? ? "yes" : "no", "\n"
+begin
+  print "\nwriting to file..."
+  f = File.new DUMP, "w"
+  perm.fwrite f
+  f.close
+  puts "ok"
+  print "reading from file..."
+  f = File.new DUMP, "r"
+  perm = Permutation.new 10
+  perm.fread f
+  f.close
+  puts "ok"
+  perm.dump
+  puts "\nread/write: ok"
+rescue IOError
+  STDERR.print "Caught exception: #{$!}\n"
+end
+
+puts "\ntesting each:"
+perm = Permutation.new 4
+perm.each {|p| p.dump; printf "\n"}
+
+File.delete(DUMP) if File.exists?(DUMP)
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

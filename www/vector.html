@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: vector.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: vector.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+DUMP = "vector.dump"
+File.delete(DUMP) if File.exists?(DUMP)
+
+STDERR.puts "Running tests for Vector..."
+
+puts "the C way"
+v = Vector.new 4
+0.upto(3) do |i|
+  v.set i, 1.23 + i
+end
+0.upto(3) do |i|
+  printf "v[%d] = %g\n", i, v.get(i)
+end
+
+puts "the Ruby way"
+a = [1,2,3,4]
+i = 0
+v = Vector.new a
+v.each do |x|
+  printf "v[%d] = %g\n", i, v.get(i)
+  i += 1
+end
+
+v = Vector.new((0..99).to_a)
+f = File.open DUMP, "w"
+v.fprintf f, "%.5g"
+f.close
+
+File.delete(DUMP) if File.exists?(DUMP)
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

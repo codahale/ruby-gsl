@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: func.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: func.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+STDERR.puts "Running tests for Function class..."
+
+#p = Proc.new { |x| x*x }
+#f = GSL::Function.new2 p
+f = Function.new { |x| x*x }
+
+puts f.eval(2)
+puts f.call(4)
+
+puts f.proc
+
+f.set { |x| x*x*x }
+
+puts f.eval(2)
+puts f[4]
+
+f2 = Function.alloc { |x| Math::sin(x) - Math::log(x)*Math::sqrt(x) }
+
+puts f2.eval(2.5)
+puts f2.arity
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

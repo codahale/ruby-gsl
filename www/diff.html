@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: diff.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: diff.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+STDERR.puts "Running tests for Numerical Differentiation..."
+
+f = Function.new { |x| Math::pow(x, 1.5) }
+
+puts "f(x) = x^(3/2)"
+
+res, err = Diff::central(f, 2.0)
+puts "x = 2.0"
+printf "f'(x) = %.10f +/- %.5f\n", res, err
+printf "exact = %.10f\n\n", 1.5 * Math::sqrt(2.0)
+
+res, err = Diff::forward(f, 0.0)
+puts "x = 0.0"
+printf "f'(x) = %.10f +/- %.5f\n", res, err
+printf "exact = %.10f\n\n", 0.0
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

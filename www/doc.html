@@ -1,0 +1,1742 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="generator" content="rude4c.rb">
+<style type="text/css">
+<!--
+span.module {font-size:14pt; color:red;}
+span.class {font-size:14pt; color:blue;}
+span.constant {color:green;}
+span.function {color:black;}
+span.method {color:black;}
+span.singleton {color:black;font-style:italic}
+//-->
+</style>
+</head>
+<body>
+<h1>Classes &amp; Modules</h1>
+<ul>
+  <li><span class="module">GSL</span>
+  <br><ul>
+  <li><span class="function">set_handler, 1</span></li>
+  <li><span class="function">strerror, 1</span></li>
+  </ul>
+  <br><ul>
+  <li><span class="constant">ERR_INTERN</span></li>
+  <li><span class="constant">ERR_OFF</span></li>
+  <li><span class="constant">ERR_RUBY</span></li>
+  <li><span class="constant">GSL_CONTINUE</span></li>
+  <li><span class="constant">GSL_EBADFUNC</span></li>
+  <li><span class="constant">GSL_EBADLEN</span></li>
+  <li><span class="constant">GSL_EBADTOL</span></li>
+  <li><span class="constant">GSL_ECACHE</span></li>
+  <li><span class="constant">GSL_EDIVERGE</span></li>
+  <li><span class="constant">GSL_EDOM</span></li>
+  <li><span class="constant">GSL_EFACTOR</span></li>
+  <li><span class="constant">GSL_EFAILED</span></li>
+  <li><span class="constant">GSL_EFAULT</span></li>
+  <li><span class="constant">GSL_EINVAL</span></li>
+  <li><span class="constant">GSL_ELOSS</span></li>
+  <li><span class="constant">GSL_EMAXITER</span></li>
+  <li><span class="constant">GSL_ENOMEM</span></li>
+  <li><span class="constant">GSL_ENOPROG</span></li>
+  <li><span class="constant">GSL_ENOPROGJ</span></li>
+  <li><span class="constant">GSL_ENOTSQR</span></li>
+  <li><span class="constant">GSL_EOF</span></li>
+  <li><span class="constant">GSL_EOVRFLW</span></li>
+  <li><span class="constant">GSL_ERANGE</span></li>
+  <li><span class="constant">GSL_EROUND</span></li>
+  <li><span class="constant">GSL_ERUNAWAY</span></li>
+  <li><span class="constant">GSL_ESANITY</span></li>
+  <li><span class="constant">GSL_ESING</span></li>
+  <li><span class="constant">GSL_ETABLE</span></li>
+  <li><span class="constant">GSL_ETOL</span></li>
+  <li><span class="constant">GSL_ETOLF</span></li>
+  <li><span class="constant">GSL_ETOLG</span></li>
+  <li><span class="constant">GSL_ETOLX</span></li>
+  <li><span class="constant">GSL_EUNDRFLW</span></li>
+  <li><span class="constant">GSL_EUNIMPL</span></li>
+  <li><span class="constant">GSL_EUNSUP</span></li>
+  <li><span class="constant">GSL_EZERODIV</span></li>
+  <li><span class="constant">GSL_FAILURE</span></li>
+  <li><span class="constant">GSL_SUCCESS</span></li>
+  <li><span class="constant">RELEASE</span></li>
+  <li><span class="constant">VERSION</span></li>
+  <li><span class="constant">VERSION_MAJOR</span></li>
+  <li><span class="constant">VERSION_MINOR</span></li>
+</ul>
+  <br><ul>
+    <li><span class="class">Block</span>
+    <br><ul>
+    <li><span class="singleton">alloc, 1</span></li>
+    <li><span class="singleton">calloc, 1</span></li>
+    <li><span class="method">fprintf, 2</span></li>
+    <li><span class="method">fread, 1</span></li>
+    <li><span class="method">fscanf, 1</span></li>
+    <li><span class="method">fwrite, 1</span></li>
+    <li><span class="singleton">new, 1</span></li>
+    <li><span class="method">size, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="class">Chebyshev</span>
+    <br><ul>
+    <li><span class="method">calc_deriv, 1 (deriv)</span></li>
+    <li><span class="method">calc_integ, 1 (integ)</span></li>
+    <li><span class="method">eval, 1</span></li>
+    <li><span class="method">eval_err, 1</span></li>
+    <li><span class="method">eval_mode, 2</span></li>
+    <li><span class="method">eval_mode_e, 2</span></li>
+    <li><span class="method">eval_n, 2</span></li>
+    <li><span class="method">eval_n_err, 2</span></li>
+    <li><span class="method">initialize, 4</span></li>
+    <li><span class="singleton">new, 4</span></li>
+    </ul>
+    </li>
+    <li><span class="class">Combination</span>
+    <br><ul>
+    <li><span class="method">data, 0 (to_a)</span></li>
+    <li><span class="method">each, 0</span></li>
+    <li><span class="method">fprintf, 2</span></li>
+    <li><span class="method">fread, 1</span></li>
+    <li><span class="method">fscanf, 1</span></li>
+    <li><span class="method">fwrite, 1</span></li>
+    <li><span class="method">get, 1</span></li>
+    <li><span class="method">init_first, 0</span></li>
+    <li><span class="method">init_last, 0</span></li>
+    <li><span class="method">initialize, 2</span></li>
+    <li><span class="method">k, 0</span></li>
+    <li><span class="method">n, 0</span></li>
+    <li><span class="singleton">new, 2</span></li>
+    <li><span class="singleton">new2, 2</span></li>
+    <li><span class="method">next, 0</span></li>
+    <li><span class="method">prev, 0</span></li>
+    <li><span class="method">reverse_each, 0</span></li>
+    <li><span class="method">valid, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="class">Complex</span>
+    <br><ul>
+    <li><span class="method">abs, 0</span></li>
+    <li><span class="method">abs2, 0</span></li>
+    <li><span class="method">add, 1</span></li>
+    <li><span class="method">add_imag, 1</span></li>
+    <li><span class="method">add_real, 1</span></li>
+    <li><span class="singleton">arccos, 1</span></li>
+    <li><span class="singleton">arccos_real, 1</span></li>
+    <li><span class="singleton">arccosh, 1</span></li>
+    <li><span class="singleton">arccosh_real, 1</span></li>
+    <li><span class="singleton">arccot, 1</span></li>
+    <li><span class="singleton">arccoth, 1</span></li>
+    <li><span class="singleton">arccsc, 1</span></li>
+    <li><span class="singleton">arccsc_real, 1</span></li>
+    <li><span class="singleton">arccsch, 1</span></li>
+    <li><span class="singleton">arcsec, 1</span></li>
+    <li><span class="singleton">arcsec_real, 1</span></li>
+    <li><span class="singleton">arcsech, 1</span></li>
+    <li><span class="singleton">arcsin, 1</span></li>
+    <li><span class="singleton">arcsin_real, 1</span></li>
+    <li><span class="singleton">arcsinh, 1</span></li>
+    <li><span class="singleton">arctan, 1</span></li>
+    <li><span class="singleton">arctanh, 1</span></li>
+    <li><span class="singleton">arctanh_real, 1</span></li>
+    <li><span class="method">arg, 0</span></li>
+    <li><span class="method">conjugate, 0</span></li>
+    <li><span class="singleton">cos, 1</span></li>
+    <li><span class="singleton">cos_e, 1</span></li>
+    <li><span class="singleton">cosh, 1</span></li>
+    <li><span class="singleton">cot, 1</span></li>
+    <li><span class="singleton">coth, 1</span></li>
+    <li><span class="singleton">csc, 1</span></li>
+    <li><span class="singleton">csch, 1</span></li>
+    <li><span class="method">div, 1</span></li>
+    <li><span class="method">div_imag, 1</span></li>
+    <li><span class="method">div_real, 1</span></li>
+    <li><span class="singleton">exp, 1</span></li>
+    <li><span class="method">image, 0 (imag)</span></li>
+    <li><span class="method">initialize, 2</span></li>
+    <li><span class="method">inverse, 0</span></li>
+    <li><span class="singleton">log, 1</span></li>
+    <li><span class="singleton">log10, 1</span></li>
+    <li><span class="method">logabs, 0</span></li>
+    <li><span class="singleton">logb, 2</span></li>
+    <li><span class="singleton">logsin_e, 1</span></li>
+    <li><span class="method">mul, 1</span></li>
+    <li><span class="method">mul_imag, 1</span></li>
+    <li><span class="method">mul_real, 1</span></li>
+    <li><span class="method">negative, 0</span></li>
+    <li><span class="singleton">new, 1</span></li>
+    <li><span class="singleton">new2, 2</span></li>
+    <li><span class="singleton">new3, 2</span></li>
+    <li><span class="singleton">pow, 2</span></li>
+    <li><span class="singleton">pow_real, 2</span></li>
+    <li><span class="method">real, 0</span></li>
+    <li><span class="singleton">sec, 1</span></li>
+    <li><span class="singleton">sech, 1</span></li>
+    <li><span class="singleton">sin, 1</span></li>
+    <li><span class="singleton">sin_e, 1</span></li>
+    <li><span class="singleton">sinh, 1</span></li>
+    <li><span class="singleton">sqrt, 1</span></li>
+    <li><span class="singleton">sqrt_real, 1</span></li>
+    <li><span class="method">sub, 1</span></li>
+    <li><span class="method">sub_imag, 1</span></li>
+    <li><span class="method">sub_real, 1</span></li>
+    <li><span class="singleton">tan, 1</span></li>
+    <li><span class="singleton">tanh, 1</span></li>
+    <li><span class="method">to_s, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="module">Const</span>
+    <br><ul>
+      <li><span class="module">CGS</span>
+      <br><ul>
+      <li><span class="constant">ACRE</span></li>
+      <li><span class="constant">ANGSTROM</span></li>
+      <li><span class="constant">ASTRONOMICAL_UNIT</span></li>
+      <li><span class="constant">BAR</span></li>
+      <li><span class="constant">BARN</span></li>
+      <li><span class="constant">BOHR_MAGNETON</span></li>
+      <li><span class="constant">BOHR_RADIUS</span></li>
+      <li><span class="constant">BOLTZMANN</span></li>
+      <li><span class="constant">BTU</span></li>
+      <li><span class="constant">CALORIE</span></li>
+      <li><span class="constant">CANADIAN_GALLON</span></li>
+      <li><span class="constant">CARAT</span></li>
+      <li><span class="constant">CUP</span></li>
+      <li><span class="constant">CURIE</span></li>
+      <li><span class="constant">DAY</span></li>
+      <li><span class="constant">ELECTRON_CHARGE</span></li>
+      <li><span class="constant">ELECTRON_MAGNETIC_MOMENT</span></li>
+      <li><span class="constant">ELECTRON_VOLT</span></li>
+      <li><span class="constant">FARADAY</span></li>
+      <li><span class="constant">FATHOM</span></li>
+      <li><span class="constant">FLUID_OUNCE</span></li>
+      <li><span class="constant">FOOT</span></li>
+      <li><span class="constant">FOOTCANDLE</span></li>
+      <li><span class="constant">FOOTLAMBERT</span></li>
+      <li><span class="constant">GAUSS</span></li>
+      <li><span class="constant">GRAM_FORCE</span></li>
+      <li><span class="constant">GRAVITATIONAL_CONSTANT</span></li>
+      <li><span class="constant">GRAV_ACCEL</span></li>
+      <li><span class="constant">HECTARE</span></li>
+      <li><span class="constant">HORSEPOWER</span></li>
+      <li><span class="constant">HOUR</span></li>
+      <li><span class="constant">INCH</span></li>
+      <li><span class="constant">INCH_OF_MERCURY</span></li>
+      <li><span class="constant">INCH_OF_WATER</span></li>
+      <li><span class="constant">KILOMETERS_PER_HOUR</span></li>
+      <li><span class="constant">KILOPOUND_FORCE</span></li>
+      <li><span class="constant">KNOT</span></li>
+      <li><span class="constant">LAMBERT</span></li>
+      <li><span class="constant">LIGHT_YEAR</span></li>
+      <li><span class="constant">LITER</span></li>
+      <li><span class="constant">LUMEN</span></li>
+      <li><span class="constant">LUX</span></li>
+      <li><span class="constant">MASS_ELECTRON</span></li>
+      <li><span class="constant">MASS_MUON</span></li>
+      <li><span class="constant">MASS_NEUTRON</span></li>
+      <li><span class="constant">MASS_PROTON</span></li>
+      <li><span class="constant">METER_OF_MERCURY</span></li>
+      <li><span class="constant">METRIC_TON</span></li>
+      <li><span class="constant">MICRON</span></li>
+      <li><span class="constant">MIL</span></li>
+      <li><span class="constant">MILE</span></li>
+      <li><span class="constant">MILES_PER_HOUR</span></li>
+      <li><span class="constant">MINUTE</span></li>
+      <li><span class="constant">MOLAR_GAS</span></li>
+      <li><span class="constant">NAUTICAL_MILE</span></li>
+      <li><span class="constant">NUCLEAR_MAGNETON</span></li>
+      <li><span class="constant">OUNCE_MASS</span></li>
+      <li><span class="constant">PARSEC</span></li>
+      <li><span class="constant">PHOT</span></li>
+      <li><span class="constant">PINT</span></li>
+      <li><span class="constant">PLANCKS_CONSTANT_H</span></li>
+      <li><span class="constant">PLANCKS_CONSTANT_HBAR</span></li>
+      <li><span class="constant">POINT</span></li>
+      <li><span class="constant">POISE</span></li>
+      <li><span class="constant">POUNDAL</span></li>
+      <li><span class="constant">POUND_FORCE</span></li>
+      <li><span class="constant">POUND_MASS</span></li>
+      <li><span class="constant">PROTON_MAGNETIC_MOMENT</span></li>
+      <li><span class="constant">PSI</span></li>
+      <li><span class="constant">QUART</span></li>
+      <li><span class="constant">RAD</span></li>
+      <li><span class="constant">ROENTGEN</span></li>
+      <li><span class="constant">RYDBERG</span></li>
+      <li><span class="constant">SOLAR_MASS</span></li>
+      <li><span class="constant">SPEED_OF_LIGHT</span></li>
+      <li><span class="constant">STANDARD_GAS_VOLUME</span></li>
+      <li><span class="constant">STD_ATMOSPHERE</span></li>
+      <li><span class="constant">STILB</span></li>
+      <li><span class="constant">STOKES</span></li>
+      <li><span class="constant">TABLESPOON</span></li>
+      <li><span class="constant">TEASPOON</span></li>
+      <li><span class="constant">TEXPOINT</span></li>
+      <li><span class="constant">THERM</span></li>
+      <li><span class="constant">TON</span></li>
+      <li><span class="constant">TORR</span></li>
+      <li><span class="constant">TROY_OUNCE</span></li>
+      <li><span class="constant">UK_GALLON</span></li>
+      <li><span class="constant">UK_TON</span></li>
+      <li><span class="constant">UNIFIED_ATOMIC_MASS</span></li>
+      <li><span class="constant">US_GALLON</span></li>
+      <li><span class="constant">VACUUM_PERMEABILITY</span></li>
+      <li><span class="constant">VACUUM_PERMITTIVITY</span></li>
+      <li><span class="constant">WEEK</span></li>
+      <li><span class="constant">YARD</span></li>
+</ul>
+      </li>
+      <li><span class="module">MKS</span>
+      <br><ul>
+      <li><span class="constant">ACRE</span></li>
+      <li><span class="constant">ANGSTROM</span></li>
+      <li><span class="constant">ASTRONOMICAL_UNIT</span></li>
+      <li><span class="constant">BAR</span></li>
+      <li><span class="constant">BARN</span></li>
+      <li><span class="constant">BOHR_MAGNETON</span></li>
+      <li><span class="constant">BOHR_RADIUS</span></li>
+      <li><span class="constant">BOLTZMANN</span></li>
+      <li><span class="constant">BTU</span></li>
+      <li><span class="constant">CALORIE</span></li>
+      <li><span class="constant">CANADIAN_GALLON</span></li>
+      <li><span class="constant">CARAT</span></li>
+      <li><span class="constant">CUP</span></li>
+      <li><span class="constant">CURIE</span></li>
+      <li><span class="constant">DAY</span></li>
+      <li><span class="constant">ELECTRON_CHARGE</span></li>
+      <li><span class="constant">ELECTRON_MAGNETIC_MOMENT</span></li>
+      <li><span class="constant">ELECTRON_VOLT</span></li>
+      <li><span class="constant">FARADAY</span></li>
+      <li><span class="constant">FATHOM</span></li>
+      <li><span class="constant">FLUID_OUNCE</span></li>
+      <li><span class="constant">FOOT</span></li>
+      <li><span class="constant">FOOTCANDLE</span></li>
+      <li><span class="constant">FOOTLAMBERT</span></li>
+      <li><span class="constant">GAUSS</span></li>
+      <li><span class="constant">GRAM_FORCE</span></li>
+      <li><span class="constant">GRAVITATIONAL_CONSTANT</span></li>
+      <li><span class="constant">GRAV_ACCEL</span></li>
+      <li><span class="constant">HECTARE</span></li>
+      <li><span class="constant">HORSEPOWER</span></li>
+      <li><span class="constant">HOUR</span></li>
+      <li><span class="constant">INCH</span></li>
+      <li><span class="constant">INCH_OF_MERCURY</span></li>
+      <li><span class="constant">INCH_OF_WATER</span></li>
+      <li><span class="constant">KILOMETERS_PER_HOUR</span></li>
+      <li><span class="constant">KILOPOUND_FORCE</span></li>
+      <li><span class="constant">KNOT</span></li>
+      <li><span class="constant">LAMBERT</span></li>
+      <li><span class="constant">LIGHT_YEAR</span></li>
+      <li><span class="constant">LITER</span></li>
+      <li><span class="constant">LUMEN</span></li>
+      <li><span class="constant">LUX</span></li>
+      <li><span class="constant">MASS_ELECTRON</span></li>
+      <li><span class="constant">MASS_MUON</span></li>
+      <li><span class="constant">MASS_NEUTRON</span></li>
+      <li><span class="constant">MASS_PROTON</span></li>
+      <li><span class="constant">METER_OF_MERCURY</span></li>
+      <li><span class="constant">METRIC_TON</span></li>
+      <li><span class="constant">MICRON</span></li>
+      <li><span class="constant">MIL</span></li>
+      <li><span class="constant">MILE</span></li>
+      <li><span class="constant">MILES_PER_HOUR</span></li>
+      <li><span class="constant">MINUTE</span></li>
+      <li><span class="constant">MOLAR_GAS</span></li>
+      <li><span class="constant">NAUTICAL_MILE</span></li>
+      <li><span class="constant">NUCLEAR_MAGNETON</span></li>
+      <li><span class="constant">OUNCE_MASS</span></li>
+      <li><span class="constant">PARSEC</span></li>
+      <li><span class="constant">PHOT</span></li>
+      <li><span class="constant">PINT</span></li>
+      <li><span class="constant">PLANCKS_CONSTANT_H</span></li>
+      <li><span class="constant">PLANCKS_CONSTANT_HBAR</span></li>
+      <li><span class="constant">POINT</span></li>
+      <li><span class="constant">POISE</span></li>
+      <li><span class="constant">POUNDAL</span></li>
+      <li><span class="constant">POUND_FORCE</span></li>
+      <li><span class="constant">POUND_MASS</span></li>
+      <li><span class="constant">PROTON_MAGNETIC_MOMENT</span></li>
+      <li><span class="constant">PSI</span></li>
+      <li><span class="constant">QUART</span></li>
+      <li><span class="constant">RAD</span></li>
+      <li><span class="constant">ROENTGEN</span></li>
+      <li><span class="constant">RYDBERG</span></li>
+      <li><span class="constant">SOLAR_MASS</span></li>
+      <li><span class="constant">SPEED_OF_LIGHT</span></li>
+      <li><span class="constant">STANDARD_GAS_VOLUME</span></li>
+      <li><span class="constant">STD_ATMOSPHERE</span></li>
+      <li><span class="constant">STILB</span></li>
+      <li><span class="constant">STOKES</span></li>
+      <li><span class="constant">TABLESPOON</span></li>
+      <li><span class="constant">TEASPOON</span></li>
+      <li><span class="constant">TEXPOINT</span></li>
+      <li><span class="constant">THERM</span></li>
+      <li><span class="constant">TON</span></li>
+      <li><span class="constant">TORR</span></li>
+      <li><span class="constant">TROY_OUNCE</span></li>
+      <li><span class="constant">UK_GALLON</span></li>
+      <li><span class="constant">UK_TON</span></li>
+      <li><span class="constant">UNIFIED_ATOMIC_MASS</span></li>
+      <li><span class="constant">US_GALLON</span></li>
+      <li><span class="constant">VACUUM_PERMEABILITY</span></li>
+      <li><span class="constant">VACUUM_PERMITTIVITY</span></li>
+      <li><span class="constant">WEEK</span></li>
+      <li><span class="constant">YARD</span></li>
+</ul>
+      </li>
+      <li><span class="module">Num</span>
+      <br><ul>
+      <li><span class="constant">AVOGADRO</span></li>
+      <li><span class="constant">FINE_STRUCTURE</span></li>
+</ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="class">DHT</span>
+    <br><ul>
+    <li><span class="method">apply, 2</span></li>
+    <li><span class="method">initialize, 3</span></li>
+    <li><span class="method">k_sample, 1</span></li>
+    <li><span class="singleton">new, 3</span></li>
+    <li><span class="method">x_sample, 1</span></li>
+    </ul>
+    </li>
+    <li><span class="module">Diff</span>
+    <br><ul>
+    <li><span class="function">backward, 2</span></li>
+    <li><span class="function">central, 2</span></li>
+    <li><span class="function">forward, 2</span></li>
+    </ul>
+    </li>
+    <li><span class="module">Eigen</span>
+    <br><ul>
+    <li><span class="function">symmv_sort, 3</span></li>
+    </ul>
+    <br><ul>
+    <li><span class="constant">SORT_ABS_ASC</span></li>
+    <li><span class="constant">SORT_ABS_DESC</span></li>
+    <li><span class="constant">SORT_VAL_ASC</span></li>
+    <li><span class="constant">SORT_VAL_DESC</span></li>
+</ul>
+    </li>
+    <li><span class="module">Fit</span>
+    <br><ul>
+    <li><span class="function">linear, 2</span></li>
+    <li><span class="function">linear_est, 6</span></li>
+    <li><span class="function">mul, 2</span></li>
+    <li><span class="function">mul_est, 6</span></li>
+    <li><span class="function">wlinear, 3</span></li>
+    <li><span class="function">wmul, 3</span></li>
+    </ul>
+    </li>
+    <li><span class="class">Function</span>
+    <br><ul>
+    <li><span class="singleton">alloc, 0</span></li>
+    <li><span class="method">arity, 0</span></li>
+    <li><span class="method">eval, 1 (call)</span></li>
+    <li><span class="method">integration_qag, 6</span></li>
+    <li><span class="method">integration_qagi, 3</span></li>
+    <li><span class="method">integration_qagil, 4</span></li>
+    <li><span class="method">integration_qagiu, 4</span></li>
+    <li><span class="method">integration_qagp, 4</span></li>
+    <li><span class="method">integration_qags, 5</span></li>
+    <li><span class="method">integration_qawc, 6</span></li>
+    <li><span class="method">integration_qawf, 4</span></li>
+    <li><span class="method">integration_qawo, 5</span></li>
+    <li><span class="method">integration_qaws, 6</span></li>
+    <li><span class="method">integration_qng, 4</span></li>
+    <li><span class="singleton">new, 0</span></li>
+    <li><span class="singleton">new2, 1</span></li>
+    <li><span class="method">proc, 0</span></li>
+    <li><span class="method">set, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="class">GSLException</span>
+    </li>
+    <li><span class="module">Histogram</span>
+    <br><ul>
+      <li><span class="class">Hist</span>
+      <br><ul>
+      <li><span class="method">accumulate, 2 (acc)</span></li>
+      <li><span class="method">add, 1</span></li>
+      <li><span class="method">bins, 0</span></li>
+      <li><span class="method">clone, 0</span></li>
+      <li><span class="method">div, 1</span></li>
+      <li><span class="method">dump, 0</span></li>
+      <li><span class="method">each, 0</span></li>
+      <li><span class="method">each_bin, 0</span></li>
+      <li><span class="method">equal_bins_p, 1</span></li>
+      <li><span class="method">find, 1</span></li>
+      <li><span class="method">fprintf, 3</span></li>
+      <li><span class="method">fread, 1</span></li>
+      <li><span class="method">fscanf, 1</span></li>
+      <li><span class="method">fwrite, 1</span></li>
+      <li><span class="method">get, 1</span></li>
+      <li><span class="method">get_range, 1</span></li>
+      <li><span class="method">increment, 1 (inc)</span></li>
+      <li><span class="method">initialize, 0</span></li>
+      <li><span class="method">max, 0</span></li>
+      <li><span class="method">max_bin, 0</span></li>
+      <li><span class="method">max_val, 0</span></li>
+      <li><span class="method">mean, 0</span></li>
+      <li><span class="function">memcpy, 2</span></li>
+      <li><span class="method">min, 0</span></li>
+      <li><span class="method">min_bin, 0</span></li>
+      <li><span class="method">min_val, 0</span></li>
+      <li><span class="method">mul, 1</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="singleton">new2, 3</span></li>
+      <li><span class="method">reset, 0</span></li>
+      <li><span class="method">scale, 1</span></li>
+      <li><span class="method">set_range, 2</span></li>
+      <li><span class="method">set_ranges, 1</span></li>
+      <li><span class="method">set_ranges_uniform, 2</span></li>
+      <li><span class="method">shift, 1</span></li>
+      <li><span class="method">sigma, 0</span></li>
+      <li><span class="method">sub, 1</span></li>
+      <li><span class="method">sum, 0</span></li>
+      </ul>
+      </li>
+      <li><span class="class">Hist2D</span>
+      <br><ul>
+      <li><span class="method">accumulate, 3 (acc)</span></li>
+      <li><span class="method">add, 1</span></li>
+      <li><span class="method">clone, 0</span></li>
+      <li><span class="method">cov, 0</span></li>
+      <li><span class="method">div, 1</span></li>
+      <li><span class="method">dump, 0</span></li>
+      <li><span class="method">equal_bins_p, 1</span></li>
+      <li><span class="method">find, 2</span></li>
+      <li><span class="method">fprintf, 3</span></li>
+      <li><span class="method">fread, 1</span></li>
+      <li><span class="method">fscanf, 2</span></li>
+      <li><span class="method">fwrite, 1</span></li>
+      <li><span class="method">get, 2</span></li>
+      <li><span class="method">get_xrange, 1</span></li>
+      <li><span class="method">get_yrange, 1</span></li>
+      <li><span class="method">increment, 2 (inc)</span></li>
+      <li><span class="method">initialize, 0</span></li>
+      <li><span class="method">max_bin, 0</span></li>
+      <li><span class="method">max_val, 0</span></li>
+      <li><span class="function">memcpy, 2</span></li>
+      <li><span class="method">min_bin, 0</span></li>
+      <li><span class="method">min_val, 0</span></li>
+      <li><span class="method">mul, 1</span></li>
+      <li><span class="singleton">new, 2</span></li>
+      <li><span class="singleton">new2, 6</span></li>
+      <li><span class="method">nx, 0</span></li>
+      <li><span class="method">ny, 0</span></li>
+      <li><span class="method">reset, 0</span></li>
+      <li><span class="method">scale, 1</span></li>
+      <li><span class="method">set_ranges, 2</span></li>
+      <li><span class="method">set_ranges_uniform, 4</span></li>
+      <li><span class="method">set_xrange, 2</span></li>
+      <li><span class="method">set_yrange, 2</span></li>
+      <li><span class="method">shift, 1</span></li>
+      <li><span class="method">sub, 1</span></li>
+      <li><span class="method">sum, 0</span></li>
+      <li><span class="method">xmax, 0</span></li>
+      <li><span class="method">xmean, 0</span></li>
+      <li><span class="method">xmin, 0</span></li>
+      <li><span class="method">xsigma, 0</span></li>
+      <li><span class="method">ymax, 0</span></li>
+      <li><span class="method">ymean, 0</span></li>
+      <li><span class="method">ymin, 0</span></li>
+      <li><span class="method">ysigma, 0</span></li>
+      </ul>
+      </li>
+      <li><span class="class">Hist2D_PDF</span>
+      <br><ul>
+      <li><span class="method">initialize, 0</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">sample, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="class">Hist_PDF</span>
+      <br><ul>
+      <li><span class="method">initialize, 0</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">sample, 1</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="module">Integration</span>
+    <br><ul>
+    <li><span class="constant">COSINE</span></li>
+    <li><span class="constant">GAUSS15</span></li>
+    <li><span class="constant">GAUSS21</span></li>
+    <li><span class="constant">GAUSS31</span></li>
+    <li><span class="constant">GAUSS41</span></li>
+    <li><span class="constant">GAUSS51</span></li>
+    <li><span class="constant">GAUSS61</span></li>
+    <li><span class="constant">SINE</span></li>
+</ul>
+    <br><ul>
+      <li><span class="class">QAWOTable</span>
+      <br><ul>
+      <li><span class="singleton">alloc, 4</span></li>
+      <li><span class="singleton">new, 4</span></li>
+      <li><span class="method">set, -1</span></li>
+      <li><span class="method">set_length, 1</span></li>
+      <li><span class="method">to_a, 0</span></li>
+      </ul>
+      </li>
+      <li><span class="class">QAWSTable</span>
+      <br><ul>
+      <li><span class="singleton">alloc, 4</span></li>
+      <li><span class="singleton">new, 4</span></li>
+      <li><span class="method">set, -1</span></li>
+      <li><span class="method">to_a, 0</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="module">Interpolation</span>
+    <br><ul>
+      <li><span class="class">Accel</span>
+      <br><ul>
+      <li><span class="method">bsearch, 4</span></li>
+      <li><span class="method">find, 2</span></li>
+      <li><span class="method">initialize, 0</span></li>
+      <li><span class="singleton">new, 0</span></li>
+      <li><span class="method">reset, 0</span></li>
+      </ul>
+      </li>
+      <li><span class="class">Interp</span>
+      <br><ul>
+      <li><span class="method">eval, 4</span></li>
+      <li><span class="method">eval_deriv, 4</span></li>
+      <li><span class="method">eval_deriv2, 4</span></li>
+      <li><span class="method">eval_deriv2_e, 5</span></li>
+      <li><span class="method">eval_deriv_e, 5</span></li>
+      <li><span class="method">eval_e, 5</span></li>
+      <li><span class="method">eval_integ, 5</span></li>
+      <li><span class="method">eval_integ_e, 6</span></li>
+      <li><span class="method">init, 2</span></li>
+      <li><span class="method">initialize, 2</span></li>
+      <li><span class="method">min_size, 0</span></li>
+      <li><span class="method">name, 0 (to_s)</span></li>
+      <li><span class="singleton">new, 2</span></li>
+      </ul>
+      <br><ul>
+      <li><span class="constant">AKIMA</span></li>
+      <li><span class="constant">AKIMA_PERIODIC</span></li>
+      <li><span class="constant">CSPLINE</span></li>
+      <li><span class="constant">CSPLINE_PERIODIC</span></li>
+      <li><span class="constant">LINEAR</span></li>
+      <li><span class="constant">POLYNOMIAL</span></li>
+</ul>
+      </li>
+      <li><span class="class">Spline</span>
+      <br><ul>
+      <li><span class="method">eval, 2</span></li>
+      <li><span class="method">eval_deriv, 2</span></li>
+      <li><span class="method">eval_deriv2, 2</span></li>
+      <li><span class="method">eval_deriv2_e, 3</span></li>
+      <li><span class="method">eval_deriv_e, 3</span></li>
+      <li><span class="method">eval_e, 3</span></li>
+      <li><span class="method">eval_integ, 3</span></li>
+      <li><span class="method">eval_integ_e, 4</span></li>
+      <li><span class="method">init, 2</span></li>
+      <li><span class="method">initialize, 2</span></li>
+      <li><span class="method">min_size, 0</span></li>
+      <li><span class="method">name, 0 (to_s)</span></li>
+      <li><span class="singleton">new, 2</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="module">Math</span>
+    <br><ul>
+    <li><span class="function">acosh, 1</span></li>
+    <li><span class="function">asinh, 1</span></li>
+    <li><span class="function">atanh, 1</span></li>
+    <li><span class="function">expm1, 1</span></li>
+    <li><span class="function">hypot, 2</span></li>
+    <li><span class="function">log1p, 1</span></li>
+    <li><span class="function">pow, 2</span></li>
+    <li><span class="function">pow_2, 1</span></li>
+    <li><span class="function">pow_3, 1</span></li>
+    <li><span class="function">pow_4, 1</span></li>
+    <li><span class="function">pow_5, 1</span></li>
+    <li><span class="function">pow_6, 1</span></li>
+    <li><span class="function">pow_7, 1</span></li>
+    <li><span class="function">pow_8, 1</span></li>
+    <li><span class="function">pow_9, 1</span></li>
+    <li><span class="function">pow_int, 2</span></li>
+    </ul>
+    <br><ul>
+    <li><span class="constant">M_1_PI</span></li>
+    <li><span class="constant">M_2_PI</span></li>
+    <li><span class="constant">M_2_SQRTPI</span></li>
+    <li><span class="constant">M_E</span></li>
+    <li><span class="constant">M_EULER</span></li>
+    <li><span class="constant">M_LN10</span></li>
+    <li><span class="constant">M_LN2</span></li>
+    <li><span class="constant">M_LNPI</span></li>
+    <li><span class="constant">M_LOG10E</span></li>
+    <li><span class="constant">M_LOG2E</span></li>
+    <li><span class="constant">M_PI</span></li>
+    <li><span class="constant">M_PI_2</span></li>
+    <li><span class="constant">M_PI_4</span></li>
+    <li><span class="constant">M_SQRT1_2</span></li>
+    <li><span class="constant">M_SQRT2</span></li>
+    <li><span class="constant">M_SQRT3</span></li>
+    <li><span class="constant">M_SQRTPI</span></li>
+</ul>
+    </li>
+    <li><span class="class">Matrix</span>
+    <br><ul>
+    <li><span class="method">add, 1</span></li>
+    <li><span class="method">add_constant, 1</span></li>
+    <li><span class="singleton">alloc, -1</span></li>
+    <li><span class="singleton">calloc, 2</span></li>
+    <li><span class="method">clone, 0</span></li>
+    <li><span class="method">column, 1 (col get_column get_col)</span></li>
+    <li><span class="method">diagonal, 0</span></li>
+    <li><span class="method">div_elements, 1</span></li>
+    <li><span class="method">eigen_symm, 0</span></li>
+    <li><span class="method">eigen_symmv, 0</span></li>
+    <li><span class="method">fprintf, 2</span></li>
+    <li><span class="method">fread, 1</span></li>
+    <li><span class="method">fscanf, 1</span></li>
+    <li><span class="method">fwrite, 1</span></li>
+    <li><span class="method">get, 2</span></li>
+    <li><span class="method">inspect, 0</span></li>
+    <li><span class="method">isnull, 0</span></li>
+    <li><span class="method">max, 0</span></li>
+    <li><span class="method">max_index, 0</span></li>
+    <li><span class="method">min, 0</span></li>
+    <li><span class="method">min_index, 0</span></li>
+    <li><span class="method">minmax, 0</span></li>
+    <li><span class="method">minmax_index, 0</span></li>
+    <li><span class="method">mul, 1</span></li>
+    <li><span class="method">mul_elements, 1</span></li>
+    <li><span class="singleton">new, -1</span></li>
+    <li><span class="method">print, 0</span></li>
+    <li><span class="method">printf, 1</span></li>
+    <li><span class="method">row, 1 (get_row)</span></li>
+    <li><span class="method">scale, 1</span></li>
+    <li><span class="method">set, -1</span></li>
+    <li><span class="method">set_all, 1</span></li>
+    <li><span class="method">set_col, 2</span></li>
+    <li><span class="method">set_identity, 0</span></li>
+    <li><span class="method">set_row, 2</span></li>
+    <li><span class="method">set_zero, 0</span></li>
+    <li><span class="method">size1, 0 (size)</span></li>
+    <li><span class="method">size2, 0</span></li>
+    <li><span class="method">sub, 1</span></li>
+    <li><span class="method">submatrix, 4</span></li>
+    <li><span class="method">swap, 1</span></li>
+    <li><span class="method">swap_columns, 2 (swap_cols)</span></li>
+    <li><span class="method">swap_rowcol, 2</span></li>
+    <li><span class="method">swap_rows, 2</span></li>
+    <li><span class="method">transpose_memcpy, 0 (transpose)</span></li>
+    </ul>
+    </li>
+    <li><span class="class">Minimizer</span>
+    <br><ul>
+    <li><span class="method">initialize, 1</span></li>
+    <li><span class="method">iterate, 0</span></li>
+    <li><span class="method">minimum, 0 (min)</span></li>
+    <li><span class="method">name, 0 (to_s)</span></li>
+    <li><span class="singleton">new, 1</span></li>
+    <li><span class="method">set, 4</span></li>
+    <li><span class="method">set_with_values, 7 (set2)</span></li>
+    <li><span class="function">test_interval, 4</span></li>
+    <li><span class="method">x_lower, 0</span></li>
+    <li><span class="method">x_upper, 0</span></li>
+    </ul>
+    <br><ul>
+    <li><span class="constant">BRENT</span></li>
+    <li><span class="constant">GOLDENSECTION</span></li>
+</ul>
+    </li>
+    <li><span class="module">MonteCarlo</span>
+    <br><ul>
+      <li><span class="class">Function</span>
+      <br><ul>
+      <li><span class="method">eval, -1</span></li>
+      <li><span class="method">eval2, 1</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="class">Plain</span>
+      <br><ul>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="method">integrate, 5</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="class">Permutation</span>
+    <br><ul>
+    <li><span class="method">data, 0 (to_a)</span></li>
+    <li><span class="method">dump, 0</span></li>
+    <li><span class="method">each, 0</span></li>
+    <li><span class="method">fprintf, 2</span></li>
+    <li><span class="method">fread, 1</span></li>
+    <li><span class="method">fscanf, 1</span></li>
+    <li><span class="method">fwrite, 1</span></li>
+    <li><span class="method">get, 1</span></li>
+    <li><span class="method">initialize, 1</span></li>
+    <li><span class="method">inverse, 0</span></li>
+    <li><span class="function">memcpy, 2</span></li>
+    <li><span class="singleton">new, 1</span></li>
+    <li><span class="singleton">new2, 1</span></li>
+    <li><span class="method">next, 0</span></li>
+    <li><span class="method">prev, 0</span></li>
+    <li><span class="method">reset, 1</span></li>
+    <li><span class="method">reverse, 0</span></li>
+    <li><span class="method">size, 0</span></li>
+    <li><span class="method">swap, 2</span></li>
+    <li><span class="method">undump, 0</span></li>
+    <li><span class="method">valid, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="module">Poly</span>
+    <br><ul>
+    <li><span class="function">complex_solve_cubic, 3</span></li>
+    <li><span class="function">complex_solve_quadratic, 3</span></li>
+    <li><span class="function">evaluate, 2</span></li>
+    <li><span class="function">solve_cubic, 3</span></li>
+    <li><span class="function">solve_quadratic, 3</span></li>
+    </ul>
+    <br><ul>
+      <li><span class="class">DD</span>
+      <br><ul>
+      <li><span class="method">evaluate, 1</span></li>
+      <li><span class="method">get, 0</span></li>
+      <li><span class="method">initialize, 2</span></li>
+      <li><span class="singleton">new, 2</span></li>
+      <li><span class="method">taylor, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="class">Workspace</span>
+      <br><ul>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">solve, 1</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="module">Random</span>
+    <br><ul>
+      <li><span class="class">Discrete</span>
+      <br><ul>
+      <li><span class="method">get, 1</span></li>
+      <li><span class="method">get_pdf, 1</span></li>
+      <li><span class="method">initialize, 2</span></li>
+      <li><span class="singleton">new, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="class">QRNG</span>
+      <br><ul>
+      <li><span class="method">clone, 0</span></li>
+      <li><span class="method">dim, 0</span></li>
+      <li><span class="method">get, 0</span></li>
+      <li><span class="method">initialize, 2</span></li>
+      <li><span class="function">memcpy, 2</span></li>
+      <li><span class="method">name, 0 (to_s)</span></li>
+      <li><span class="singleton">new, 2</span></li>
+      <li><span class="method">reset, 0</span></li>
+      <li><span class="method">size, 0</span></li>
+      </ul>
+      <br><ul>
+      <li><span class="constant">NIEDERREITER_2</span></li>
+      <li><span class="constant">SOBOL</span></li>
+</ul>
+      </li>
+      <li><span class="module">RND</span>
+      <br><ul>
+      <li><span class="function">bernoulli, 2</span></li>
+      <li><span class="function">bernoulli_pdf, 2</span></li>
+      <li><span class="function">beta, 3</span></li>
+      <li><span class="function">beta_pdf, 3</span></li>
+      <li><span class="function">binomial, 3</span></li>
+      <li><span class="function">binomial_pdf, 3</span></li>
+      <li><span class="function">bivariate_gaussian, 4</span></li>
+      <li><span class="function">bivariate_gaussian_pdf, 5</span></li>
+      <li><span class="function">cauchy, 2</span></li>
+      <li><span class="function">cauchy_pdf, 2</span></li>
+      <li><span class="function">chisq, 2</span></li>
+      <li><span class="function">chisq_pdf, 2</span></li>
+      <li><span class="function">choose, 3</span></li>
+      <li><span class="function">dir_2d, 1</span></li>
+      <li><span class="function">dir_2d_trig_method, 1</span></li>
+      <li><span class="function">dir_3d, 1</span></li>
+      <li><span class="function">dir_nd, 2</span></li>
+      <li><span class="function">erlang, 3</span></li>
+      <li><span class="function">erlang_pdf, 3</span></li>
+      <li><span class="function">exponential, 2</span></li>
+      <li><span class="function">exponential_pdf, 2</span></li>
+      <li><span class="function">exppow, 3</span></li>
+      <li><span class="function">exppow_pdf, 3</span></li>
+      <li><span class="function">fdist, 3 (F)</span></li>
+      <li><span class="function">fdist_pdf, 3 (F_pdf)</span></li>
+      <li><span class="function">flat, 3</span></li>
+      <li><span class="function">flat_pdf, 3</span></li>
+      <li><span class="function">gamma, 3</span></li>
+      <li><span class="function">gamma_int, 2</span></li>
+      <li><span class="function">gamma_pdf, 3</span></li>
+      <li><span class="function">gaussian, 2</span></li>
+      <li><span class="function">gaussian_pdf, 2</span></li>
+      <li><span class="function">gaussian_ratio_method, 2</span></li>
+      <li><span class="function">gaussian_tail, 3</span></li>
+      <li><span class="function">gaussian_tail_pdf, 3</span></li>
+      <li><span class="function">geometric, 2</span></li>
+      <li><span class="function">geometric_pdf, 2</span></li>
+      <li><span class="function">gumbel1, 3</span></li>
+      <li><span class="function">gumbel1_pdf, 3</span></li>
+      <li><span class="function">gumbel2, 3</span></li>
+      <li><span class="function">gumbel2_pdf, 3</span></li>
+      <li><span class="function">hypergeometric, 4</span></li>
+      <li><span class="function">hypergeometric_pdf, 4</span></li>
+      <li><span class="function">landau, 1</span></li>
+      <li><span class="function">landau_pdf, 1</span></li>
+      <li><span class="function">laplace, 2</span></li>
+      <li><span class="function">laplace_pdf, 2</span></li>
+      <li><span class="function">levy, 3</span></li>
+      <li><span class="function">levy_skew, 4</span></li>
+      <li><span class="function">logarithmic, 2</span></li>
+      <li><span class="function">logarithmic_pdf, 2</span></li>
+      <li><span class="function">logistic, 2</span></li>
+      <li><span class="function">logistic_pdf, 2</span></li>
+      <li><span class="function">lognormal, 3</span></li>
+      <li><span class="function">lognormal_pdf, 3</span></li>
+      <li><span class="function">negative_binomial, 3</span></li>
+      <li><span class="function">negative_binomial_pdf, 3</span></li>
+      <li><span class="function">pareto, 3</span></li>
+      <li><span class="function">pareto_pdf, 3</span></li>
+      <li><span class="function">pascal, 3</span></li>
+      <li><span class="function">pascal_pdf, 3</span></li>
+      <li><span class="function">poisson, 2</span></li>
+      <li><span class="function">poisson_pdf, 2</span></li>
+      <li><span class="function">rayleigh, 2</span></li>
+      <li><span class="function">rayleigh_pdf, 2</span></li>
+      <li><span class="function">rayleigh_tail, 3</span></li>
+      <li><span class="function">rayleigh_tail_pdf, 3</span></li>
+      <li><span class="function">sample, 3</span></li>
+      <li><span class="function">shuffle, 2</span></li>
+      <li><span class="function">tdist, 2 (t)</span></li>
+      <li><span class="function">tdist_pdf, 2 (t_pdf)</span></li>
+      <li><span class="function">ugaussian, 1</span></li>
+      <li><span class="function">ugaussian_pdf, 1</span></li>
+      <li><span class="function">ugaussian_ratio_method, 1</span></li>
+      <li><span class="function">ugaussian_tail, 2</span></li>
+      <li><span class="function">ugaussian_tail_pdf, 2</span></li>
+      <li><span class="function">weibull, 3</span></li>
+      <li><span class="function">weibull_pdf, 3</span></li>
+      </ul>
+      </li>
+      <li><span class="class">RNG</span>
+      <br><ul>
+      <li><span class="method">clone, 0</span></li>
+      <li><span class="method">get, 0</span></li>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="method">max, 0</span></li>
+      <li><span class="function">memcpy, 2</span></li>
+      <li><span class="method">min, 0</span></li>
+      <li><span class="method">name, 0 (to_s)</span></li>
+      <li><span class="singleton">new, 0</span></li>
+      <li><span class="singleton">new2, 1</span></li>
+      <li><span class="method">print_state, 0 (dump)</span></li>
+      <li><span class="method">set, 1</span></li>
+      <li><span class="method">size, 0</span></li>
+      <li><span class="method">uniform, 0</span></li>
+      <li><span class="method">uniform_int, 1</span></li>
+      <li><span class="method">uniform_pos, 0</span></li>
+      </ul>
+      <br><ul>
+      <li><span class="constant">BOROSH13</span></li>
+      <li><span class="constant">CMRG</span></li>
+      <li><span class="constant">COVEYOU</span></li>
+      <li><span class="constant">FISHMAN18</span></li>
+      <li><span class="constant">FISHMAN20</span></li>
+      <li><span class="constant">FISHMAN2X</span></li>
+      <li><span class="constant">GFSR4</span></li>
+      <li><span class="constant">KNUTHRAN</span></li>
+      <li><span class="constant">KNUTHRAN2</span></li>
+      <li><span class="constant">LECUYER21</span></li>
+      <li><span class="constant">MINSTD</span></li>
+      <li><span class="constant">MRG</span></li>
+      <li><span class="constant">MT19937</span></li>
+      <li><span class="constant">R250</span></li>
+      <li><span class="constant">RAN0</span></li>
+      <li><span class="constant">RAN1</span></li>
+      <li><span class="constant">RAN2</span></li>
+      <li><span class="constant">RAN3</span></li>
+      <li><span class="constant">RAND</span></li>
+      <li><span class="constant">RAND48</span></li>
+      <li><span class="constant">RANDOM128_BSD</span></li>
+      <li><span class="constant">RANDOM128_GLIBC2</span></li>
+      <li><span class="constant">RANDOM128_LIBC5</span></li>
+      <li><span class="constant">RANDOM256_BSD</span></li>
+      <li><span class="constant">RANDOM256_GLIBC2</span></li>
+      <li><span class="constant">RANDOM256_LIBC5</span></li>
+      <li><span class="constant">RANDOM32_BSD</span></li>
+      <li><span class="constant">RANDOM32_GLIBC2</span></li>
+      <li><span class="constant">RANDOM32_LIBC5</span></li>
+      <li><span class="constant">RANDOM64_BSD</span></li>
+      <li><span class="constant">RANDOM64_GLIBC2</span></li>
+      <li><span class="constant">RANDOM64_LIBC5</span></li>
+      <li><span class="constant">RANDOM8_BSD</span></li>
+      <li><span class="constant">RANDOM8_GLIBC2</span></li>
+      <li><span class="constant">RANDOM8_LIBC5</span></li>
+      <li><span class="constant">RANDOM_BSD</span></li>
+      <li><span class="constant">RANDOM_GLIBC2</span></li>
+      <li><span class="constant">RANDOM_LIBC5</span></li>
+      <li><span class="constant">RANDU</span></li>
+      <li><span class="constant">RANF</span></li>
+      <li><span class="constant">RANLUX</span></li>
+      <li><span class="constant">RANLUX389</span></li>
+      <li><span class="constant">RANLXD1</span></li>
+      <li><span class="constant">RANLXD2</span></li>
+      <li><span class="constant">RANLXS0</span></li>
+      <li><span class="constant">RANLXS1</span></li>
+      <li><span class="constant">RANLXS2</span></li>
+      <li><span class="constant">RANMAR</span></li>
+      <li><span class="constant">SLATEC</span></li>
+      <li><span class="constant">TAUS</span></li>
+      <li><span class="constant">TRANSPUTER</span></li>
+      <li><span class="constant">TT800</span></li>
+      <li><span class="constant">UNI</span></li>
+      <li><span class="constant">UNI32</span></li>
+      <li><span class="constant">VAX</span></li>
+      <li><span class="constant">WATERMAN14</span></li>
+      <li><span class="constant">ZUF</span></li>
+</ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="class">Result</span>
+    <br><ul>
+    <li><span class="method">err, 0</span></li>
+    <li><span class="method">initialize, 2</span></li>
+    <li><span class="singleton">new, 0</span></li>
+    <li><span class="singleton">new2, 2</span></li>
+    <li><span class="method">val, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="class">Result10</span>
+    <br><ul>
+    <li><span class="method">e10, 0</span></li>
+    <li><span class="method">err, 0</span></li>
+    <li><span class="method">initialize, 0</span></li>
+    <li><span class="singleton">new, 0</span></li>
+    <li><span class="method">val, 0</span></li>
+    </ul>
+    </li>
+    <li><span class="module">Solver</span>
+    <br><ul>
+    <li><span class="function">test_delta, 4</span></li>
+    <li><span class="function">test_interval, 4</span></li>
+    <li><span class="function">test_residual, 2</span></li>
+    </ul>
+    <br><ul>
+      <li><span class="class">FDFSolver</span>
+      <br><ul>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="method">iterate, 0</span></li>
+      <li><span class="method">name, 0 (to_s)</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">root, 0</span></li>
+      <li><span class="method">set, 3</span></li>
+      </ul>
+      <br><ul>
+      <li><span class="constant">NEWTON</span></li>
+      <li><span class="constant">SECANT</span></li>
+      <li><span class="constant">STEFFENSON</span></li>
+</ul>
+      </li>
+      <li><span class="class">FSolver</span>
+      <br><ul>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="method">iterate, 0</span></li>
+      <li><span class="method">name, 0 (to_s)</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">root, 0</span></li>
+      <li><span class="method">set, 3</span></li>
+      <li><span class="method">x_lower, 0</span></li>
+      <li><span class="method">x_upper, 0</span></li>
+      </ul>
+      <br><ul>
+      <li><span class="constant">BISECTION</span></li>
+      <li><span class="constant">BRENT</span></li>
+      <li><span class="constant">FALSEPOS</span></li>
+</ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="module">Special</span>
+    <br><ul>
+    <li><span class="constant">PREC_APPROX</span></li>
+    <li><span class="constant">PREC_DOUBLE</span></li>
+    <li><span class="constant">PREC_SINGLE</span></li>
+</ul>
+    <br><ul>
+      <li><span class="module">Airy</span>
+      <br><ul>
+      <li><span class="function">Ai, 2</span></li>
+      <li><span class="function">Ai_deriv, 2</span></li>
+      <li><span class="function">Ai_deriv_e, 2</span></li>
+      <li><span class="function">Ai_deriv_scaled, 2</span></li>
+      <li><span class="function">Ai_deriv_scaled_e, 2</span></li>
+      <li><span class="function">Ai_e, 2</span></li>
+      <li><span class="function">Ai_scaled, 2</span></li>
+      <li><span class="function">Ai_scaled_e, 2</span></li>
+      <li><span class="function">Bi, 2</span></li>
+      <li><span class="function">Bi_deriv, 2</span></li>
+      <li><span class="function">Bi_deriv_e, 2</span></li>
+      <li><span class="function">Bi_deriv_scaled, 2</span></li>
+      <li><span class="function">Bi_deriv_scaled_e, 2</span></li>
+      <li><span class="function">Bi_e, 2</span></li>
+      <li><span class="function">Bi_scaled, 2</span></li>
+      <li><span class="function">Bi_scaled_e, 2</span></li>
+      <li><span class="function">zero_Ai, 1</span></li>
+      <li><span class="function">zero_Ai_deriv, 1</span></li>
+      <li><span class="function">zero_Ai_deriv_e, 1</span></li>
+      <li><span class="function">zero_Ai_e, 1</span></li>
+      <li><span class="function">zero_Bi, 1</span></li>
+      <li><span class="function">zero_Bi_deriv, 1</span></li>
+      <li><span class="function">zero_Bi_deriv_e, 1</span></li>
+      <li><span class="function">zero_Bi_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Bessel</span>
+      <br><ul>
+      <li><span class="function">I0, 1</span></li>
+      <li><span class="function">I0_e, 1</span></li>
+      <li><span class="function">I0_scaled, 1</span></li>
+      <li><span class="function">I0_scaled_e, 1</span></li>
+      <li><span class="function">I1, 1</span></li>
+      <li><span class="function">I1_e, 1</span></li>
+      <li><span class="function">I1_scaled, 1</span></li>
+      <li><span class="function">I1_scaled_e, 1</span></li>
+      <li><span class="function">In, 2</span></li>
+      <li><span class="function">In_array, 3</span></li>
+      <li><span class="function">In_e, 2</span></li>
+      <li><span class="function">In_scaled, 2</span></li>
+      <li><span class="function">In_scaled_array, 3</span></li>
+      <li><span class="function">In_scaled_e, 2</span></li>
+      <li><span class="function">Inu, 2</span></li>
+      <li><span class="function">Inu_e, 2</span></li>
+      <li><span class="function">Inu_scaled, 2</span></li>
+      <li><span class="function">Inu_scaled_e, 2</span></li>
+      <li><span class="function">J0, 1</span></li>
+      <li><span class="function">J0_e, 1</span></li>
+      <li><span class="function">J1, 1</span></li>
+      <li><span class="function">J1_e, 1</span></li>
+      <li><span class="function">Jn, 2</span></li>
+      <li><span class="function">Jn_array, 3</span></li>
+      <li><span class="function">Jn_e, 2</span></li>
+      <li><span class="function">Jnu, 2</span></li>
+      <li><span class="function">Jnu_e, 2</span></li>
+      <li><span class="function">K0, 1</span></li>
+      <li><span class="function">K0_e, 1</span></li>
+      <li><span class="function">K0_scaled, 1</span></li>
+      <li><span class="function">K0_scaled_e, 1</span></li>
+      <li><span class="function">K1, 1</span></li>
+      <li><span class="function">K1_e, 1</span></li>
+      <li><span class="function">K1_scaled, 1</span></li>
+      <li><span class="function">K1_scaled_e, 1</span></li>
+      <li><span class="function">Kn, 2</span></li>
+      <li><span class="function">Kn_array, 3</span></li>
+      <li><span class="function">Kn_e, 2</span></li>
+      <li><span class="function">Kn_scaled, 2</span></li>
+      <li><span class="function">Kn_scaled_array, 3</span></li>
+      <li><span class="function">Kn_scaled_e, 2</span></li>
+      <li><span class="function">Knu, 2</span></li>
+      <li><span class="function">Knu_e, 2</span></li>
+      <li><span class="function">Knu_scaled, 2</span></li>
+      <li><span class="function">Knu_scaled_e, 2</span></li>
+      <li><span class="function">Y0, 1</span></li>
+      <li><span class="function">Y0_e, 1</span></li>
+      <li><span class="function">Y1, 1</span></li>
+      <li><span class="function">Y1_e, 1</span></li>
+      <li><span class="function">Yn, 2</span></li>
+      <li><span class="function">Yn_array, 3</span></li>
+      <li><span class="function">Yn_e, 2</span></li>
+      <li><span class="function">Ynu, 2</span></li>
+      <li><span class="function">Ynu_e, 2</span></li>
+      <li><span class="function">i0_scaled, 1</span></li>
+      <li><span class="function">i0_scaled_e, 1</span></li>
+      <li><span class="function">i1_scaled, 1</span></li>
+      <li><span class="function">i1_scaled_e, 1</span></li>
+      <li><span class="function">i2_scaled, 1</span></li>
+      <li><span class="function">i2_scaled_e, 1</span></li>
+      <li><span class="function">il_scaled, 2</span></li>
+      <li><span class="function">il_scaled_array, 2</span></li>
+      <li><span class="function">il_scaled_e, 2</span></li>
+      <li><span class="function">j0, 1</span></li>
+      <li><span class="function">j0_e, 1</span></li>
+      <li><span class="function">j1, 1</span></li>
+      <li><span class="function">j1_e, 1</span></li>
+      <li><span class="function">j2, 1</span></li>
+      <li><span class="function">j2_e, 1</span></li>
+      <li><span class="function">jl, 2</span></li>
+      <li><span class="function">jl_array, 2</span></li>
+      <li><span class="function">jl_e, 2</span></li>
+      <li><span class="function">jl_steed_array, 2</span></li>
+      <li><span class="function">k0_scaled, 1</span></li>
+      <li><span class="function">k0_scaled_e, 1</span></li>
+      <li><span class="function">k1_scaled, 1</span></li>
+      <li><span class="function">k1_scaled_e, 1</span></li>
+      <li><span class="function">k2_scaled, 1</span></li>
+      <li><span class="function">k2_scaled_e, 1</span></li>
+      <li><span class="function">kl_scaled, 2</span></li>
+      <li><span class="function">kl_scaled_array, 2</span></li>
+      <li><span class="function">kl_scaled_e, 2</span></li>
+      <li><span class="function">lnKnu, 2</span></li>
+      <li><span class="function">lnKnu_e, 2</span></li>
+      <li><span class="function">y0, 1</span></li>
+      <li><span class="function">y0_e, 1</span></li>
+      <li><span class="function">y1, 1</span></li>
+      <li><span class="function">y1_e, 1</span></li>
+      <li><span class="function">y2, 1</span></li>
+      <li><span class="function">y2_e, 1</span></li>
+      <li><span class="function">yl, 2</span></li>
+      <li><span class="function">yl_array, 2</span></li>
+      <li><span class="function">yl_e, 2</span></li>
+      <li><span class="function">zero_J0, 1</span></li>
+      <li><span class="function">zero_J0_e, 1</span></li>
+      <li><span class="function">zero_J1, 1</span></li>
+      <li><span class="function">zero_J1_e, 1</span></li>
+      <li><span class="function">zero_Jnu, 2</span></li>
+      <li><span class="function">zero_Jnu_e, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Clausen</span>
+      <br><ul>
+      <li><span class="function">clausen, 1</span></li>
+      <li><span class="function">clausen_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Conical</span>
+      <br><ul>
+      <li><span class="function">P_0, 2</span></li>
+      <li><span class="function">P_0_e, 2</span></li>
+      <li><span class="function">P_1, 2</span></li>
+      <li><span class="function">P_1_e, 2</span></li>
+      <li><span class="function">P_cyl_reg, 3</span></li>
+      <li><span class="function">P_cyl_reg_e, 3</span></li>
+      <li><span class="function">P_half, 2</span></li>
+      <li><span class="function">P_half_e, 2</span></li>
+      <li><span class="function">P_mhalf, 2</span></li>
+      <li><span class="function">P_mhalf_e, 2</span></li>
+      <li><span class="function">P_sph_reg, 3</span></li>
+      <li><span class="function">P_sph_reg_e, 3</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Coulomb</span>
+      <br><ul>
+      <li><span class="function">CL_array, 3</span></li>
+      <li><span class="function">CL_e, 2</span></li>
+      <li><span class="function">hydrogenicR, 4</span></li>
+      <li><span class="function">hydrogenicR_1, 2</span></li>
+      <li><span class="function">hydrogenicR_1_e, 2</span></li>
+      <li><span class="function">hydrogenicR_e, 4</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Coupling</span>
+      <br><ul>
+      <li><span class="function">wigner_3j, 6</span></li>
+      <li><span class="function">wigner_3j_e, 6</span></li>
+      <li><span class="function">wigner_6j, 6</span></li>
+      <li><span class="function">wigner_6j_e, 6</span></li>
+      <li><span class="function">wigner_9j, 9</span></li>
+      <li><span class="function">wigner_9j_e, 9</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Dawson</span>
+      <br><ul>
+      <li><span class="function">dawson, 1</span></li>
+      <li><span class="function">dawson_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Debye</span>
+      <br><ul>
+      <li><span class="function">D1, 1</span></li>
+      <li><span class="function">D1_e, 1</span></li>
+      <li><span class="function">D2, 1</span></li>
+      <li><span class="function">D2_e, 1</span></li>
+      <li><span class="function">D3, 1</span></li>
+      <li><span class="function">D3_e, 1</span></li>
+      <li><span class="function">D4, 1</span></li>
+      <li><span class="function">D4_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Dilog</span>
+      <br><ul>
+      <li><span class="function">complex_dilog_e, 2</span></li>
+      <li><span class="function">dilog, 1</span></li>
+      <li><span class="function">dilog_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Elementary</span>
+      <br><ul>
+      <li><span class="function">multiply, 2</span></li>
+      <li><span class="function">multiply_e, 2</span></li>
+      <li><span class="function">multiply_err_e, 4</span></li>
+      </ul>
+      </li>
+      <li><span class="module">EllInt</span>
+      <br><ul>
+      <li><span class="function">D, 4</span></li>
+      <li><span class="function">D_e, 4</span></li>
+      <li><span class="function">E, 3</span></li>
+      <li><span class="function">E_e, 3</span></li>
+      <li><span class="function">Ecomp, 2</span></li>
+      <li><span class="function">Ecomp_e, 2</span></li>
+      <li><span class="function">F, 3</span></li>
+      <li><span class="function">F_e, 3</span></li>
+      <li><span class="function">Kcomp, 2</span></li>
+      <li><span class="function">Kcomp_e, 2</span></li>
+      <li><span class="function">P, 4</span></li>
+      <li><span class="function">P_e, 4</span></li>
+      <li><span class="function">RC, 3</span></li>
+      <li><span class="function">RC_e, 3</span></li>
+      <li><span class="function">RD, 4</span></li>
+      <li><span class="function">RD_e, 4</span></li>
+      <li><span class="function">RF, 4</span></li>
+      <li><span class="function">RF_e, 4</span></li>
+      <li><span class="function">RJ, 5</span></li>
+      <li><span class="function">RJ_e, 5</span></li>
+      </ul>
+      </li>
+      <li><span class="module">EllJac</span>
+      <br><ul>
+      <li><span class="function">e, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Error</span>
+      <br><ul>
+      <li><span class="function">erf, 1</span></li>
+      <li><span class="function">erf_Q, 1</span></li>
+      <li><span class="function">erf_Q_e, 1</span></li>
+      <li><span class="function">erf_Z, 1</span></li>
+      <li><span class="function">erf_Z_e, 1</span></li>
+      <li><span class="function">erf_e, 1</span></li>
+      <li><span class="function">erfc, 1</span></li>
+      <li><span class="function">erfc_e, 1</span></li>
+      <li><span class="function">log_erf, 1</span></li>
+      <li><span class="function">log_erf_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Exp</span>
+      <br><ul>
+      <li><span class="function">exp, 1</span></li>
+      <li><span class="function">exp_e, 1</span></li>
+      <li><span class="function">exp_e10_e, 1</span></li>
+      <li><span class="function">exp_err_e, 2</span></li>
+      <li><span class="function">exp_err_e10_e, 2</span></li>
+      <li><span class="function">exp_mult, 2</span></li>
+      <li><span class="function">exp_mult_e, 2</span></li>
+      <li><span class="function">exp_mult_e10_e, 2</span></li>
+      <li><span class="function">exp_mult_err_e, 4</span></li>
+      <li><span class="function">exp_mult_err_e10_e, 4</span></li>
+      <li><span class="function">expm1, 1</span></li>
+      <li><span class="function">expm1_e, 1</span></li>
+      <li><span class="function">exprel, 1</span></li>
+      <li><span class="function">exprel_2, 1</span></li>
+      <li><span class="function">exprel_2_e, 1</span></li>
+      <li><span class="function">exprel_e, 1</span></li>
+      <li><span class="function">exprel_n, 2</span></li>
+      <li><span class="function">exprel_n_e, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="module">ExpInt</span>
+      <br><ul>
+      <li><span class="function">Chi, 1</span></li>
+      <li><span class="function">Chi_e, 1</span></li>
+      <li><span class="function">Ci, 1</span></li>
+      <li><span class="function">Ci_e, 1</span></li>
+      <li><span class="function">E1, 1</span></li>
+      <li><span class="function">E1_e, 1</span></li>
+      <li><span class="function">E2, 1</span></li>
+      <li><span class="function">E2_e, 1</span></li>
+      <li><span class="function">Ei, 1</span></li>
+      <li><span class="function">Ei3, 1</span></li>
+      <li><span class="function">Ei3_e, 1</span></li>
+      <li><span class="function">Ei_e, 1</span></li>
+      <li><span class="function">Shi, 1</span></li>
+      <li><span class="function">Shi_e, 1</span></li>
+      <li><span class="function">Si, 1</span></li>
+      <li><span class="function">Si_e, 1</span></li>
+      <li><span class="function">atanint, 1</span></li>
+      <li><span class="function">atanint_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">FermiDirac</span>
+      <br><ul>
+      <li><span class="function">F0, 1</span></li>
+      <li><span class="function">F0_e, 1</span></li>
+      <li><span class="function">F1, 1</span></li>
+      <li><span class="function">F1_e, 1</span></li>
+      <li><span class="function">F2, 1</span></li>
+      <li><span class="function">F2_e, 1</span></li>
+      <li><span class="function">F3half, 1</span></li>
+      <li><span class="function">F3half_e, 1</span></li>
+      <li><span class="function">Fhalf, 1</span></li>
+      <li><span class="function">Fhalf_e, 1</span></li>
+      <li><span class="function">Finc_0, 2</span></li>
+      <li><span class="function">Finc_0_e, 2</span></li>
+      <li><span class="function">Fint, 2</span></li>
+      <li><span class="function">Fint_e, 2</span></li>
+      <li><span class="function">Fm1, 1</span></li>
+      <li><span class="function">Fm1_e, 1</span></li>
+      <li><span class="function">Fmhalf, 1</span></li>
+      <li><span class="function">Fmhalf_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Gamma</span>
+      <br><ul>
+      <li><span class="function">beta, 2</span></li>
+      <li><span class="function">beta_e, 2</span></li>
+      <li><span class="function">beta_inc, 3</span></li>
+      <li><span class="function">beta_inc_e, 3</span></li>
+      <li><span class="function">choose, 2</span></li>
+      <li><span class="function">choose_e, 2</span></li>
+      <li><span class="function">doublefact, 1</span></li>
+      <li><span class="function">doublefact_e, 1</span></li>
+      <li><span class="function">fact, 1</span></li>
+      <li><span class="function">fact_e, 1</span></li>
+      <li><span class="function">gamma, 1</span></li>
+      <li><span class="function">gamma_e, 1</span></li>
+      <li><span class="function">gamma_inc_P, 2</span></li>
+      <li><span class="function">gamma_inc_P_e, 2</span></li>
+      <li><span class="function">gamma_inc_Q, 2</span></li>
+      <li><span class="function">gamma_inc_Q_e, 2</span></li>
+      <li><span class="function">gammainv, 1</span></li>
+      <li><span class="function">gammainv_e, 1</span></li>
+      <li><span class="function">gammastar, 1</span></li>
+      <li><span class="function">gammastar_e, 1</span></li>
+      <li><span class="function">lnbeta, 2</span></li>
+      <li><span class="function">lnbeta_e, 2</span></li>
+      <li><span class="function">lnchoose, 2</span></li>
+      <li><span class="function">lnchoose_e, 2</span></li>
+      <li><span class="function">lndoublefact, 1</span></li>
+      <li><span class="function">lndoublefact_e, 1</span></li>
+      <li><span class="function">lnfact, 1</span></li>
+      <li><span class="function">lnfact_e, 1</span></li>
+      <li><span class="function">lngamma, 1</span></li>
+      <li><span class="function">lngamma_e, 1</span></li>
+      <li><span class="function">lnpoch, 2</span></li>
+      <li><span class="function">lnpoch_e, 2</span></li>
+      <li><span class="function">poch, 2</span></li>
+      <li><span class="function">poch_e, 2</span></li>
+      <li><span class="function">pochrel, 2</span></li>
+      <li><span class="function">pochrel_e, 2</span></li>
+      <li><span class="function">taylorcoeff, 2</span></li>
+      <li><span class="function">taylorcoeff_e, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Gegenbauer</span>
+      <br><ul>
+      <li><span class="function">poly_1, 2</span></li>
+      <li><span class="function">poly_1_e, 2</span></li>
+      <li><span class="function">poly_2, 2</span></li>
+      <li><span class="function">poly_2_e, 2</span></li>
+      <li><span class="function">poly_3, 2</span></li>
+      <li><span class="function">poly_3_e, 2</span></li>
+      <li><span class="function">poly_array, 3</span></li>
+      <li><span class="function">poly_n, 3</span></li>
+      <li><span class="function">poly_n_e, 3</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Hyperg</span>
+      <br><ul>
+      <li><span class="function">F01, 2</span></li>
+      <li><span class="function">F01_e, 2</span></li>
+      <li><span class="function">F11, 3</span></li>
+      <li><span class="function">F11_e, 3</span></li>
+      <li><span class="function">F11_int, 3</span></li>
+      <li><span class="function">F11_int_e, 3</span></li>
+      <li><span class="function">F20, 3</span></li>
+      <li><span class="function">F20_e, 3</span></li>
+      <li><span class="function">F21, 4</span></li>
+      <li><span class="function">F21_conj, 4</span></li>
+      <li><span class="function">F21_conj_e, 4</span></li>
+      <li><span class="function">F21_conj_renorm, 4</span></li>
+      <li><span class="function">F21_conj_renorm_e, 4</span></li>
+      <li><span class="function">F21_e, 4</span></li>
+      <li><span class="function">F21_renorm, 4</span></li>
+      <li><span class="function">F21_renorm_e, 4</span></li>
+      <li><span class="function">U, 3</span></li>
+      <li><span class="function">U_e, 3</span></li>
+      <li><span class="function">U_int, 3</span></li>
+      <li><span class="function">U_int_e, 3</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Laguerre</span>
+      <br><ul>
+      <li><span class="function">L1, 2</span></li>
+      <li><span class="function">L1_e, 2</span></li>
+      <li><span class="function">L2, 2</span></li>
+      <li><span class="function">L2_e, 2</span></li>
+      <li><span class="function">L3, 2</span></li>
+      <li><span class="function">L3_e, 2</span></li>
+      <li><span class="function">Ln, 3</span></li>
+      <li><span class="function">Ln_e, 3</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Lambert</span>
+      <br><ul>
+      <li><span class="function">W0, 1</span></li>
+      <li><span class="function">W0_e, 1</span></li>
+      <li><span class="function">Wm1, 1</span></li>
+      <li><span class="function">Wm1_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Legendre</span>
+      <br><ul>
+      <li><span class="function">H3d, 3</span></li>
+      <li><span class="function">H3d_0, 2</span></li>
+      <li><span class="function">H3d_0_e, 2</span></li>
+      <li><span class="function">H3d_1, 2</span></li>
+      <li><span class="function">H3d_1_e, 2</span></li>
+      <li><span class="function">H3d_e, 3</span></li>
+      <li><span class="function">P1, 1</span></li>
+      <li><span class="function">P1_e, 1</span></li>
+      <li><span class="function">P2, 1</span></li>
+      <li><span class="function">P2_e, 1</span></li>
+      <li><span class="function">P3, 1</span></li>
+      <li><span class="function">P3_e, 1</span></li>
+      <li><span class="function">Pl, 2</span></li>
+      <li><span class="function">Pl_e, 2</span></li>
+      <li><span class="function">Plm, 3</span></li>
+      <li><span class="function">Plm_e, 3</span></li>
+      <li><span class="function">Q0, 1</span></li>
+      <li><span class="function">Q0_e, 1</span></li>
+      <li><span class="function">Q1, 1</span></li>
+      <li><span class="function">Q1_e, 1</span></li>
+      <li><span class="function">Ql, 2</span></li>
+      <li><span class="function">Ql_e, 2</span></li>
+      <li><span class="function">sphPlm, 3</span></li>
+      <li><span class="function">sphPlm_e, 3</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Log</span>
+      <br><ul>
+      <li><span class="function">log, 1</span></li>
+      <li><span class="function">log_1px, 1</span></li>
+      <li><span class="function">log_1px_e, 1</span></li>
+      <li><span class="function">log_1px_mx, 1</span></li>
+      <li><span class="function">log_1px_mx_e, 1</span></li>
+      <li><span class="function">log_abs, 1</span></li>
+      <li><span class="function">log_abs_e, 1</span></li>
+      <li><span class="function">log_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Psi</span>
+      <br><ul>
+      <li><span class="function">psi, 1</span></li>
+      <li><span class="function">psi_1_int, 1</span></li>
+      <li><span class="function">psi_1_int_e, 1</span></li>
+      <li><span class="function">psi_1piy, 1</span></li>
+      <li><span class="function">psi_1piy_e, 1</span></li>
+      <li><span class="function">psi_e, 1</span></li>
+      <li><span class="function">psi_int, 1</span></li>
+      <li><span class="function">psi_int_e, 1</span></li>
+      <li><span class="function">psi_n, 2</span></li>
+      <li><span class="function">psi_n_e, 2</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Synchrotron</span>
+      <br><ul>
+      <li><span class="function">S1, 1</span></li>
+      <li><span class="function">S1_e, 1</span></li>
+      <li><span class="function">S2, 1</span></li>
+      <li><span class="function">S2_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Transport</span>
+      <br><ul>
+      <li><span class="function">J2, 1</span></li>
+      <li><span class="function">J2_e, 1</span></li>
+      <li><span class="function">J3, 1</span></li>
+      <li><span class="function">J3_e, 1</span></li>
+      <li><span class="function">J4, 1</span></li>
+      <li><span class="function">J4_e, 1</span></li>
+      <li><span class="function">J5, 1</span></li>
+      <li><span class="function">J5_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Trig</span>
+      <br><ul>
+      <li><span class="function">angle_restrict_pos, 1</span></li>
+      <li><span class="function">angle_restrict_symm, 1</span></li>
+      <li><span class="function">complex_cos_e, 2</span></li>
+      <li><span class="function">complex_logsin_e, 2</span></li>
+      <li><span class="function">complex_sin_e, 2</span></li>
+      <li><span class="function">cos, 1</span></li>
+      <li><span class="function">cos_e, 1</span></li>
+      <li><span class="function">cos_err_e, 2</span></li>
+      <li><span class="function">hypot, 2</span></li>
+      <li><span class="function">hypot_e, 2</span></li>
+      <li><span class="function">lncosh, 1</span></li>
+      <li><span class="function">lncosh_e, 1</span></li>
+      <li><span class="function">lnsinh, 1</span></li>
+      <li><span class="function">lnsinh_e, 1</span></li>
+      <li><span class="function">polar2rect, 2</span></li>
+      <li><span class="function">rect2polar, 2</span></li>
+      <li><span class="function">sin, 1</span></li>
+      <li><span class="function">sin_e, 1</span></li>
+      <li><span class="function">sin_err_e, 2</span></li>
+      <li><span class="function">sinc, 1</span></li>
+      <li><span class="function">sinc_e, 1</span></li>
+      </ul>
+      </li>
+      <li><span class="module">Zeta</span>
+      <br><ul>
+      <li><span class="function">eta, 1</span></li>
+      <li><span class="function">eta_e, 1</span></li>
+      <li><span class="function">eta_int, 1</span></li>
+      <li><span class="function">eta_int_e, 1</span></li>
+      <li><span class="function">hzeta, 2</span></li>
+      <li><span class="function">hzeta_e, 2</span></li>
+      <li><span class="function">zeta, 1</span></li>
+      <li><span class="function">zeta_e, 1</span></li>
+      <li><span class="function">zeta_int, 1</span></li>
+      <li><span class="function">zeta_int_e, 1</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="module">Stats</span>
+    <br><ul>
+    <li><span class="function">absdev, 2</span></li>
+    <li><span class="function">absdev_m, 3</span></li>
+    <li><span class="function">covariance, 4</span></li>
+    <li><span class="function">covariance_m, 6</span></li>
+    <li><span class="function">kurtosis, 2</span></li>
+    <li><span class="function">kurtosis_m_sd, 4</span></li>
+    <li><span class="function">lag1_autocorrelation, 2</span></li>
+    <li><span class="function">lag1_autocorrelation_m, 3</span></li>
+    <li><span class="function">max, 2</span></li>
+    <li><span class="function">max_index, 2</span></li>
+    <li><span class="function">mean, 2</span></li>
+    <li><span class="function">mean1, 1</span></li>
+    <li><span class="function">median, 2</span></li>
+    <li><span class="function">median_from_sorted_data, 2</span></li>
+    <li><span class="function">min, 2</span></li>
+    <li><span class="function">min_index, 2</span></li>
+    <li><span class="function">minmax, 2</span></li>
+    <li><span class="function">minmax_index, 2</span></li>
+    <li><span class="function">pvariance, 4</span></li>
+    <li><span class="function">quantile, 3</span></li>
+    <li><span class="function">quantile_from_sorted_data, 3</span></li>
+    <li><span class="function">sd, 2</span></li>
+    <li><span class="function">sd1, 1</span></li>
+    <li><span class="function">sd1_m, 2</span></li>
+    <li><span class="function">sd1_with_fixed_mean, 2</span></li>
+    <li><span class="function">sd_m, 3</span></li>
+    <li><span class="function">sd_with_fixed_mean, 3</span></li>
+    <li><span class="function">skew, 2</span></li>
+    <li><span class="function">skew_m_sd, 4</span></li>
+    <li><span class="function">ttest, 4</span></li>
+    <li><span class="function">variance, 2</span></li>
+    <li><span class="function">variance1, 1</span></li>
+    <li><span class="function">variance1_m, 2</span></li>
+    <li><span class="function">variance1_with_fixed_mean, 2</span></li>
+    <li><span class="function">variance_m, 3</span></li>
+    <li><span class="function">variance_with_fixed_mean, 3</span></li>
+    <li><span class="function">wabsdev, 4</span></li>
+    <li><span class="function">wabsdev_m, 5</span></li>
+    <li><span class="function">wkurtosis, 4</span></li>
+    <li><span class="function">wkurtosis_m_sd, 6</span></li>
+    <li><span class="function">wmean, 4</span></li>
+    <li><span class="function">wsd, 4</span></li>
+    <li><span class="function">wsd_m, 5</span></li>
+    <li><span class="function">wsd_with_fixed_mean, 5</span></li>
+    <li><span class="function">wskew, 4</span></li>
+    <li><span class="function">wskew_m_sd, 6</span></li>
+    <li><span class="function">wvariance, 4</span></li>
+    <li><span class="function">wvariance_m, 5</span></li>
+    <li><span class="function">wvariance_with_fixed_mean, 5</span></li>
+    </ul>
+    </li>
+    <li><span class="module">Sum</span>
+    <br><ul>
+      <li><span class="class">Levin</span>
+      <br><ul>
+      <li><span class="method">accel, 1</span></li>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="method">minmax, 3</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">size, 0</span></li>
+      <li><span class="method">step, 3</span></li>
+      <li><span class="method">sum_plain, 0</span></li>
+      <li><span class="method">terms_used, 0</span></li>
+      </ul>
+      </li>
+      <li><span class="class">LevinTrunc</span>
+      <br><ul>
+      <li><span class="method">accel, 1</span></li>
+      <li><span class="method">initialize, 1</span></li>
+      <li><span class="method">minmax, 3</span></li>
+      <li><span class="singleton">new, 1</span></li>
+      <li><span class="method">size, 0</span></li>
+      <li><span class="method">step, 2</span></li>
+      <li><span class="method">sum_plain, 0</span></li>
+      <li><span class="method">terms_used, 0</span></li>
+      </ul>
+      </li>
+    </ul>
+    </li>
+    <li><span class="class">Vector</span>
+    <br><ul>
+    <li><span class="method">add, 1</span></li>
+    <li><span class="method">add_const, 1</span></li>
+    <li><span class="singleton">alloc, 1</span></li>
+    <li><span class="singleton">calloc, 1</span></li>
+    <li><span class="method">clone, 0</span></li>
+    <li><span class="method">div, 1</span></li>
+    <li><span class="method">each, 0</span></li>
+    <li><span class="method">fprintf, 2</span></li>
+    <li><span class="method">fread, 1</span></li>
+    <li><span class="method">fscanf, 1</span></li>
+    <li><span class="method">fwrite, 1</span></li>
+    <li><span class="method">get, 1</span></li>
+    <li><span class="method">inspect, 0</span></li>
+    <li><span class="method">isnull, 0</span></li>
+    <li><span class="method">max, 0</span></li>
+    <li><span class="method">max_index, 0</span></li>
+    <li><span class="function">memcpy, 2</span></li>
+    <li><span class="method">min, 0</span></li>
+    <li><span class="method">min_index, 0</span></li>
+    <li><span class="method">minmax, 0</span></li>
+    <li><span class="method">minmax_index, 0</span></li>
+    <li><span class="method">mul, 1</span></li>
+    <li><span class="singleton">new, 1</span></li>
+    <li><span class="method">owner, 0</span></li>
+    <li><span class="method">print, 0</span></li>
+    <li><span class="method">printf, 1</span></li>
+    <li><span class="method">reverse, 0</span></li>
+    <li><span class="method">scale, 1</span></li>
+    <li><span class="method">set, -1</span></li>
+    <li><span class="method">set_all, 1</span></li>
+    <li><span class="method">set_basis, 1</span></li>
+    <li><span class="method">set_zero, 0</span></li>
+    <li><span class="method">size, 0</span></li>
+    <li><span class="method">stride, 0</span></li>
+    <li><span class="method">sub, 1</span></li>
+    <li><span class="method">subvector, 2</span></li>
+    <li><span class="method">subvector_with_stride, 3</span></li>
+    <li><span class="function">swap, 2</span></li>
+    <li><span class="method">swap_elements, 2</span></li>
+    <li><span class="method">to_a, 0</span></li>
+    </ul>
+    </li>
+  </ul>
+  </li>
+</ul><br>
+Classes are <span class="class">blue</span>, Modules are <span class="module">red</span>.
+Constants are <span class="constant">green</span>.
+Methods/Functions are listed with arity and aliases (if any).
+<hr>Documentation generated with <tt>rude4c.rb</tt>
+</body></html>

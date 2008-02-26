@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Trigonometric Functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="zeta.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="transport.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Trigonometric Functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Trigonometric Functions</h1>
+The library includes its own trigonometric functions in order to provide 
+consistency across platforms and reliable error estimates.
+
+<h3>Module Trig</h3>
+<a href="#complex_cos_e">complex_cos_e</a> ,&nbsp
+<a href="#complex_sin_e">complex_sin_e</a> ,&nbsp
+<a href="#cos">cos</a> ,&nbsp
+<a href="#hypot">hypot</a> ,&nbsp
+<a href="#lncos">lncos</a> ,&nbsp
+<a href="#lnsinh">lnsinh</a> ,&nbsp
+<a href="#polar2rect">polar2rect</a> ,&nbsp
+<a href="#rect2polar">rect2polar</a> ,&nbsp
+<a href="#sin">sin</a> ,&nbsp
+<a href="#sinc">sinc</a> &nbsp
+<a href="#angle_restrict_symm"> angle_restrict_symm</a> ,&nbsp
+<a href="#angle_restrict_pos"> angle_restrict_pos</a> &nbsp
+<p>
+
+<h4>Circular Trigonometric Functions</h4>
+<a name="sin"></a>
+<tt>GSL::Special::Trig::sin</tt><br>
+<tt>GSL::Special::Trig::sin_e</tt><br>
+<tt>Trig::sin(x) -> d1</tt><br>
+x is a double.
+These routines compute the sine function \sin(x).
+<p>
+<a name="cos"></a>
+<tt>GSL::Special::Trig::cos</tt><br>
+<tt>GSL::Special::Trig::cos_e</tt><br>
+<tt>Trig::cos(x) -> d1</tt><br>
+These routines compute the cosine function \cos(x).
+<p>
+<a name="hypot"></a>
+<tt>GSL::Special::Trig::hypot</tt><br>
+<tt>GSL::Special::Trig::hypot_e</tt><br>
+<tt>Trig::hypot(x, y) -> d1</tt><br>
+x and y are doubles.
+These routines compute the hypotenuse function \sqrt{x^2 + y^2} avoiding 
+overflow and underflow.
+<p>
+<a name="sinc"></a>
+<tt>GSL::Special::Trig::sinc</tt><br>
+<tt>GSL::Special::Trig::sinc_e</tt><br>
+<tt>Trig::sinc(x) -> d1</tt><br>
+These routines compute \sinc(x) = \sin(\pi x) / (\pi x) for any value of x.
+
+<h4>Trigonometric Functions for Complex Arguments</h4>
+See also GSL::Complex .<br>
+<a name="complex_sin_e"></a>
+<tt>GSL::Special::Trig::complex_sin_e</tt><br>
+<tt>Trig::complex_sin_e(z_r, z_i ) -> anArray</tt><br>
+z_r and z_i are doubles.
+This function computes the complex sine, \sin(z_r + i z_i) storing the real 
+and imaginary parts szr, szi in objects of type Result 
+in a two-dimensional array <tt>anArray</tt>
+<p>
+<a name="complex_cos_e"></a>
+<tt>GSL::Special::Trig::complex_cos_e</tt><br>
+<tt>Trig::complex_cos_e(z_r, z_i ) -> anArray-> </tt><br>
+This function computes the complex cosine, \cos(z_r + i z_i) storing the real
+and imaginary parts szr, szi in objects of type Result   
+in a two-dimensional array <tt>anArray</tt>
+<p>
+<h4>Hyperbolic Trigonometric Functions</h4>
+<a name="lnsinh"></a>
+<tt>GSL::Special::Trig::lnsinh</tt><br>
+<tt>GSL::Special::Trig::lnsinh_e</tt><br>
+<tt>Trig::lnsinh(x) -> d1</tt><br>
+These routines compute \log(\sinh(x)) for x > 0.
+<p>
+<tt>GSL::Special::Trig::lncosh</tt><br>
+<tt>GSL::Special::Trig::lncosh_e</tt><br>
+<tt>Trig::lncosh(x) -> d1</tt><br>
+These routines compute \log(\cosh(x)) for any x.
+
+<a name="complex_logsin_e"></a>
+<tt>GSL::Special::Trig::complex_logsin_e</tt><br>
+<tt>Trig::complex_logsin_e(z_r, z_i ) -> anArray</tt><br>
+This function computes the logarithm of the complex sine, 
+\log(\sin(z_r + i z_i)) storing the real and imaginary parts szr, szi
+in objects of type Result in a two-dimensional array <tt>anArray</tt>
+
+<h4>Conversion Functions</h4>
+<a name="polar2rect"></a>
+<tt>GSL::Special::Trig::polar2rect</tt><br>
+<tt>Trig::polar2rect(r, theta) -> anArray</tt><br>
+This function converts the polar coordinates (r,theta) to rectilinear 
+coordinates (x,y), x = r\cos(\theta), y = r\sin(\theta). It returns a
+two-dimensional array of Result objects.
+<p>
+<a name="rect2polar"></a>
+<tt>GSL::Special::Trig::rect2polar</tt><br>
+<tt>Trig::rect2polar(x, y) -> anArray</tt><br>
+This function converts the rectilinear coordinates (x,y) to polar coordinates 
+(r,theta), such that x = r\cos(\theta), y = r\sin(\theta). 
+ It returns a two-dimensional array of Result objects.
+The argument theta lies in the range [-\pi, \pi].
+
+<h4>Restriction Functions</h4>
+<a name="angle_restrict_symm"></a>
+<tt>GSL::Special::Trig::angle_restrict_symm</tt><br>
+<tt>Trig::angle_restrict_symm(theta) -> </tt><br>
+These routines force the angle theta to lie in the range (-\pi,\pi].
+<p>
+<a name="angle_restrict_pos"></a>
+<tt>GSL::Special::Trig::angle_restrict_pos</tt><br>
+<tt>Trig::angle_restrict_pos(theta) -> </tt><br>
+These routines force the angle theta to lie in the range [0, 2\pi)
+
+<h4>Trigonometric Functions With Error Estimates</h4>
+<a name="sin_err_e"></a>
+<tt>GSL::Special::Trig::sin_err_e</tt><br>
+<tt>Trig::sin_err_e(x, dx) -> res</tt><br>
+These routines compute the sine of an angle x with an associated absolute 
+error dx, \sin(x \pm dx). It returns an object of typr Result.
+<p>
+<a name="cos_err_e"></a>
+<tt>GSL::Special::Trig::cos_err_e</tt><br>
+<tt>Trig::cos_err_e(x, dx) -> res</tt><br>
+These routines compute the cosine of an angle x with an associated absolute 
+error dx, \cos(x \pm dx).
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+include GSL::Special; include Math
+require 'gsl_util'
+
+eps = 1.0e-15
+
+puts "sin"
+x = 0.987
+assert Trig::sin(x) == sin(x)
+
+puts "cos"
+assert fcmp(Trig::cos(x), cos(x), eps) == 0
+
+puts "hypot"
+y = 0.3
+assert Trig::hypot(x, y) == hypot(x, y)
+
+puts "sinc"
+assert fcmp(Trig::sinc(x), sin(M_PI*x)/(M_PI*x), eps) == 0
+
+puts "complex_sin_e"
+y = 0.3
+r = Trig::complex_sin_e(x, y)
+c1 = Complex.new2(x, y)
+assert r[0].val == Complex.sin(c1).real &amp;&amp;  r[1].val == Complex.sin(c1).imag
+
+puts "complex_cos_e"
+r = Trig::complex_cos_e(x, y)
+assert r[0].val == Complex.cos(c1).real &amp;&amp;  r[1].val == Complex.cos(c1).imag
+
+puts "complex_logsin_e"
+y = 0.3
+r = Trig::complex_logsin_e(x, y)
+c1 = Complex.new2(x, y)
+assert r[0].val =~ Complex.logsin_e(c1)[0].val
+assert r[0].val ==  Complex.logsin_e(c1)[0].val &amp;&amp;  r[1].val ==  Complex.logsin_e(c1)[1].val
+
+puts "lnsinh"
+r = Trig::lnsinh(x)
+assert r == log(Complex::sinh(Complex.new2(x,0)).real)
+
+puts "lncosh"
+r = Trig::lncosh(x)
+assert r == log(Complex::cosh(Complex.new2(x,0)).real)
+p r
+r = Trig::lncosh_e(x)
+p r.val; r.err
+
+puts "polar2rect"
+radius = 1.0; theta = M_PI/6
+ary = Trig::polar2rect(radius, theta)
+assert ary[0].val == radius * cos(theta)
+assert ary[1].val == radius * sin(theta)
+
+puts "rect2polar"
+ary = Trig::rect2polar(radius * cos(theta), radius * sin(theta))
+assert ary[0].val == radius
+assert ary[1].val == theta
+
+puts "angle_restrict_pos"
+r = Trig::angle_restrict_pos(theta + 2*M_PI)
+assert fcmp(r,theta, eps) == 0
+
+puts "sin_err_e"
+r = Trig::sin_err_e(x,1.0e-18)
+r1 = r.val; p r.err
+r = Trig::sin_err_e(x,1.0e-14)
+r2 = r.val; p r.err
+assert r1 == r2 &amp;&amp; r1 == sin(x)
+
+puts "cos_err_e"
+r = Trig::cos_err_e(x,1.0e-18)
+r1 = r.val; p r.err
+assert r1 =~ cos(x)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="zeta.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="transport.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Trigonometric Functions</td> 
+</tr></tbody></table><hr></body>
+</ht
+ml>

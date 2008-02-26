@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Eigensystems</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href=".html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="linalg.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Eigensystems</td> 
+</tr></tbody></table><hr>
+<h1>
+Eigensystems</h1>
+This chapter describes functions for computing eigenvalues and
+eigenvectors of matrices. There are routines for real symmetric and
+complex hermitian matrices, and eigenvalues can be computed with or
+without eigenvectors. The algorithms used are symmetric bidiagonalization
+followed by QR reduction.
+
+These routines are intended for "small" systems where simple algorithms
+are acceptable. Anyone interested finding eigenvalues and eigenvectors
+of large matrices will want to use the sophisticated routines found in
+LAPACK. The Fortran version of LAPACK is recommended as the standard
+package for linear algebra.
+
+<h2>Module Eigen</h2>
+<a href="#eigen_symm">eigen_symm</a> ,&nbsp
+<a href="#eigen_symm!">eigen_symm!</a> ,&nbsp
+<a href="#eigen_symmv">eigen_symmv</a> ,&nbsp
+<a href="#eigen_symmv!">eigen_symmv!</a> ,&nbsp
+<a href="#symmv_sort">symmv_sort</a> ,&nbsp
+
+
+
+<h3>Real Symmetric Matrices</h3>
+
+<a name="eigen_symm"></a>
+<tt>GSL::Eigen#eigen_symm</tt><br>
+<tt>A.eigen_symm() -> eval</tt><br>
+GSL::Matrix A; GSL::Vector eval<br>
+This method computes the eigenvalues of the real symmetric square matrix A. 
+The diagonal and lower triangular part of A
+are destroyed during the computation, but the strict upper triangular
+part is not referenced. 
+The eigenvalues are stored in the vector <tt>eval</tt>
+and are unordered.
+<p>
+<a name="eigen_symm!"></a>
+<tt>GSL::Eigen#eigen_symm!</tt><br>
+<tt>A.eigen_symm!() -> eval</tt><br>
+Corresponding mutating method.<br>
+The diagonal and lower triangular part of A
+are destroyed during the computation, but the strict upper triangular
+part is not referenced. (Not seen in the example).
+<p>
+<a name="eigen_symmv"></a>
+<tt>GSL::Eigen#eigen_symmv</tt><br>
+<tt>A.eigen_symmv() -> [eval, evec]</tt><br>
+This method
+computes the eigenvalues and eigenvectors of the real symmetric matrix A. 
+The eigenvalues are stored in the vector <tt>eval</tt< and are unordered. The
+corresponding eigenvectors are stored in the columns of the matrix
+<tt>evec</tt>. 
+For example, the eigenvector in the first column corresponds to
+the first eigenvalue. The eigenvectors are guaranteed to be mutually
+orthogonal and normalised to unit magnitude.
+<p>
+<a name="eigen_symmv!"></a> 
+<tt>GSL::Eigen#eigen_symmv!</tt><br>
+<tt>A.eigen_symmv!() -> [eval, evec]</tt><br>
+Corresponding mutating method.<br>
+The diagonal and lower triangular part of A are destroyed during the
+computation, but the strict upper triangular part is not referenced. 
+(Not seen in the example).
+
+<h3>Sorting Eigenvalues and Eigenvectors</h3>
+<p>
+<a name="symmv_sort!"></a>
+<tt>GSL::Eigen::symmv_sort</tt>&nbsp; (mutating its parameters)<br>
+<tt>Eigen::symmv_sort(eval, evec, sort_type </tt><br>
+This function simultaneously sorts the eigenvalues stored 
+in the vector <tt>eval</tt> and the corresponding real eigenvectors stored 
+in the columns of the matrix <tt>evec</tt> into ascending or descending 
+order according to the value of the parameter <tt>sort_type</tt>,
+<pre>
+Eigen::SORT_VAL_ASC ascending order in numerical value
+Eigen::SORT_VAL_DESC descending order in numerical
+Eigen::SORT_ABS_ASC ascending order in magnitude
+Eigen::SORT_ABS_DESC descending order in magnitude
+</pre>
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+puts "eigen_symm"
+a_diag = Matrix.new([1,0,0],[0,2,0],[0,0,3])
+h = Matrix.new([0.6, -0.8,0],[-0.8, -0.6,0],[0,0,1])
+a = Matrix.new([41.0/25, 12.0/25, 0], [12.0/25, 34.0/25, 0], [0, 0, 3])
+assert h.t * a_diag * h =~ a
+eval = a.eigen_symm
+assert eval =~ Vector.new([2,1,3])
+
+puts "eigen_symm!"
+a_dup = a.clone
+eval = a_dup.eigen_symm!
+assert eval =~ Vector.new([2,1,3])
+assert a == a_dup
+
+puts "eigen_symmv"
+eval1, evec1 = a.eigen_symmv
+p evec1.class
+
+3.times{|i| assert a * evec1.col(i) == evec1.col(i) * eval[i]}
+
+puts "eigen_symmv!"
+a_dup = a.clone
+eval2, evec2 = a_dup.eigen_symmv!
+assert eval2 == eval1 &amp;&amp;  evec2 == evec1
+assert a_dup == a
+
+puts "symmv_sort"
+eval1_dup, evec1_dup =  eval1, evec1
+Eigen::symmv_sort(eval1_dup, evec1_dup,Eigen::SORT_VAL_ASC)
+assert eval1_dup == Vector.new([1,2,3])
+assert evec1_dup.col(0) == evec2.col(1) &amp;&amp; evec1_dup.col(1) == evec2.col(0)
+
+eval1_dup, evec1_dup =  eval1, evec1
+Eigen::symmv_sort(eval1_dup, evec1_dup,Eigen::SORT_VAL_DESC)
+assert eval1_dup == Vector.new([3,2,1])
+3.times{|i| assert a * evec1_dup.col(i) == evec1_dup.col(i) * eval1_dup[i]}
+
+eval1_dup, evec1_dup =  eval1, evec1
+Eigen::symmv_sort(eval1_dup, evec1_dup,Eigen::SORT_ABS_ASC)
+assert eval1_dup == Vector.new([1,2,3])
+3.times{|i| assert a * evec1_dup.col(i) == evec1_dup.col(i) * eval1_dup[i]}
+
+eval1_dup, evec1_dup =  eval1, evec1
+Eigen::symmv_sort(eval1_dup, evec1_dup,Eigen::SORT_ABS_DESC)
+assert eval1_dup == Vector.new([3,2,1])
+3.times{|i| assert a * evec1_dup.col(i) == evec1_dup.col(i) * eval1_dup[i]}
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h2>Module Eigen_complex</h2>
+
+<h3>Complex Hermitian Matrices</h3>
+
+<a name="eigen_herm"></a>
+<tt>GSL::Eigen#eigen_herm</tt><br>
+<tt>A.eigen_herm() -> eval</tt><br>
+GSL::Matrix_complex A; GSL::Vector eval<br>
+This method computes the eigenvalues of the complex hermitian matrix A. 
+The eigenvalues are stored in the vector eval and are unordered.
+<p>
+<a name="eigen_herm!"></a>
+<tt>GSL::Eigen#eigen_herm!</tt><br>
+<tt>A.eigen_herm!() -> eval</tt><br>
+Corresponding mutating method.
+A are destroyed during the computation, but the strict upper triangular
+part is not referenced. 
+<p>
+<a name="eigen_hermv"></a>
+<tt>GSL::Eigen#eigen_hermv</tt><br>
+<tt>A.eigen_hermv() -> [eval, evec]</tt><br>
+GSL::Matrix_complex A, evec; GSL::Vector eval<br>
+This method computes the eigenvalues and eigenvectors of the complex
+hermitian matrix A. 
+The eigenvalues are stored in the vector eval
+and are unordered. The corresponding complex eigenvectors are stored
+in the columns of the matrix evec. For example, the eigenvector in the
+first column corresponds to the first eigenvalue. The eigenvectors are
+guaranteed to be mutually orthogonal and normalised to unit magnitude.
+<p>
+<a name="eigen_hermv"></a>
+<tt>GSL::Eigen#eigen_hermv</tt><br>
+<tt>A.eigen_hermv() -> [eval, evec]</tt><br>
+Corresponding mutating method. <br>
+The diagonal and lower triangular part of A are destroyed
+during the computation, but the strict upper triangular part is not
+referenced. The imaginary parts of the diagonal are assumed to be zero
+and are not referenced. 
+
+<h3>Sorting Eigenvalues and Eigenvectors</h3>
+<a name="hermv_sort"></a>
+<tt>GSL::Eigen#hermv_sort</tt><br>
+<tt>Eigen_complex::hermv_sort(eval, evec, sort_type) -> </tt><br>
+GSL::Vector eval; GSL:Matrix_complex evec<br>
+Function: int gsl_eigen_hermv_sort (gsl_vector * eval, gsl_matrix_complex
+* evec, gsl_eigen_sort_t sort_type) 
+This function simultaneously sorts
+the eigenvalues stored in the vector eval and the corresponding complex
+eigenvectors stored in the columns of the matrix evec into ascending or
+descending order according to the value of the parameter sort_type as
+shown above.
+<pre>
+<pre>
+Eigen::SORT_VAL_ASC ascending order in numerical value
+Eigen::SORT_VAL_DESC descending order in numerical
+Eigen::SORT_ABS_ASC ascending order in magnitude
+Eigen::SORT_ABS_DESC descending order in magnitude
+</pre>
+Eigen_complex::SORT_VAL_ASC ascending order in numerical value
+Eigen_complex::SORT_VAL_DESC descending order in numerical
+Eigen_complex::SORT_ABS_ASC ascending order in magnitude
+Eigen_complex::SORT_ABS_DESC descending order in magnitude
+</pre>
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+puts "eigen_herm"
+a_diag = Matrix.new([1,0,0],[0,2,0],[0,0,3]).to_complex
+h = Matrix.new([0.6, -0.8,0],[-0.8, -0.6,0],[0,0,1]).to_complex
+a0 = Matrix.new([41.0/25, 12.0/25, 0], [12.0/25, 34.0/25, 0], [0, 0, 3]).to_complex
+assert h.t * a_diag * h =~ a0
+v_0 = Vector_complex.new([1,1, 1,2, 1,3])
+U = v_0.house
+assert U * U.h =~ Matrix_complex::identity(3)
+a = U * a0 * U.h
+
+a_dup = a.clone
+eval = a_dup.eigen_herm!
+assert eval =~ Vector.new([3,1,2])
+eval2 = a.eigen_herm
+assert eval == eval2
+
+puts "eigen_hermv!"
+a_dup = a.clone
+eval1, evec1 = a_dup.eigen_hermv!
+
+3.times{|i| assert a * evec1.col(i) =~ evec1.col(i) * eval[i]}
+assert a_dup !~ [a, 1.0e-14]  
+
+puts "eigen_hermv"
+eval2, evec2 = a.eigen_hermv
+assert eval2 == eval1 &amp;&amp;  evec2 == evec1
+
+puts "hermv_sort"
+eval1_dup, evec1_dup =  eval1, evec1
+Eigen_complex::hermv_sort(eval1_dup, evec1_dup,Eigen_complex::SORT_VAL_ASC)
+assert eval1_dup =~ Vector.new([1,2,3])
+#assert evec1_dup.col(0) == evec2.col(1) &amp;&amp; evec1_dup.col(1) == evec2.col(0)
+assert evec1_dup.col(0) == evec2.col(1)
+assert evec1_dup.col(1) =~ evec2.col(2)
+assert evec1_dup.col(2) =~ evec2.col(0)
+
+eval1_dup, evec1_dup =  eval2, evec2
+Eigen_complex::hermv_sort(eval1_dup, evec1_dup,Eigen_complex::SORT_VAL_DESC)
+assert eval1_dup =~ Vector.new([3,2,1])
+3.times{|i| assert a * evec1_dup.col(i) =~ evec1_dup.col(i) * eval1_dup[i]}
+eval1_dup, evec1_dup =  eval2, evec2
+Eigen_complex::hermv_sort(eval1_dup, evec1_dup,Eigen_complex::SORT_ABS_ASC)
+assert eval1_dup =~ Vector.new([1,2,3])
+3.times{|i| assert a * evec1_dup.col(i) =~ evec1_dup.col(i) * eval1_dup[i]}
+
+eval1_dup, evec1_dup =  eval2, evec2
+Eigen_complex::hermv_sort(eval1_dup, evec1_dup,Eigen_complex::SORT_ABS_DESC)
+assert eval1_dup =~ Vector.new([3,2,1])
+3.times{|i| assert a * evec1_dup.col(i) =~ evec1_dup.col(i) * eval1_dup[i]}
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><h3>References and Further Reading</h3>
+
+Further information on the algorithms described in this section can be found 
+in the following book,<br>
+G. H. Golub, C. F. Van Loan, Matrix Computations (3rd Ed, 1996), 
+Johns Hopkins University Press, ISBN 0-8018-5414-8.
+<p>
+The LAPACK library is described in,<br>
+LAPACK Users' Guide (Third Edition, 1999), Published by SIAM, 
+ISBN 0-89871-447-8. http://www.netlib.org/lapack
+<p>
+The LAPACK source code can be found at the website above along with an
+online copy of the users guide.
+	
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href=".html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="linalg.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Eigensystems</td> 
+</tr></tbody></table><hr></body>
+</html>

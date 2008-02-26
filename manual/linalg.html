@@ -1,0 +1,1662 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Linear Algebra</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="eigen.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Linear Algebra</td> 
+</tr></tbody></table><hr>
+<h1>
+Linear Algebra</h1>
+<ul>
+<li>On real numbers in this page
+<li>On complex numbers <a href="linalg_complex.html">here</a>
+</ul>
+<p>
+<ul>
+<li><a href="#LU">LU Decomposition</a>
+<li><a href="#QR">QR Decomposition</a>
+<li><a href="#QR2">QR Decomposition with Column Pivoting</a>
+<li><a href="#SVD">Singular Value Decomposition</a>
+<li><a href="#Cholesky">Cholesky Decomposition</a>
+<li><a href="#Tri">Tridiagonal Decomposition of Real Symmetric Matrices</a>
+<li><a href="#Bidiag">Bidiagonalization</a>
+<li><a href="#House">Householder solver for linear systems</a>
+<li><a href="#Tris">Tridiagonal Systems</a>
+</ul>
+<hr>
+This chapter describes functions for solving linear systems. The library
+provides simple linear algebra operations which operate directly on
+the GSL::Vector and GSL::Matrix objects. These are intended for use with
+"small" systems where simple algorithms are acceptable.
+<p>
+Anyone interested in large systems will want to use the sophisticated
+routines found in LAPACK. The Fortran version of LAPACK is recommended as
+the standard package for linear algebra. It supports blocked algorithms,
+specialized data representations and other optimizations.
+
+<h2>Module Linalg</h2>
+<a href="#HH_solve">HH_solve</a> ,&nbsp
+<a href="#HH_svx">HH_svx</a> ,&nbsp
+<a href="#L">L</a> ,&nbsp
+<a href="#LUD_solve">LUD_solve</a> ,&nbsp
+<a href="#LU_decomp">LU_decomp</a> ,&nbsp
+<a href="#LU_det">LU_det</a> ,&nbsp
+<a href="#LU_invert">LU_invert</a> ,&nbsp
+<a href="#LU_lndet">LU_lndet</a> ,&nbsp
+<a href="#LU_refine">LU_refine</a> ,&nbsp
+<a href="#LU_sgndet">LU_sgndet</a> ,&nbsp
+<a href="#LU_solve">LU_solve</a> ,&nbsp
+<a href="#LU_svx">LU_svx</a> ,&nbsp
+<a href="#LU_svx!">LU_svx!</a> ,&nbsp
+<a href="#Linalg">Linalg</a> ,&nbsp
+<a href="#QRPT_QRsolve">QRPT_QRsolve</a> ,&nbsp
+<a href="#QRPT_Rsolve">QRPT_Rsolve</a> ,&nbsp
+<a href="#QRPT_Rsvx!">QRPT_Rsvx!</a> ,&nbsp
+<a href="#QRPT_decomp">QRPT_decomp</a> ,&nbsp
+<a href="#QRPT_decomp2">QRPT_decomp2</a> ,&nbsp
+<a href="#QRPT_solve">QRPT_solve</a> ,&nbsp
+<a href="#QRPT_svx">QRPT_svx</a> ,&nbsp
+<a href="#QRPT_svx">QRPT_svx</a> ,&nbsp
+<a href="#QRPT_update">QRPT_update</a> ,&nbsp
+<a href="#QR_QRsolve">QR_QRsolve</a> ,&nbsp
+<a href="#QR_QTvec">QR_QTvec</a> ,&nbsp
+<a href="#QR_Qvec">QR_Qvec</a> ,&nbsp
+<a href="#QR_Rsolve">QR_Rsolve</a> ,&nbsp
+<a href="#QR_Rsvx">QR_Rsvx</a> ,&nbsp
+<a href="#QR_decomp">QR_decomp</a> ,&nbsp
+<a href="#QR_lssolve">QR_lssolve</a> ,&nbsp
+<a href="#QR_solve">QR_solve</a> ,&nbsp
+<a href="#QR_svx">QR_svx</a> ,&nbsp
+<a href="#QR_svx!">QR_svx!</a> ,&nbsp
+<a href="#QR_unpack">QR_unpack</a> ,&nbsp
+<a href="#QR_update">QR_update</a> ,&nbsp
+<a href="#R_solve">R_solve</a> ,&nbsp
+<a href="#R_svx">R_svx</a> ,&nbsp
+<a href="#SVD_solve">SVD_solve</a> ,&nbsp
+<a href="#SV_decomp">SV_decomp</a> ,&nbsp
+<a href="#SV_decomp_jacobi">SV_decomp_jacobi</a> ,&nbsp
+<a href="#SV_decomp_mod">SV_decomp_mod</a> ,&nbsp
+<a href="#SV_solve">SV_solve</a> ,&nbsp
+<a href="#U">U</a> ,&nbsp
+<a href="#balance_columns">balance_columns</a> ,&nbsp
+<a href="#bidiag_decomp">bidiag_decomp</a> ,&nbsp
+<a href="#bidiag_unpack">bidiag_unpack</a> ,&nbsp
+<a href="#bidiag_unpack2">bidiag_unpack2</a> ,&nbsp
+<a href="#bidiag_unpack_B">bidiag_unpack_B</a> ,&nbsp
+<a href="#cholesky_decomp">cholesky_decomp</a> ,&nbsp
+<a href="#cholesky_solve">cholesky_solve</a> ,&nbsp
+<a href="#cholesky_svx">cholesky_svx</a> ,&nbsp
+<a href="#det">det</a> ,&nbsp
+<a href="#house">house</a> ,&nbsp
+<a href="#house_m">house_m</a> ,&nbsp
+<a href="#house_v">house_v</a> ,&nbsp
+<a href="#householder_hm!">householder_hm!</a> ,&nbsp
+<a href="#householder_hm1">householder_hm1</a> ,&nbsp
+<a href="#householder_hv">householder_hv</a> ,&nbsp
+<a href="#householder_hv!">householder_hv!</a> ,&nbsp
+<a href="#householder_mh!">householder_mh!</a> ,&nbsp
+<a href="#householder_transform">householder_transform</a> ,&nbsp
+<a href="#inv">inv</a> ,&nbsp
+<a href="#invert">invert</a> ,&nbsp
+<a href="#lndet">lndet</a> ,&nbsp
+<a href="#lower">lower</a> ,&nbsp
+<a href="#sgndet">sgndet</a> ,&nbsp
+<a href="#solve_cyc_tridiag">solve_cyc_tridiag</a> ,&nbsp
+<a href="#solve_symm_cyc_tridiag">solve_symm_cyc_tridiag</a> ,&nbsp
+<a href="#solve_symm_tridiag">solve_symm_tridiag</a> ,&nbsp
+<a href="#solve_tridiag">solve_tridiag</a> ,&nbsp
+<a href="#symmtd_decomp">symmtd_decomp</a> ,&nbsp
+<a href="#upper">upper</a> ,&nbsp
+<a href="#symmtd_unpack">symmtd_unpack</a> ,&nbsp
+<a href="#symmtd_unpack_T">symmtd_unpack_T</a> ,&nbsp
+
+<h3>Utility methods</h3>
+
+<a name="U"></a>
+<tt>GSL::Matrix#U</tt><br>
+<tt>m.U() -> m'</tt><br>
+GSL::Matrix m, m'<br>
+m' is the upper part of m, including the diagonal; the other elements are
+zero.
+<p>
+<a name="upper"></a>
+<tt>GSL::Matrix#upper</tt><br>
+<tt>m.upper(diag) -> m'</tt><br>
+GSL::Matrix m, m'; bool diag <br>
+m' = m.upper(true); m' is the upper part of m, including the diagonal;<br>
+m' = m.upper(false); m' is the upper part of m, excluding the diagonal;
+all the othe values are zero.
+<p>
+<a name="L"></a>
+<tt>GSL::Matrix#L</tt><br>
+<tt>m.L() -> m'</tt><br>
+m' is the lower part of m, excluding the diagonal; the other elements are
+zero.
+<p>
+<a name="Matrix"></a>
+<tt>GSL::Linalg#lower</tt><br>
+<tt>m.lower(diag) -> m'</tt><br>
+GSL::Matrix m, m'; bool diag <br>
+m' = m.lower(true); m' is the lower part of m, including the diagonal;<br>
+m' = m.lower(false); m' is the lower part of m, excluding the diagonal;
+all the other values are zero.
+
+<a name="LU"></a>
+<h3>LU Decomposition</h3>
+
+A general square matrix A has an LU decomposition into upper and lower
+triangular matrices,
+<pre>
+P A = L U
+</pre>
+where P is a permutation matrix, L is unit lower triangular matrix and U
+is upper triangular matrix. For square matrices this decomposition can
+be used to convert the linear system A x = b into a pair of triangular
+systems (L y = P b, U x = y), which can be solved by forward and
+back-substitution.<br>
+(Not all matrices have the decomposition <tt>A = L U</tt>, in particular
+A = [[0,1],[1,0]] doesn't)
+<p>
+<a name="LU_decomp"></a>
+<tt>GSL::Linalg#LU_decomp</tt><br>
+<tt>A.LU_decomp() ->  [LU, p, signum]</tt><br>
+GSL::Matrix A; GSL::Permutation p; Fixnum s<br>
+This method factorizes the square matrix A according to the LU decomposition 
+P A = L U. 
+The diagonal and upper triangular part of the input matrix
+LU contain the matrix U. The lower triangular part of LU
+(excluding the diagonal) contains L. The diagonal elements of L are unity,
+and are not stored.
+<p>
+The permutation matrix P is encoded in the permutation p. The j-th
+column of the matrix P is given by the k-th column of the identity
+matrix, where k = p_j the j-th element of the permutation vector. The
+sign of the permutation is given by signum. It has the value (-1)^n,
+where n is the number of interchanges in the permutation.
+The algorithm used in the decomposition is Gaussian Elimination with
+partial pivoting (Golub & Van Loan, Matrix Computations, Algorithm 3.4.1).
+<p>
+<a name="LU_decomp!"></a>
+<tt>GSL::Linalg#LU_decomp!</tt><br>
+<tt>A.LU_decomp!() -> [LU, p, signum]</tt><br>
+The corresponding mutating method; A becomes LU
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+eps = 1.0e-15
+
+puts "LU_decomp"
+m1 = Matrix.new([0,1],[1,0])
+m_1, p1, s1 = m1.LU_decomp
+assert m_1 == Matrix.new([1,0],[0,1]) &amp;&amp; p1.to_a == [1, 0] &amp;&amp; s1 == -1
+
+m2 = Matrix.new([1,1],[2,5])
+m_2, p2, s2 = m2.LU_decomp
+assert m_2 == Matrix.new([2,5],[0.5,-1.5])
+assert m_2.U == Matrix.new([2,5],[0,-1.5])
+assert m_2.L == Matrix.new([1,0],[0.5,1])
+assert p2.to_a == [1,0] &amp;&amp; s2 == -1
+assert Matrix.perm(p2) == Matrix.new([0,1],[1,0])
+assert Matrix.perm(p2) * m2 == m_2.L * m_2.U
+
+
+a = [ 0.18, 0.60, 0.57, 0.96,
+      0.41, 0.24, 0.99, 0.58,
+      0.14, 0.30, 0.97, 0.66,
+      0.51, 0.13, 0.19, 0.85 ]
+b = [ 1.0, 2.0, 3.0, 4.0 ]
+
+m = Matrix.new(a, 4, 4)
+v = Vector.new(b)
+
+ma, p, s = m.LU_decomp
+assert p.to_a == [3, 0, 1, 2]
+assert Matrix.perm(p) == Matrix.new([0,0,0,1],[1,0,0,0],[0,1,0,0],[0,0,1,0])
+assert Matrix.perm(p) * m =~ ma.L * ma.U
+
+puts "LU_decomp!"
+ma1, p1, s1 = m.LU_decomp!
+assert m == ma &amp;&amp; ma1 == ma &amp;&amp; p1 == p &amp;&amp; s1 == s
+
+m = Matrix.new([1,2,3],[4,5,6],[7,8,9])
+assert m.upper(true) == Matrix.new([1,2,3],[0,5,6],[0,0,9])
+assert m.upper(false) == Matrix.new([0,2,3],[0,0,6],[0,0,0])
+assert m.lower(true) == Matrix.new([1,0,0],[4,5,0],[7,8,9])
+assert m.lower(false) == Matrix.new([0,0,0],[4,0,0],[7,8,0])
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><a name="LU_solve"></a>
+<tt>GSL::Linalg#LU_solve</tt><br>
+<tt>matr1.LU_solve(p1, b) -> x</tt><br>
+p1 is type GSL::Permutation, b type GSL::Vector.<br>
+This method solves the system A x = b using
+the LU decomposition of A into (LU, p) given by Linalg_LU_decomp.
+It returns x of type GSL::Vector.
+<p>
+<a name="LUD_solve"></a>
+<tt>GSL::Linalg#LUD_solve</tt><br>
+<tt>A.LUD_solve(b) -> x</tt><br>
+b is type GSL::Vector;<br> 
+This method returns the vector x solution of A x = b
+<p>
+<a name="LU_decomp_solve!"></a>
+<tt>GSL::Linalg#LU_decomp_solve!</tt><br>
+<tt>A.LU_decomp_solve!(b) -> x</tt><br>
+Mutating version of <tt>GSL::Linalg#LUD_solve</tt> ;
+it mutates A in LU = A.LU_decomp[0] .
+<p>
+<a name="LU_svx"></a>
+<tt>GSL::Linalg#LU_svx</tt><br>
+<tt>b.LU_svx(LU, p) -> x</tt><br>
+GSL::Matrix LU; GSP::Permutation p; GSL::Vector b,x<br>
+This method solves the
+system A x = b using the LU decomposition of A into (LU,p).
+It returns the solution vector x .
+<p>
+<a name="LU_svx!"></a>
+<tt>GSL::Linalg#LU_svx!</tt><br>
+<tt>b.LU_svx!(LU, p) -> b</tt><br>
+GSL::Matrix LU; GSL::Permutation p; GSL::Vector b<br>
+Corresponding mutating method, replacing b with the solution x.
+<p>
+<a name="LU_refine"></a>
+<tt>GSL::Linalg#LU_refine</tt><br>
+<tt>A.LU_refine(LU, p, b) -> anArray</tt><br>
+A and LU are type GSL::Matrix, p type GSL::Permutation,, b type GSL::Vector.
+This method applies an iterative
+improvement to x, the solution of A x = b, using the LU decomposition
+of A into (LU,p). The initial residual r = A x - b is also computed and
+stored in residual.
+anArray = [x, r]
+<p>
+<a name="LU_invert"></a>
+<tt>GSL::Linalg#LU_invert</tt><br>
+<tt>A.LU_invert(p) -> matr1</tt><br>
+This method computes the inverse of a matrix A from its LU decomposition 
+(LU,p), storing the result in the matrix inverse. The inverse <tt>matr1</tt> 
+is computed by
+solving the system A x = b for each column of the identity matrix. It is
+preferable to avoid direct computation of the inverse whenever possible.
+<p>
+<a name="LU_det"></a>
+<tt>GSL::Linalg#LU_det</tt><br>
+<tt>matr1.LU_det(LU, signum) -> d1</tt><br>
+This method computes the determinant of a matrix A from its
+LU decomposition, matr1 = LU. The determinant is computed as the product of the
+diagonal elements of U and the sign of the row permutation signum.
+<p>
+<a name="LU_lndet"></a>
+<tt>GSL::Linalg#LU_lndet</tt><br>
+<tt>matr1.LU_lndet() -> d1</tt><br>
+This method 
+computes the logarithm of the absolute value of the determinant of a matrix
+A, \ln|det(A)|, from its LU decomposition, matr1 = LU. 
+This function may be useful
+if the direct computation of the determinant would overflow or underflow.
+<p>
+<a name="LU_sgndet"></a>
+<tt>GSL::Linalg#LU_sgndet</tt><br>
+<tt>matr1.LU_sgndet(signum) -> aSign</tt><br>
+GSL::Matrix LU; int signum<br> 
+This method computes the sign of the
+determinant of a matrix A, det(A)/|det(A)|, from its LU decomposition, LU.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+eps = 1.0e-15
+
+puts "LU_solve"
+m2 = Matrix.new([1,1],[2,5])
+m_2, p2, s2 = m2.LU_decomp
+assert Matrix.perm(p2) * m2 == m_2.L * m_2.U 
+v1 = Vector.new([1,2])
+x1 = m_2.LU_solve(p2, v1)
+assert m2 * x1 == v1
+
+puts "LUD_solve"
+x2 = m2.LUD_solve(v1)
+assert x2 == x1
+
+puts "LU_decomp_solve!"
+m3 = m2.clone
+x3 = m3.LU_decomp_solve!(v1)
+assert m3 == m_2 &amp;&amp; x3 == x1
+
+puts "LU_svx"
+x4 = v1.LU_svx(m_2, p2)
+assert x4 == x1
+
+puts "LU_svx!"
+v1_dup = v1.clone
+v1_dup.LU_svx!(m_2, p2)
+assert v1_dup == x1
+
+puts "LU_refine (?)"
+a1 = m2.LU_refine(m_2, p2, v1)
+assert a1[0].to_a == [1,0]
+p a1[1].to_a
+
+puts "LU_invert"
+m4 = m_2.LU_invert(p2)
+assert m4 =~ m2.inv
+
+puts "LU_det ?"
+assert m_2 == Matrix.new([2,5], [0.5, -1.5])
+# ?? 
+assert m_2.LU_det(s2) == 3
+
+puts "det"
+assert m2.det == 3
+
+puts "LU_lndet"
+assert m_2.LU_lndet =~ Math::log(3)
+
+puts "LU_sgndet"
+assert m_2.LU_sgndet(s2) == 1
+m5 = Matrix.new([0,1],[1,0])
+m_5, p5, s5 = Matrix.new([0,1],[1,0]).LU_decomp
+assert m_5.LU_sgndet(s5) == -1
+
+m6 = Matrix.new([1,2,3],[2,3,4],[3,4,5])
+assert m6.trace == 9 &amp;&amp; m5.trace == 0
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QR"></a>
+<h4>QR Decomposition</h4>
+A general rectangular M-by-N matrix A has a QR decomposition into the
+product of an orthogonal M-by-M square matrix Q (where Q^T Q = I) and
+an M-by-N right-triangular matrix R,<br>
+A = Q R<br>
+
+This decomposition can be used to convert the linear system A x =
+b into the triangular system R x = Q^T b, which can be solved by
+back-substitution. Another use of the QR decomposition is to compute an
+orthonormal basis for a set of vectors. The first N columns of Q form an
+orthonormal basis for the range of A, ran(A), when A has full column rank.
+<p>
+<a name="QR_decomp"></a>
+<tt>GSL::Matrix#QR_decomp</tt><br>
+<tt>A.QR_decomp() -> anArray</tt><br>
+where anArray = [QR, tau]<br>
+    This method factorizes the M-by-N matrix A into the QR decomposition
+    A = Q R. On output the diagonal and upper triangular part of the
+    input matrix contain the matrix R. The vector tau and the columns of
+    the lower triangular part of the matrix A contain the Householder
+    coefficients and Householder vectors which encode the orthogonal
+    matrix Q. The vector tau must be of length k=\min(M,N). The matrix
+    Q is related to these components by, Q = Q_k ... Q_2 Q_1 where
+    Q_i = I - \tau_i v_i v_i^T and v_i is the Householder vector v_i =
+    (0,...,1,A(i+1,i),A(i+2,i),...,A(m,i)). This is the same storage
+    scheme as used by LAPACK.
+
+        The algorithm used to perform the decomposition is Householder QR
+        (Golub & Van Loan, Matrix Computations, Algorithm 5.2.1).
+<p>
+<a name="house"></a>
+<tt>GSL::Vector#house</tt>&nbsp; (not in GSL)<br>
+<tt>vect1.house -> matr1</tt><br>
+where matr1 is the Householder matrix corresponding to the Householder 
+vector vect1
+<p>
+<a name="house_v"></a>
+<tt>GSL::Matrix#house_v</tt>&nbsp; (not in GSL)<br>
+<tt>QR.house_v(n) -> vect1</tt><br> 
+n = 0,1,.. <br>
+This method returns the n-th householder vector, read from the n-th
+column of QR.
+<p>
+<a name="house_m"></a>
+<tt>GSL::Matrix#house_m</tt>&nbsp; (not in GSL)<br>
+<tt>QR.house_m(n) -> matr1</tt><br>
+This method returns the n-th householder matrix, read from the n-th
+column of QR.
+<p>
+<a name="householder_hv"></a>
+<tt>GSL::Vector#householder_hv</tt><br>
+<tt>vect1.householder_hv(tau,vect2) -> vect3</tt><br>
+vect2 is a vector with vect2(0) = 1 (householder vector);
+this method returns vect1 - tau vect2 (vect2.vect1). For 
+tau = 2/(vect2.vect2) this is a householder transformation
+<p>
+<a name="householder_hv!"></a>
+<tt>GSL::Vector#householder_hv!</tt><br>
+<tt>vect1.householder_hv!(tau,vect2) -> vect1</tt><br>
+Corresponding mutating method.<br>
+vect2 is a vector with vect2(0) = 1 (householder vector);
+vect1 is mutated into
+vect1 - tau vect2 (vect2.vect1). 
+<p>
+<a name="householder_transform"></a>
+<tt>GSL::Vector#householder_transform</tt><br>
+<tt>vect1.householder_transform() -> [tau2, vect2]</tt><br>
+GSL::Vector vect1, vect2; double tau2<br>
+The vector w = vect1.householder_hv(tau2, vect2) has the first component
+equal to the norm of vect1 (up to the sign), and the remaining components 0.
+<p>
+<a name="householder_transform!"></a>
+<tt>GSL::Vector#householder_transform!</tt><br>
+<tt>vect1.householder_transform!() -> tau</tt><br>
+GSL::Vector vect1; double tau
+Corresponding mutating method.<br>
+This method replaces vect1 with a householder vector and returns tau. <br>
+<p>
+<a name="householder_hm!"></a>
+<tt>m.householder_hm!(tau,v) -> m</tt><br>
+GSL::matrix m; GSL::vector v; double tau<br>
+For tau = 2/(v^T v) and v(0) = 1 this is the householder transformation
+P m = (1 - tau v v^T) m
+<p>
+<a name="householder_mh!"></a>
+<tt>m.householder_mh!(tau,v) -> m</tt><br>
+GSL::matrix m; GSL::vector v; double tau<br>
+For tau = 2/(v^T v) and v(0) = 1 this is the householder transformation
+m P  = m (1 - tau v v^T) 
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+
+v = Vector.new([1,2,3])
+tau1, v1 = v.householder_transform
+w1 = v.householder_hv(tau1, v1) 
+assert w1 =~ Vector.new([-v.dnrm2, 0, 0])
+
+v_dup = v.clone
+tau2 = v_dup.householder_transform!
+w2 = v.householder_hv(tau2, v_dup)
+assert w1 == w2 &amp;&amp; tau1 == tau2
+
+# householder vector
+v1[0] = 1
+m = Matrix.new([1,2,4],[2,5,6],[3,8,9])
+
+puts "householder_hm!"
+m_dup = m.clone
+m_dup.householder_hm!(tau1, v1)
+# v[0] = 1 implies
+assert m_dup =~ v1.house * m
+assert m_dup.col(0) =~ Vector.new([-v.dnrm2, 0, 0])
+
+puts "householder_mh!"
+v = Vector.new([1,2,4])
+tau1, v1 = v.householder_transform
+w1 = v.householder_hv(tau1, v1)
+assert w1 =~ Vector.new([-v.dnrm2, 0, 0])
+# householder vector
+v1[0] = 1
+m_dup = m.clone
+m_dup.householder_mh!(tau1, v1)
+# v[0] = 1 implies
+assert m_dup =~ m * v1.house 
+assert m_dup.row(0) =~ Vector.new([-v.dnrm2, 0, 0])
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>(See e.g.  http://www.cs.ut.ee/~toomas_l/linalg/lin2/node8.html
+for examples)
+<p>
+<a name="QR_decomp!"></a>
+<tt>GSL::Matrix#QR_decomp!</tt><br>
+<tt>A.QR_decomp!() -> vect1</tt><br>
+Mutating method; it mutates A into the QR matrix and returns vect1 = tau.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "Vector::house"
+v2 = Vector.new([9,6,-3])
+h2 = v2.house
+assert h2 * h2.t =~ Matrix.identity(3)
+
+puts "householder_hv"
+v1 = Vector.new([1,1,0])
+w1 = Vector.new([2,0.5,0.5])
+assert v1.house * w1 == w1.householder_hv(2/(v1*v1), v1)
+w1_dup = w1.clone
+w1_dup.householder_hv!(2/(v1*v1), v1)
+assert v1.house * w1 == w1_dup
+
+
+puts "QR_decomp"
+ma = Matrix.new([1,1], [2,3], [2,1])
+qr, tau = ma.QR_decomp
+assert qr =~ Matrix.new([-3,-3],[0.5,-sqrt(2)],[0.5,1 - sqrt(2)])
+hv0 = Vector.new([1,0.5,0.5])
+hv1 = Vector.new([0,1,1 -sqrt(2)])
+
+puts "house_v"
+assert qr.house_v(0) =~ hv0
+assert qr.house_v(1) =~ hv1
+
+assert tau =~ Vector.new([ 2/(hv0*hv0), 2/(hv1*hv1)])
+assert hv1.house * hv0.house * ma =~ qr.U
+QT = hv1.house * hv0.house ;  Q = hv0.house * hv1.house
+
+p Q.t * ma
+p qr.U
+puts "house_m"
+assert qr.house_v(0).house == qr.house_m(0)
+
+puts "QR_decomp!"
+ma1 = ma.clone
+tau1 = ma1.QR_decomp!
+assert tau1 == tau &amp;&amp; ma1 =~ qr
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+
+v = Vector.new([1,2,3])
+tau1, v1 = v.householder_transform
+w1 = v.householder_hv(tau1, v1) 
+assert w1 =~ Vector.new([-v.dnrm2, 0, 0])
+
+v_dup = v.clone
+tau2 = v_dup.householder_transform!
+w2 = v.householder_hv(tau2, v_dup)
+assert w1 == w2 &amp;&amp; tau1 == tau2
+
+# householder vector
+v1[0] = 1
+m = Matrix.new([1,2,4],[2,5,6],[3,8,9])
+
+puts "householder_hm!"
+m_dup = m.clone
+m_dup.householder_hm!(tau1, v1)
+# v[0] = 1 implies
+assert m_dup =~ v1.house * m
+assert m_dup.col(0) =~ Vector.new([-v.dnrm2, 0, 0])
+
+puts "householder_mh!"
+v = Vector.new([1,2,4])
+tau1, v1 = v.householder_transform
+w1 = v.householder_hv(tau1, v1)
+assert w1 =~ Vector.new([-v.dnrm2, 0, 0])
+# householder vector
+v1[0] = 1
+m_dup = m.clone
+m_dup.householder_mh!(tau1, v1)
+# v[0] = 1 implies
+assert m_dup =~ m * v1.house 
+assert m_dup.row(0) =~ Vector.new([-v.dnrm2, 0, 0])
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="QR_solve"></a>
+<tt>GSL::Linalg#QR_solve</tt><br>
+<tt>QR.QR_solve(tau, b) -> x</tt><br>
+GSL::Matrix QR; GSL::Vector tau, b, x;<br>
+This function solves the system A x = b using the QR decomposition of A into 
+(QR, tau) given by gsl_linalg_QR_decomp. QR must be a square matrix.
+<p>
+<a name="QR_svx"></a>
+<tt>GSL::Matrix#QR_svx</tt><br>
+<tt>QR.QR_svx(tau, b) -> x</tt><br>
+Same as QR_solve ? (it calls it; I can't see the difference between them).
+<p>
+<a name="QR_svx!"></a>
+<tt>GSL::Matrix#QR_svx!</tt><br>
+<tt>b.QR_svx!(tau, b) -> b</tt><br>
+Mutating version; the solution vector is written in b.
+<p>
+
+<a name="QR_lssolve"></a>
+<tt>GSL::Matrix#QR_lssolve</tt><br>
+<tt>QR.QR_lssolve(tau, b) -> anArray</tt><br>
+anArray = [x, residual]<br>
+This method finds the least squares solution to the
+overdetermined system A x = b where the matrix A has more rows than
+columns. The least squares solution minimizes the Euclidean norm of the
+residual, ||Ax - b||.The routine uses the QR decomposition of A into
+(QR, tau) given by QR_decomp. The solution is returned in
+x. The residual is computed as a by-product and stored in residual = b - A x
+
+<p>
+<a name="QR_QTvec"></a>
+<tt>GSL::Matrix#QR_QTvec</tt><br>
+<tt>QR.QR_QTvec(tau, vect1) -> vect2</tt><br>
+This method applies the matrix Q^T encoded in
+the decomposition (QR,tau) to the vector vect1, returning the result 
+Q^T vect1.
+The matrix multiplication is carried out directly using the encoding
+of the Householder vectors without needing to form the full matrix Q^T.
+<p>
+<a name="QR_Qvec"></a>
+<tt>GSL::Linalg#QR_Qvec</tt><br>
+<tt>QR.QR_Qvec(vect1) -> vect2</tt><br>
+This method applies the matrix Q encoded in
+the decomposition (QR,tau) to the vector vect1, storing the result Q vect1,
+ The matrix multiplication is carried out directly using the encoding
+of the Householder vectors without needing to form the full matrix Q.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "QR_solve"
+a = Matrix.new([2,0,1],[6,2,0],[-3,-1,-1])
+b = Vector.new([1,0,1])
+qr, tau = a.QR_decomp
+p qr
+x = qr.QR_solve(tau, b)
+assert a*x =~ b
+
+puts "QR_svx"
+x2 = b.QR_svx(qr, tau)
+assert x2 == x
+
+puts "QR_svx!"
+b_dup = b.clone
+b_dup.QR_svx!(qr, tau)
+assert b_dup == x 
+
+puts "QR_lssolve"
+a2 = Matrix.new([1,0,0],[0,1,0],[0,0,-1],[1,0,0],[0,-1,0])
+b2 = Vector.new([1,0,1,0,1])
+qr2, tau2 = a2.QR_decomp
+x2, res = qr2.QR_lssolve(tau2, b2)
+assert res =~ b2 - a2 * x2 
+
+# http://www.cs.ut.ee/~toomas_l/linalg/lin2/node16.html
+a3 = Matrix.new([1,1],[2,3],[2,1])
+b3 = Vector.new([1,1,1])
+qr3, tau3 = a3.QR_decomp
+x3, res = qr3.QR_lssolve(tau3, b3)
+assert x3 =~ Vector.new([5.0/9, 0])
+assert res =~ b3 - a3 * x3
+
+puts "QR_QTvec"
+qr, tau = Matrix.new([1,1], [2,3], [2,1]).QR_decomp
+Q = qr.house_m(0) * qr.house_m(1)
+b = Vector.new([1,2,3])
+assert qr.QR_QTvec(tau, b) =~ Q.t * b
+
+puts "QR_Qvec"
+assert qr.QR_Qvec(tau, b) =~ Q * b
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="QR_unpack"></a>
+<tt>GSL::Matrix#QR_unpack</tt><br>
+<tt>QR.QR_unpack(tau) -> anArray</tt><br>
+anArray = [Q, R]<br>
+This method unpacks
+the encoded QR decomposition (QR,tau) into the matrices Q and R, where
+Q is M-by-M and R is M-by-N.
+<p>
+<a name="QR_QRsolve"></a>
+<tt>GSL::Linalg::#QR_QRsolve</tt><br>
+<tt>Linalg::QR_QRsolve(Q, R, b) -> x</tt><br>
+This function solves the system
+R x = Q^T b for x. It can be used when the QR decomposition of a matrix
+is available in unpacked form as (Q,R).
+<p>
+<a name="QR_update"></a>
+<tt>GSL::Linalg#QR_update</tt><br>
+<tt>>Linalg::QR_update(Q, R) -> anArray</tt><br>
+anArray = [Q', R']<br>
+NOT WORKING <br>
+Function: int gsl_linalg_QR_update (gsl_matrix * Q, gsl_matrix * R,
+gsl_vector * w, const gsl_vector * v) 
+This function performs a rank-1
+update w v^T of the QR decomposition (Q, R). The update is given by Q'R'
+= Q R + w v^T where the output matrices Q' and R' are also orthogonal
+and right triangular. Note that w is destroyed by the update.
+<p>
+<a name="R_solve"></a>
+<tt>GSL::Matrix#R_solve</tt><br>
+<tt>R.R_solve(b) -> x</tt><br>
+This method solves the triangular system R x = b for the N-by-N matrix R.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+ma = Matrix.new([1,1], [2,3], [2,1])
+qr, tau = ma.QR_decomp
+Q = qr.house_m(0) * qr.house_m(1)
+
+puts "QR_unpack"
+Q1, R1 = qr.QR_unpack(tau)
+assert Q1 =~ Q
+assert ma =~ Q1 * R1
+
+puts "QR_QRsolve"
+m2 = Matrix.new([1,1], [2,3])
+qr2, tau2 = m2.QR_decomp
+Q2, R2 = qr2.QR_unpack(tau2)
+assert m2 =~ Q2 * R2
+Q2a = qr2.house_m(0)
+assert Q2a =~ Q2 &amp;&amp; m2 =~ Q2a * R2
+v = Vector.new([1,0])
+b = m2 * v
+x = Linalg::QR_QRsolve(Q2, R2, b)
+assert R2 * x =~ Q2.transpose * b
+p R2
+p Q2
+
+=begin
+# NOT WORKING
+puts "Linalg::QR_update"
+q2_dup = Q2.clone; r2_dup = R2.clone
+v = Vector.new([7,8])
+w = Vector.new([2,1])
+Linalg::QR_update(q2_dup, r2_dup, v, w)
+assert q2_dup * r2_dup =~ Q2 * R2 + v.outer(w)
+=end
+
+puts "R_solve"
+b = R2 * v
+x = R2.R_solve(b)
+assert x == v
+
+puts "R_svx"
+b1 = b.clone
+x = R2.R_solve(b)
+assert b1 == b &amp;&amp; x == v
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QR2"></a>
+<h4>QR Decomposition with Column Pivoting</h4>
+The QR decomposition can be extended to the rank deficient case by
+introducing a column permutation P,<br>
+A P = Q R<br>
+The first r columns of this Q form an orthonormal basis for the range of
+A for a matrix with column rank r. This decomposition can also be used to
+convert the linear system A x = b into the triangular system R y = Q^T b,
+x = P y, which can be solved by back-substitution and permutation. We
+denote the QR decomposition with column pivoting by QRP^T since A =
+Q R P^T.
+<p>
+<a name="QRPT_decomp!"></a>
+<tt>GSL::Linalg#QRPT_decomp!</tt><br>
+<tt>A.QRPT_decomp!() -> anArray</tt><br>
+GSL::Matrix A; 
+anArray = [vtau, vp, signum, vnorm]<br>
+This function factorizes the M-by-N matrix A into the QRP^T
+decomposition A = Q R P^T. On output the diagonal and upper
+triangular part of the input matrix A contain the matrix R. The
+permutation matrix P is stored in the permutation p. The sign of
+the permutation is given by signum. It has the value (-1)^n, where
+n is the number of interchanges in the permutation. The vector tau
+and the columns of the lower triangular part of the matrix A contain
+the Householder coefficients and vectors which encode the orthogonal
+matrix Q. The vector tau must be of length k=\min(M,N). The matrix
+Q is related to these components by, Q = Q_k ... Q_2 Q_1 where
+Q_i = I - \tau_i v_i v_i^T and v_i is the Householder vector v_i =
+(0,...,1,A(i+1,i),A(i+2,i),...,A(m,i)). This is the same storage
+scheme as used by LAPACK. On output the norms of each column of R
+are stored in the vector norm.
+<p>
+The algorithm used to perform the decomposition is Householder
+QR with column pivoting (Golub & Van Loan, Matrix Computations,
+Algorithm 5.4.1).
+<p>
+<a name="QRPT_decomp"></a>
+<tt>GSL::Linalg#QRPT_decomp</tt><br>
+<tt>A.QRPT_decomp() -> anArray</tt><br>
+anArray = [vq, vr, vtau, vp, signum, vnorm]
+This function factorizes the matrix A into the decomposition A = Q R P^T 
+without modifying A itself and storing the output in the separate matrices 
+q and r. (it seems that vnorm stores the absolute values of the diagonal
+elements of R. I  get A = Q R P because I use the same definition of 
+permutation matrix described in <a href="#LU">LU decomposition</a>.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "QRPT_decomp"
+ma = Matrix.new([1,2,3], [1,5,6],[1,8,9],[1,11,12])
+
+vq, vr, vtau, vp, signum, vnorm = ma.QRPT_decomp
+
+(0..2).each{|i| assert vnorm.get(i) == vr.get(i,i).abs} # ??
+assert vp.to_a == [2, 0, 1] &amp;&amp; signum == 1
+assert ma =~ [vq * vr * Matrix::perm(vp), 1.0e-14]
+
+puts "QRPT_decomp!"
+vtau2, vp2, signum2, vnorm2 = ma.QRPT_decomp!
+assert vtau2 == vtau &amp;&amp; vp2 == vp &amp;&amp; signum2 == signum &amp;&amp; vnorm2 == vnorm
+assert vq =~ ma.house_m(0) * ma.house_m(1) * ma.house_m(2)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<p>
+<a name="QRPT_solve"></a>
+<tt>GSL::Linalg#QRPT_solve</tt><br>
+<tt>QR.QRPT_solve(tau, p, b) -> x</tt><br>
+This method solves the system A x = b using the QRP^T
+decomposition of A into (QR, tau, p) given by gsl_linalg_QRPT_decomp.
+<p>
+<a name="QRPT_svx!"></a>
+<tt>GSL::Linalg#QRPT_svx!</tt><br>
+<tt>x.QRPT_svx!(QR, tau, p) -> x</tt><br>
+This method solves
+the system A x = b in-place using the QRP^T decomposition of A into
+(QR,tau,p). On input x should contain the right-hand side b, which is
+replaced by the solution on output.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "QRPT_solve"
+a = Matrix.new([2,0,1],[6,2,0],[-3,-1,-1])
+
+a1 = a.clone
+b = Vector.new([1,0,1])
+vtau, vp, signum, vnorm = a1.QRPT_decomp!
+x = a1.QRPT_solve(vtau, vp, b)
+assert a*x =~ b
+
+puts "QRPT_svx"
+b1 = b.clone
+b1.QRPT_svx!(a1, vtau, vp)
+assert a * b1 =~ b
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="QRPT_QRsolve"></a>
+<tt>GSL::Linalg#QRPT_QRsolve</tt><br>
+<tt>Linalg::QQRPT_QRsolve() -> [vq, vr, vtau, vp, signum, vnorm]</tt><br>
+Function: int gsl_linalg_QRPT_QRsolve (const gsl_matrix * Q, const
+gsl_matrix * R, const gsl_permutation * p, const gsl_vector * b,
+gsl_vector * x)<br> 
+This function solves the system R P^T x = Q^T b for
+x. It can be used when the QR decomposition of a matrix is available in
+unpacked form as (Q,R).<br>
+(there is a bug in gsl_linalg_QR_QRsolve; see example)
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+puts "QRPT_solve"
+a = Matrix.new([2,0,1],[6,2,0],[-3,-1,-1])
+b = Vector.new([1,0,1])
+vq, vr, vtau, vp, signum, vnorm  = a.QRPT_decomp
+
+x = Linalg::QRPT_QRsolve(vq.transpose, vr, vp, b) # this fix works
+# in linalg/qrpt.c 
+#    /* compute b' = Q^T b */
+#     gsl_blas_dgemv (CblasNoTrans, 1.0, Q, b, 0.0, x);
+# becomes 
+#     gsl_blas_dgemv (CblasTrans, 1.0, Q, b, 0.0, x);
+#          
+# This function solves the system R P^T x = Q^T b for x: 
+assert vr * Matrix.perm(vp) * x =~ vq.transpose * b
+assert a * x =~ b
+assert a =~ vq * vr * Matrix.perm(vp)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="QRPT_update"></a>
+<tt>GSL::Linalg#QRPT_update</tt><br>
+<tt>matr1.QRPT_update(q, r, p,) -> </tt><br>
+SKIPPED<br>
+Function: int gsl_linalg_QRPT_update (gsl_matrix * Q, gsl_matrix *
+R, const gsl_permutation * p, gsl_vector * u, const gsl_vector * v)
+This function performs a rank-1 update w v^T of the QRP^T decomposition
+(Q, R,p). The update is given by Q'R' = Q R + w v^T where the output
+matrices Q' and R' are also orthogonal and right triangular. Note that
+w is destroyed by the update. The permutation p is not changed.
+<p>
+<a name="QRPT_Rsolve"></a>
+<tt>GSL::Matrix#QRPT_Rsolve</tt><br>
+<tt>QR.QRPT_Rsolve(p, b1) -> x</tt><br>
+This method solves the triangular system R P^T x = b1 
+for the N-by-N matrix R contained in QR, for b1 = Q^T b .
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "QRPT_QRsolve"
+a = Matrix.new([2,0,1],[6,2,0],[-3,-1,-1])
+b = Vector.new([1,0,1])
+vq, vr, vtau, vp, signum, vnorm  = a.QRPT_decomp
+
+x = Linalg::QRPT_QRsolve(vq.transpose, vr, vp, b) # this fix works
+b1 = vq.t * b
+assert vr * Matrix.perm(vp) * x =~ b1 &amp;&amp; a * x =~ b &amp;&amp; a =~ vq * vr * Matrix.perm(vp)
+p vr * Matrix.perm(vp) 
+p x
+
+ma = a.clone
+vtau2, vp2, signum2, vnorm2 = ma.QRPT_decomp!
+x1 = ma.QRPT_Rsolve(vp, b1)
+assert a * x1 =~ b &amp;&amp; vr * Matrix.perm(vp) * x1 =~ b1
+assert vq * vr * Matrix.perm(vp) =~ a # I have A = Q R P instead of Q R P^T
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="QRPT_Rsvx!"></a>
+<tt>GSL::Matrix#QRPT_Rsvx!</tt><br>
+<tt>x.QRPT_Rsvx!(R, p) -> x</tt><br>
+Function: int gsl_linalg_QRPT_Rsvx (const gsl_matrix * QR, const gsl_permutation * p, gsl_vector * x)
+This function solves the triangular system R P^T x = b in-place for the N-by-N matrix R contained in QR. On input x should contain the right-hand side b, which is replaced by the solution on output.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "QRPT_Rsvx!"
+a = Matrix.new([2,0,1],[6,2,0],[-3,-1,-1])
+b = Vector.new([1,0,1])
+a_dup = a.clone
+vq, vr, vtau, vp, signum, vnorm  = a.QRPT_decomp
+
+b1 = vq.t * b
+x = b1.clone
+x.QRPT_Rsvx!(vr, vp)
+assert Matrix.perm(vp).inv * vr.upper(true).inv * b1 =~ x
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="SVD"></a>
+<h3>Singular Value Decomposition</h3>
+A general rectangular M-by-N matrix A has a singular value decomposition
+(SVD) into the product of an M-by-N orthogonal matrix U, an N-by-N
+diagonal matrix of singular values S and the transpose of an N-by-N
+orthogonal square matrix V,<br>
+A = U S V^T<br>
+
+The singular values \sigma_i = S_{ii} are all non-negative and are
+generally chosen to form a non-increasing sequence \sigma_1 >= \sigma_2 >=
+... >= \sigma_N >= 0.<br>
+
+The singular value decomposition of a matrix has many practical uses. The
+condition number of the matrix is given by the ratio of the largest
+singular value to the smallest singular value. The presence of a zero
+singular value indicates that the matrix is singular. The number of
+non-zero singular values indicates the rank of the matrix. In practice
+singular value decomposition of a rank-deficient matrix will not produce
+exact zeroes for singular values, due to finite numerical precision. Small
+singular values should be edited by choosing a suitable tolerance.
+<p>
+<a name="SV_decomp!"></a>
+<tt>GSL::Linalg#SV_decomp!</tt><br>
+<tt>A.SV_decomp!() -> [V, S]</tt><br>
+This method factorizes the M-by-N matrix A into the singular value
+decomposition A = U S V^T. On output the matrix A is replaced by
+U. The diagonal elements of the singular value matrix S are stored
+in the vector S. The singular values are non-negative and form a
+non-increasing sequence from S_1 to S_N. The matrix V contains the
+elements of V in untransposed form. To form the product U S V^T it
+is necessary to take the transpose of V. A workspace of length N is
+required in work.
+<br>
+This routine uses the Golub-Reinsch SVD algorithm.
+<p>
+<a name="SV_decomp"></a>
+<tt>GSL::Linalg#SV_decomp</tt><br>
+<tt>A.SV_decomp() -> [U, V, S]</tt><br>
+Corresponding non-mutating method.
+
+<p>
+<a name="SV_decomp_mod!"></a> 
+<tt>GSL::Linalg#SV_decomp_mod!</tt><br>
+<tt>A.SV_decomp_mod!() ->  [V, S]</tt><br>
+This method computes
+the SVD using the modified Golub-Reinsch algorithm, which is faster for
+M>>N. It requires the vector work and the N-by-N matrix X as additional
+working space.
+<p>
+<a name="SV_decomp_mod"></a>
+<tt>GSL::Linalg#SV_decomp_mod</tt><br>
+<tt>A.SV_decomp_mod() ->  [U, V, S]</tt><br>
+Corresponding non-mutating method.
+
+<p>
+<a name="SV_decomp_jacobi!"></a>
+<tt>GSL::Linalg#SV_decomp_jacobi!</tt><br>
+<tt>A.SV_decomp_jacobi!() -> [V, S]</tt><br>
+ This method computes the SVD using one-sided Jacobi
+ orthogonalization (see references for details). 
+ On output the matrix A is replaced by U.<br>  
+ The Jacobi method can compute singular values to higher relative accuracy 
+ than Golub-Reinsch algorithms.
+<p>
+<a name="SV_decomp_jacobi"></a>
+<tt>GSL::Linalg#SV_decomp_jacobi</tt><br>
+<tt>A.SV_decomp_jacobi() -> [U, V, S]</tt><br>
+
+<a name="SV_solve"></a>
+<tt>GSL::Linalg#SV_solve</tt><br>
+<tt>Linalg::SV_solve(U, V, S, b) -> x</tt><br>
+  This function solves the system A x = b using the singular value
+  decomposition (U, S, V) of A given by SV_decomp.<br>
+   
+   Only non-zero singular values are used in computing the
+   solution. The parts of the solution corresponding to singular
+   values of zero are ignored. Other singular values can be edited
+   out by setting them to zero before calling this function.<br>
+    
+    In the over-determined case where A has more rows than
+    columns the system is solved in the least squares sense,
+    returning the solution x which minimizes ||A x - b||_2.
+    
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+a = Matrix.new([1,1],
+               [0,1],
+	       [1,0])
+
+a_dup = a.clone
+v, s = a_dup.SV_decomp!
+
+u1 = Matrix.new([-sqrt(6)/3,	    0   	], 
+                [-sqrt(6)/6,	-sqrt(2)/2	],
+		[-sqrt(6)/6,	sqrt(2)/2 	])
+
+d1 = Matrix.new([sqrt(3),	0],
+                [      0,       1])
+		
+v1 = Matrix.new([-sqrt(2)/2,	sqrt(2)/2 ],
+                [-sqrt(2)/2,	-sqrt(2)/2])
+		
+assert a_dup =~ u1 &amp;&amp; d1[0][0] == s[0] &amp;&amp; v =~ v1 &amp;&amp; a =~ u1 * d1 * v1.t
+assert d1[1][1] =~ s[1]
+
+u2, v2, s2 = a.SV_decomp
+assert u2 =~ u1 &amp;&amp; v2 =~ v1 &amp;&amp; s2 =~ s
+
+a_dup3 = a.clone
+v3, s3 = a_dup3.SV_decomp_mod!
+assert a_dup3 =~ u1 &amp;&amp; v3 =~ v &amp;&amp; s3 =~ s
+
+u4, v4, s4 = a.SV_decomp_mod
+assert u4 =~ u1 &amp;&amp; v4 =~ v1 &amp;&amp; s4 =~ s
+
+a_dup5 = a.clone
+v5, s5 = a_dup5.SV_decomp_jacobi!
+assert v5 =~ -v1 &amp;&amp; s5 =~ s &amp;&amp; a_dup5 =~ -a_dup3 &amp;&amp; a =~ a_dup5 * d1 * v5.t
+
+u6, v6, s6 = a.SV_decomp_jacobi
+assert u6 =~ a_dup5 &amp;&amp; v6 =~ v5 &amp;&amp; s6 =~ s5
+
+puts "SV_solve"
+b = Vector.new([3, 4, 5])
+x = Linalg::SV_solve(u2, v2, s2, b)
+assert a * x =~ Vector.new([5, 2 ,3])
+# check that x is the least squares solution to the overdetermined system a x = b
+qr6, tau6 = a.QR_decomp
+x6, res6 = qr6.QR_lssolve(tau6, b)
+assert x6 =~ x &amp;&amp; res6 =~ b - a * x
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="Cholesky"></a>
+<h3>Cholesky Decomposition</h3>
+A symmetric, positive definite square matrix A has a Cholesky
+decomposition into a product of a lower triangular matrix L and its
+transpose L^T,<br>
+A = L L^T<br>
+
+This is sometimes referred to as taking the square-root of a matrix. The
+Cholesky decomposition can only be carried out when all the eigenvalues
+of the matrix are positive. This decomposition can be used to convert
+the linear system A x = b into a pair of triangular systems (L y = b,
+L^T x = y), which can be solved by forward and back-substitution.
+<p>
+<a name="cholesky_decomp"></a>
+<tt>GSL::Linalg#cholesky_decomp</tt><br>
+<tt>A.cholesky_decomp() -> LLT</tt><br>
+
+This method
+factorizes the positive-definite square matrix A into the Cholesky
+decomposition A = L L^T. On output the diagonal and lower triangular part
+of the input matrix LLT contain the matrix L. The upper triangular part
+of the input matrix contains L^T, the diagonal terms being identical
+for both L and L^T. If the matrix is not positive-definite then the
+decomposition will fail, returning the error code GSL_EDOM.
+<p>
+<a name="cholesky_decomp!"></a>
+<tt>GSL::Linalg#cholesky_decomp!</tt><br>
+<tt>A.cholesky_decomp!() -> A</tt><br>
+Corresponding mutating method; A becomes LLT .
+<p>
+<a name="cholesky_solve"></a>
+<tt>GSL::Linalg#cholesky_solve</tt><br>
+<tt>LLT.cholesky_solve(b) -> x</tt><br>
+This method solves the system
+A x = b using the Cholesky decomposition of A into the matrix cholesky
+given by GSL::Linalg#cholesky_decomp.
+<p>
+<a name="cholesky_svx!"></a>
+<tt>GSL::Linalg#cholesky_svx!</tt><br>
+<tt>x.cholesky_svx!(LLT) -> x</tt><br>
+Function: int gsl_linalg_cholesky_svx (const gsl_matrix * cholesky,
+gsl_vector * x) 
+This function solves the system A x = b in-place using
+the Cholesky decomposition of A into the matrix cholesky given by
+GSL::Linalg#cholesky_decomp. On input x should contain the right-hand
+side b, which is replaced by the solution on output.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+puts "cholesky_decomp!"
+a = Matrix.new([2, -2], [-2, 5])
+a_dup = a.clone
+a_dup.cholesky_decomp!
+aL = a_dup.lower(true)
+aLT = a_dup.upper(true)
+assert aL == Matrix.new([sqrt(2), 0],[-sqrt(2), sqrt(3)])
+assert aLT == aL.t &amp;&amp; a =~ aL * aL.t
+
+puts "cholesky_decomp"
+a1 = a.cholesky_decomp
+assert a1 == a_dup
+
+puts "cholesky_solve"
+x1 = Vector.new([1,2])
+b = a * x1
+x = a_dup.cholesky_solve(b)
+assert x1 =~ x
+
+puts "cholesky_svx!"
+b_dup = b.clone
+b_dup.cholesky_svx!(a_dup)
+assert b_dup == x
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="Tri"></a>
+<h3>Tridiagonal Decomposition of Real Symmetric Matrices</h3>
+
+A symmetric matrix A can be factorized by similarity transformations 
+into the form,<br>
+
+A = Q T Q^T<br>
+
+where Q is an orthogonal matrix and T is a symmetric tridiagonal matrix.
+<p>
+<a name="symmtd_decomp"></a>
+<tt>GSL::Linalg#symmtd_decomp</tt><br>
+<tt>A.symmtd_decomp() -> [TM, tau]</tt><br>
+A is a N x N symmetric matrix. <br>
+This method factorizes the symmetric square matrix A into the
+symmetric tridiagonal decomposition Q T Q^T. On output the diagonal and
+the first subdiagonal of TM contain the lower part of the
+tridiagonal symmetric matrix T. 
+The remaining lower triangular part of the input matrix contains the
+Householder vectors which, together with the Householder coefficients
+tau, encode the orthogonal matrix Q. This storage scheme is the same as
+used by LAPACK. The upper triangular part of A is not referenced.<br>
+tau is a (N-1)-dimensional vector.
+<pre>
+TM = (d                     )
+     (e   d                 )
+     (v0  e   d             )
+     ........
+     ............
+     ...............
+     (v0  v1 .. v(N-3)  e  d)
+
+v_(0) = (0 1 v0 .. v0)
+v_(1) = (0 0 1 v1 .. v1)
+...
+v_(N-3) = (0 0 ...0 1 v(N-3))
+
+H(i) = I - tau(i) v_(i) v_(i)^T
+Q = H(0) H(1)...H(N-3)
+tau(i) = 2/(v_(i)^T v_(i)) for i = 0,..., N - 3
+</pre>
+where d and e denote diagonal and off-diagonal elements of TM, and vi
+denotes an element of the vector defining H(i).
+
+<p>
+<a name="symmtd_decomp!"></a>
+<tt>GSL::Linalg#symmtd_decomp!</tt><br>
+<tt>A.symmtd_decomp!() -> tau</tt><br>
+Corresponding mutating method; A becomes TM .
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+puts "symmtd_decomp"
+a = Matrix.new([1,3,4],
+               [3,2,8],
+	       [4,8,3])
+a1, tau = a.symmtd_decomp
+puts "a1"
+p a1
+
+v_0 = Vector.new([0,1,a1.get(2,0)])
+h_0 = v_0.house
+puts "h_0"
+p h_0
+assert tau[0] =~ 2/(v_0*v_0)
+
+q = h_0
+# Get the tridiagonal matrix
+a1.set(2,0,0)
+t1 = a1.lower(true) + a1.lower(false).t
+assert t1 =~ [q.t * a * q, 1.0e-14]
+puts "t1"
+p t1
+puts "q.t * a * q"
+p q.t * a * q
+
+a = Matrix.new([1,3,4,5],
+               [3,2,8,9],
+	       [4,8,3,7],
+	       [5,9,7,6])
+a1, tau = a.symmtd_decomp
+v_0 = Vector.new([0,1,a1.get(2,0), a1.get(3,0)])
+v_1 = Vector.new([0,0,1, a1.get(3,1)])
+h_0 = v_0.house
+h_1 = v_1.house
+q = h_0 * h_1
+puts "Q"
+p q
+# Get the tridiagonal matrix
+a1.set(2,0,0)
+a1.set(3,0,0); a1.set(3,1,0)
+t1 = a1.lower(true) + a1.lower(false).t
+puts "t1"
+p t1
+assert t1 =~ [q.t * a * q, 1.0e-14]
+assert tau[0] =~ 2/(v_0*v_0)
+assert tau[1] =~ 2/(v_1*v_1)
+
+puts "symmtd_decomp!"
+a_dup = a.clone
+a1, tau = a.symmtd_decomp
+tau1 = a_dup.symmtd_decomp!
+assert tau1 == tau &amp;&amp; a_dup == a1 
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="symmtd_unpack"></a>
+<tt>GSL::Linalg#symmtd_unpack</tt><br>
+<tt>TM.symmtd_unpack(tau) -> [Q, diag, subdiag]</tt><br>
+GSL::Matrix TM, Q; GSL::Vector diag, subdiag
+This method unpacks the encoded symmetric tridiagonal decomposition (TM,
+tau), obtained from symmtd_decomp of A, into the orthogonal matrix
+Q, the vector of diagonal elements diag and the vector of subdiagonal
+elements subdiag.
+<p>
+<a name="symmtd_unpack_T"></a>
+<tt>GSL::Linalg#symmtd_unpack_T</tt><br>
+<tt>TM.symmtd_unpack_T() -> [diag, subdiag]</tt><br>
+
+Function: int gsl_linalg_symmtd_unpack_T (const gsl_matrix * A, gsl_vector
+* diag, gsl_vector * subdiag) 
+This method unpacks the diagonal and
+subdiagonal of the encoded symmetric tridiagonal decomposition (TM, tau),
+obtained from gsl_linalg_symmtd_decomp of A, into the vectors diag and subdiag.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+
+a = Matrix.new([1,3,4,5],
+               [3,2,8,9],
+	       [4,8,3,7],
+	       [5,9,7,6])
+tm, tau = a.symmtd_decomp
+v_0 = Vector.new([0,1,tm.get(2,0), tm.get(3,0)])
+v_1 = Vector.new([0,0,1, tm.get(3,1)])
+q = v_0.house * v_1.house
+t = tm.clone
+t.set(2,0,0); t.set(3,0,0); t.set(3,1,0)
+t = t.lower(true) + t.lower(false).t
+assert t =~ [q.t * a * q, 1.0e-14]
+
+puts "symmtd_unpack"
+q_un, d_un, sd_un = tm.symmtd_unpack(tau)
+assert q_un =~ q &amp;&amp; d_un =~ t.subdiagonal(0) &amp;&amp; sd_un =~ t.subdiagonal(1)
+
+puts "symmtd_unpack_T"
+d_un, sd_un = tm.symmtd_unpack_T
+assert d_un =~ t.subdiagonal(0) &amp;&amp; sd_un =~ t.subdiagonal(1)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="Bidiag"></a>
+<h3>Bidiagonalization</h3>
+
+A general matrix A can be factorized by similarity transformations into
+the form,<br>
+
+A = U B V^T<br>
+
+where U and V are orthogonal matrices and B is a N-by-N bidiagonal matrix
+with non-zero entries only on the diagonal and superdiagonal. The size
+of U is M-by-N i with M >= N and the size of V is N-by-N.
+<p>
+<a name="bidiag_decomp"></a>
+<tt>GSL::Linalg#bidiag_decomp</tt><br>
+<tt>A.bidiag_decomp() -> [TM, tau_U, tau_V] </tt><br>
+
+This method factorizes the M-by-N matrix A into bidiagonal form<br>
+A = U B V^T<br>
+where U and V are orthogonal and B is upper bidiagonal.<br>
+The diagonal and superdiagonal of the
+matrix B are stored in the diagonal and superdiagonal of A. The orthogonal
+matrices U and V are stored as compressed Householder vectors in the
+remaining elements of A. <br>
+U is stored as a packed set of Householder transformations in the
+lower triangular part of the input matrix below the diagonal.<br>
+V is stored as a packed set of Householder transformations in the
+upper triangular part of the input matrix above the first superdiagonal.<br>
+The full matrix for U can be obtained as the product,br>
+U = U_0 U_1 .. U_(N-1)<br>
+where U_i = (I - tau_i * v_i * v_i')
+and where v_i is a Householder vector
+v_i = [0,..,0,1, A(i+1,i), A(i+2,i), ... , A(M-1,i)]
+      
+The full matrix for V can be obtained as the product<br>
+V = V_0 .. V_(N-3)<br>
+where V_i = (I - tau_i * v_i * v_i')
+and where v_i is a Householder vector
+v_i = [0,..0, 1, A(i,i+2), A(i,i+3), ... , A(i,N-1)]
+	   
+The Householder coefficients are stored in
+the vectors tau_U and tau_V. The length of tau_U must equal the number
+of elements in the diagonal of A and the length of tau_V should be one
+element shorter.<br>
+See Golub & Van Loan, "Matrix Computations" (3rd ed), Algorithm 5.4.2 
+<p>
+<a name="bidiag_unpack"></a>
+<tt>GSL::Linalg#bidiag_unpack</tt><br>
+<tt>TM.bidiag_unpack(tau_U, tau_V) -> [U, V, diag, superdiag]</tt><br>
+This method unpacks
+the bidiagonal decomposition of A given by bidiag_decomp,
+(TM, tau_U, tau_V) into the separate orthogonal matrices U, V and the
+diagonal vector diag and superdiagonal superdiag.
+<p>
+<a name="bidiag_unpack2"></a>
+<tt>GSL::Linalg#bidiag_unpack2</tt><br>
+<tt>TM.bidiag_unpack2(tau_U, tau_V) -> </tt>&nbsp; (mutating TM, tau_U, tau_V)<br>
+This method unpacks the
+bidiagonal decomposition of A given by bidiag_decomp, (TM,
+tau_U, tau_V) into the separate orthogonal matrices U, V and the diagonal
+vector diag and superdiagonal superdiag. The matrix U is stored in-place
+in TM, the superdiagonal in tau_v, the diagonal in tau_U 
+<p>
+<a name="bidiag_unpack_B"></a>
+<tt>GSL::Linalg#bidiag_unpack_B</tt><br>
+<tt>BD.bidiag_unpack_B(tau_U, tau_V) -> </tt><br>
+
+Function: int gsl_linalg_bidiag_unpack_B (const gsl_matrix * A,
+gsl_vector * diag, gsl_vector * superdiag) 
+This method unpacks the
+diagonal and superdiagonal of the bidiagonal matrix BD given by
+bidiag_decomp into the diagonal vector diag and superdiagonal
+vector superdiag.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+# M x N matrix A with M = 4, N = 3 
+a = Matrix.new([1,3,4],
+               [3,2,8],
+	       [4,8,3],
+               [5,9,7])
+m = a.size1
+n = a.size2
+puts "bidiag_decomp"
+tm, tu, tv = a.bidiag_decomp
+
+# householder vectors U_i, i = 0,.., N-1
+vu0 = tm.col(0); vu0[0] = 1
+vu1 = tm.col(1); vu1[0] = 0; vu1[1] = 1
+vu2 = tm.col(2); vu2[0] = 0; vu2[1] = 0; vu2[2] = 1
+
+# U = U_0 U_1 .. U_(N-1)
+vu1 = vu0.house * vu1.house * vu2.house
+
+# householder vectors V_i, i = 0,.., N-3
+vv0 = tm.row(0); vv0[0] = 0; vv0[1] = 1 
+
+# V = V_0 .. V_(N-3)
+vv1 = vv0.house
+
+# B = U^T A V
+bd1 = vu1.t * a * vv1
+puts "vu1.t, vv1"
+p vu1.t, vv1
+
+# check that B is bidiagonal within precision 1.0e-14
+(2..n-1).each{|i| assert bd1.superdiagonal(i) =~ [Vector::zero(n-i), 1.0e-14]}
+(1..m-1).each{|i| assert bd1.subdiagonal(i) =~ [Vector::zero(m-i), 1.0e-14]}
+
+puts "bidiag_unpack"
+vu, vv, vd, vs = tm.bidiag_unpack(tu, tv)
+bd = vu.t * a * vv
+puts "vu.t, a, vv"
+p vu.t, a, vv
+puts "bd1, bd"
+p bd1, bd
+assert bd.superdiagonal(0) =~ [vd, 1.0e-14]
+assert bd.superdiagonal(1) =~ [vs, 1.0e-14]
+
+assert vu.size1 == 4 &amp;&amp; vu.size2 == 3 &amp;&amp; vu1.size1 == 4 &amp;&amp; vu1.size2 == 4
+3.times {|i| assert vu.col(i) =~ vu1.col(i)}
+
+assert vv1 =~ vv
+
+# Another example
+# M x N matrix A with M = 5, N = 4
+a = Matrix.new([1,3,4,4],
+               [3,2,8,9],
+	       [4,8,3,5],
+               [5,9,7,6],
+	       [8,7,6,5])
+	       
+puts "bidiag_decomp"
+tm, tu, tv = a.bidiag_decomp
+
+# householder vectors U_i, i = 0,.., N-1
+vu0 = tm.col(0); vu0[0] = 1
+vu1 = tm.col(1); vu1[0] = 0; vu1[1] = 1
+vu2 = tm.col(2); vu2[0] = 0; vu2[1] = 0; vu2[2] = 1
+vu3 = tm.col(3); vu3[0] = 0; vu3[1] = 0; vu3[2] = 0; vu3[3] = 1
+
+# householder vectors V_i, i = 0,.., N-3
+vv0 = tm.row(0); vv0[0] = 0; vv0[1] = 1 
+vv1 = tm.row(1); vv1[0] = 0; vv1[1] = 0; vv1[2] = 1
+
+puts "bidiag_unpack"
+vu, vv, vd, vs = tm.bidiag_unpack(tu, tv)
+bd = vu.t * a * vv
+assert bd.superdiagonal(0) =~ [vd, 1.0e-14]
+assert bd.superdiagonal(1) =~ [vs, 1.0e-14]
+
+# U = U_0 U_1 .. U_(N-1)
+vu1 = vu0.house * vu1.house * vu2.house * vu3.house
+assert vu.size1 == 5 &amp;&amp; vu.size2 == 4 &amp;&amp; vu1.size1 == 5 &amp;&amp; vu1.size2 == 5
+4.times {|i| assert vu.col(i) =~ vu1.col(i)}
+
+# V = V_0 .. V_(N-3)
+vv1 = vv0.house * vv1.house
+assert vv1 =~ vv
+assert vv.size1 == 4 &amp;&amp; vv.size2 == 4
+
+puts "bidiag_unpack2"
+tm_dup = tm.clone
+vv2 = tm_dup.bidiag_unpack2(tu, tv)
+assert tm_dup =~ vu
+assert vv2 =~ vv
+assert tu =~ vd &amp;&amp; tv =~ vs
+
+puts "bidiag_unpack_B"
+vd3, vs3 = bd.bidiag_unpack_B
+assert vd3 =~ [vd, 1.0e-14] &amp;&amp; vs3 =~ vs
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="House"></a>
+<h3>Householder solver for linear systems</h3>
+<a name="HH_solve"></a>
+<tt>GSL::Linalg#HH_solve</tt><br>
+<tt>A.HH_solve(b) -> x</tt><br>
+GSL::Matrix A; GSL::Vector b, x<br>
+A in a M x N matrix, with M <= N. (I got it to work only for M=N)<br>
+This function solves the system A x = b directly
+using Householder transformations. On output the solution is stored in
+x and b is not modified.
+<p>
+<a name="HH_solve!"></a>
+<tt>GSL::Linalg#HH_solve!</tt><br>
+<tt>A.HH_solve!(b) -> x!</tt><br>
+Corresponding mutating method; the matrix A is destroyed by the Householder
+transformations.
+<p>
+<a name="HH_svx"></a>
+<tt>GSL::Linalg#HH_svx</tt>&nbsp; (mutating)<br> 
+<tt>A.HH_svx(b) -> A</tt><br>
+This method solves the system A x = b in-place using Householder
+transformations. On input x should contain the right-hand side b, which
+is replaced by the solution on output. 
+<p>
+<a name="HH_svx!"></a>
+<tt>GSL::Linalg#HH_svx!</tt><br>
+<tt>A.HH_svx!(b) -> A</tt><br>
+Like the previus one, but
+the matrix A is destroyed by the Householder transformations.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+puts "HH_solve"
+a = Matrix.new([1,3,4],
+               [3,2,6],
+	       [2,8,3])
+
+x = Vector.new([1,2,3])
+
+b = a*x
+a_dup = a.clone
+x1 = a_dup.HH_solve(b)
+assert x1 =~ [x, 1.0e-14]
+assert a_dup == a
+    
+puts "HH_solve!"
+x1 = a_dup.HH_solve!(b)
+assert x1 =~ [x, 1.0e-14]
+assert a_dup !~ a
+
+puts "HH_svx!"
+b_dup = b.clone
+a_dup = a.clone
+a_dup.HH_svx!(b_dup)
+assert b_dup =~ [x, 1.0e-14] &amp;&amp; a_dup !~ a
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="Tris"></a>
+<h3>Tridiagonal Systems</h3>
+<p>
+<a name="solve_symm_tridiag"></a>
+<tt>GSL::Linalg#solve_symm_tridiag</tt><br>
+<tt>A.solve_symm_tridiag(diag, subdiag, b) -> x</tt><br>
+This function solves the general N-by-N system A x = b where A is symmetric
+tridiagonal. The form of A for the 4-by-4 case is shown below,
+<pre>
+A = ( d_0 e_0         ) 
+    ( e_0 d_1 e_1     ) 
+    (     e_1 d_2 e_2 ) 
+    (         e_2 d_3 )
+
+diag = (d_0 d_1 d_2 d_3)
+subdiag =  (e_0 e_1 e_2)
+</pre>
+<p>
+<a name="solve_symm_cyc_tridiag"></a>
+<tt>GSL::Linalg#solve_symm_cyc_tridiag</tt><br>
+<tt>A.solve_symm_cyc_tridiag(diag, e, b) -> x</tt><br>
+This function solves the general N-by-N system A x = b where A is symmetric
+cyclic tridiagonal. The form of A for the 4-by-4 case is shown below,
+<pre>
+A = ( d_0 e_0     e_3 ) 
+    ( e_0 d_1 e_1     ) 
+    (     e_1 d_2 e_2 ) 
+    (e_3      e_2 d_3 )
+
+diag = (d_0 d_1 d_2 d_3)
+e    = (e_0 e_1 e_2 e_3)
+</pre>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'; require 'gsl_linalg'
+eps = 1.0e-15
+
+puts "solve_symm_tridiag"
+a = Matrix.new([1,3,4,5],
+               [3,2,8,9],
+	       [4,8,3,7],
+	       [5,9,7,6])
+tm, tau = a.symmtd_decomp
+q, d, sd = tm.symmtd_unpack(tau)
+t = q.t * a * q
+b = Vector.new([1,2,3,4])
+x = Linalg::solve_symm_tridiag(d,sd,b)
+assert t * x =~ [b, 1.0e-14]
+
+puts "solve_symm_cyc_tridiag"
+
+t2 = Matrix.new([1,3,0,5],
+                [3,2,8,0],
+        	[0,8,3,7],
+	        [5,0,7,6])
+
+d2 = t2.subdiagonal(0)
+e2 = Vector.new([3,8,7,5])
+x2 = Linalg::solve_symm_cyc_tridiag(d2,e2,b)
+assert t2 * x2 =~ b
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>References and Further Reading</h3>
+
+Further information on the algorithms described in this section can be
+found in the following book,
+<br>
+ G. H. Golub, C. F. Van Loan, Matrix Computations (3rd Ed, 1996),
+Johns Hopkins University Press, ISBN 0-8018-5414-8.
+<p>
+The LAPACK library is described in,
+<br>
+LAPACK Users' Guide (Third Edition, 1999), Published by SIAM, ISBN
+0-89871-447-8. 
+<a href="http://www.netlib.org/lapack">http://www.netlib.org/lapack</a>
+<br>
+The LAPACK source code can be found at the website above, along with an
+online copy of the users guide.
+<p>
+The Modified Golub-Reinsch algorithm is described in the following paper,
+<p>
+T.F. Chan, "An Improved Algorithm for Computing the Singular Value
+Decomposition", ACM Transactions on Mathematical Software, 8 (1982),
+pp 72--83.
+<p>
+The Jacobi algorithm for singular value decomposition is described in
+the following papers,
+<br>
+J.C.Nash, "A one-sided transformation method for the singular value
+decomposition and algebraic eigenproblem", Computer Journal, Volume 18,
+Number 1 (1973), p 74--76 * James Demmel, Kresimir Veselic, "Jacobi's
+Method is more accurate than QR", Lapack Working Note 15 (LAWN-15),
+October 1989. Available from netlib, 
+<a href="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</a>
+in the lawns or lawnspdf directories.
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="eigen.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Linear Algebra</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

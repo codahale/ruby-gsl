@@ -1,0 +1,172 @@
+To use ruby-gsl you need Ruby and GSL :-)
+
+ruby-gsl is separated into several modules which reflect the different 
+classes of functions in GSL. The top module is GSL, all other modules 
+are mostly called after the class of functions they contain.
+
+Usually a function named gsl_<module>_<name> resides in 
+module <module> and is called <name>, e.g.:
+gsl_poly_solve_quadratic -> GSL::Poly::solve_quadratic
+
+1. Special Functions
+--------------------
+The many special functions like Airy, Bessel, etc. are all grouped 
+into the module Special and each build a sub-module there:
+gsl_sf_bessel_j0 -> GSL::Special::Bessel::j0
+
+Here are some differences between the functions of GSL and ruby-gsl:
+
+Module     | GSL           | ruby-gsl   | Note
+====================================================================
+Poly       | eval          | evaluate   | do not override Ruby's eval
+           | solve         | ..         | return arrays
+--------------------------------------------------------------------
+Coupling   | 3j            | wigner_3j  | function names cannot start
+           | 6j            | wigner_6j  |   with numbers
+           | 9j            | wigner_9j  | 
+--------------------------------------------------------------------
+ExpInt     | 3             | Ei3        | dto.
+--------------------------------------------------------------------
+FermiDirac | 0             | F0         | dto.
+           | 1             | F1         |  
+           | 2             | F2         | 
+           | 3half         | F3half     | 
+           | m1            | Fm1        | same naming scheme for all
+           | mhalf         | Fmhalf     |   functions within a module
+           | half          | Fhalf      | 
+           | int           | Fint       | 
+           | inc_0         | Finc_0     | 
+--------------------------------------------------------------------
+Gegenbauer | gegenpoly_1   | poly_1     | shorter name
+           | gegenpoly_2   | poly_2     |
+           | gegenpoly_3   | poly_3     |
+           | gegenpoly_n   | poly_n     |
+--------------------------------------------------------------------
+Hyperg     | 0F1           | F01        | function names cannot start
+           | 1F1           | F11        |   with numbers
+           | 1F1_int       | F11_int    |
+           | etc.          |            |
+--------------------------------------------------------------------
+Laguerre   | 1             | L1         | dto.
+           | 2             | L2         |
+           | etc.          |            |
+--------------------------------------------------------------------
+Legendre   | conicalP_0    | P0         | moved to module Conical
+           | conicalP_1    | P1         | 
+           | etc.          |            |
+--------------------------------------------------------------------
+Log        | log_1plusx    | log_1px    | shorter name
+           | log_1plusx_mx | log_1px_mx | 
+--------------------------------------------------------------------
+Synchrotron| 1             | S1         |
+           | 2             | S2         |
+--------------------------------------------------------------------
+Transport  | 2             | J2         |
+           | 3             | J3         |
+           | etc.          |            |
+--------------------------------------------------------------------
+
+The _e functions return a Result object, so
+
+C:
+int gsl_sf_dilog_e(const double x, gsl_sf_result * result);
+
+Ruby:
+r = Special::Dilog::dilog_e(x)
+puts r.val
+puts r.err
+
+Functions that take pointers to double in C to return several
+values return an array in Ruby:
+
+C:
+int gsl_sf_elljac_e(double u, double m, double * sn, double * cn, double * dn);
+
+Ruby:
+sn, cn, dn = Special::EllJac::e(u, m)
+
+2. Stats
+--------
+The functions in module Stats all take less arguments than its
+GSL C counterparts, because you don't have to provide an argument
+for the length of the data arrays. We get this value from 
+RARRAY(data)->len.
+It might be nice to make the Stats module includable into the
+Ruby Array class. See array.rb in the test directory for
+a quick hack. This way you can say
+
+a = [1,2,3,4,5,6]
+puts a.mean
+
+instead of
+
+puts GSL::Stats::mean a, 1
+
+3. Permutation, Combinations
+----------------------------
+The class Permutation maps the GSL functions to a more rubyesque
+way, i.e. methods which work on a permutation return the
+permutation object and not the GSL error codes. The latter are
+rather sent back with an exception if necessary. This makes using
+the Permutation class straight-forward:
+
+perm = Permutation.new(10)
+perm.swap(2,4).swap(3,5)
+perm.fprintf(STDOUT, " %u")
+perm.next.next
+perm.dump
+
+Also you might want to use perm.each which iterates through
+all permutations insteads of using perm.next/perm.prev.
+The method dump writes to STDOUT with format " %u", while
+undump reads from STDIN.
+
+Combinations are mostly like Permutations. They have a each
+method and a reverse_each as well. Use the new2 constructor
+if you don't want to call the initialization implicitly (same
+as with Permutation).
+
+4. Complex
+----------
+The class Complex was implemented although Ruby already has support
+for complex numbers. However the GSL offers more functions for
+complex numbers. Also using the GSL functions offers significant
+speed-up compared to the original Ruby functions.
+
+You can create GSL::Complex objects from Ruby Complex objects with
+the new method, from rectangular coordinates with new2, and from
+polar coordinates with new3. The methods add, sub, mul, and div
+have aliases +, -, *, and /.
+
+5. Error handling
+-----------------
+I haven't come up with a satisfying solution for error handling.
+Right now, some functions throw exceptions if the arguments
+are wrong. There is also the possibility to install a different
+error handler so that most GSL errors will raise an exception,
+which can be handled as usual:
+
+GSL::set_handler(ERR_RUBY)
+begin
+  r = Special::Legendre::Q1_e(x)
+  show "Q1_e", x, r
+rescue GSLException
+  puts "Ouch: #{$!}"
+end
+
+See test/error.rb for further details.
+
+6. Input/Output
+---------------
+Some classes offer fprintf/fscanf methods (e.g. Hist, Permutation, ...).
+This does not integrate with Ruby very nicely. Maybe it should be converted
+so it can used with Ruby's serialization mechanism (Marshal). However in 
+the meantime, you can at least exchange data written by other GSL programs 
+using fprintf etc.
+
+7. Miscellaneous
+----------------
+Have a look at the test files to get an idea how to use ruby-gsl.
+Also there is some documentation listing classes/modules with
+their methods/functions and constants.
+

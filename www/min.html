@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: min.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: min.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+# Test class Minimizer
+
+STDERR.puts "Running minimization tests (minimizer)..."
+
+  f = GSL::Function.new { |x| Special::Trig::cos(x) + 1.0 }
+
+[Minimizer::GOLDENSECTION, Minimizer::BRENT].each do |alg|
+
+  status = GSL_CONTINUE
+  iter = 0
+  max_iter = 100
+  m = 2.0
+  m_exp = GSL::Math::M_PI
+  a = 0.0
+  b = 6.0
+
+  s = Minimizer.new alg
+  s.set f, m, a, b
+
+  puts "\nUsing #{s} method"
+
+  printf "%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", 
+    "min", "err", "err(est)"
+
+  printf "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n", iter, a, b,
+    m, m - m_exp, b - a
+
+  while status == GSL_CONTINUE && iter < max_iter
+    iter += 1
+    status = s.iterate
+    m = s.minimum
+    a = s.x_lower
+    b = s.x_upper
+    status = Minimizer::test_interval(a, b, 0.0, 0.001)
+
+    puts "Converged:" if status == GSL_SUCCESS
+
+    printf "%5d [%.7f, %.7f] %.7f %+.7f %.7f\n", iter, a, b,
+      m, m - m_exp, b - a
+  end
+
+end
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

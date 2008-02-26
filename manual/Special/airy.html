@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Airy Functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="bessel.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Airy Functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Airy Functions</h1>
+<h3>Airy Functions and Derivatives</h3>
+
+The Airy functions Ai(x) and Bi(x) are defined by the integral representations,
+<pre>
+Ai(x) = (1/\pi) \int_0^\infty \cos((1/3) t^3 + xt) dt
+Bi(x) = (1/\pi) \int_0^\infty (e^(-(1/3) t^3) + \sin((1/3) t^3 + xt)) dt
+</pre>
+They satisfy the differential equation<br>
+<tt> d^2 f/dx^2 - x f = 0</tt><br>
+
+For further information see Abramowitz & Stegun, Section 10.4.
+
+<h4>Module Airy</h4>
+<a href="#Ai">Ai</a> ,&nbsp
+<a href="#Ai_deriv">Ai_deriv</a> ,&nbsp
+<a href="#Ai_deriv_scaled">Ai_deriv_scaled</a> ,&nbsp
+<a href="#Ai_scaled">Ai_scaled</a> ,&nbsp
+<a href="#Bi">Bi</a> ,&nbsp
+<a href="#Bi_deriv">Bi_deriv</a> ,&nbsp
+<a href="#Bi_deriv_scaled">Bi_deriv_scaled</a> ,&nbsp
+<a href="#Bi_scaled">Bi_scaled</a> ,&nbsp
+<a href="#zero_Ai">zero_Ai</a> ,&nbsp
+<a href="#zero_Ai_deriv">zero_Ai_deriv</a> ,&nbsp
+<a href="#zero_Bi">zero_Bi</a> ,&nbsp
+<a href="#zero_Bi_deriv">zero_Bi_deriv</a> ,&nbsp
+<p>
+
+<h4>Airy Functions</h4>
+<a name="Ai"></a>
+<tt>GSL::Special::Airy::Ai</tt><br>
+<tt>Airy::Ai(d1, mode) -> d2</tt><br>
+where d1 and d2 are doubles<br>
+<tt>GSL::Special::Airy::Ai_e</tt><br>
+<tt>Airy::Ai(d1, mode) -> res</tt><br>
+where d1  is a double and res is an object of the class Result;
+res.val and res.err are doubles.<br>
+(All the methods Special::function_e are similarly defined.)<br>
+These routines compute the Airy function Ai(x) with an accuracy specified by mode.
+<p>
+<a name="Bi"></a>
+<tt>GSL::Special::Airy::Bi</tt><br>
+<tt>Airy::Bi(d1, mode) -> d2</tt><br>
+<tt>GSL::Special::Airy::Bi</tt><br>
+These routines compute the Airy function Bi(x) with an accuracy specified by mode.
+<p>
+<a name="Ai_scaled"></a>
+<tt>GSL::Special::Airy::Ai_scaled</tt><br>
+<tt>GSL::Special::Airy::Ai_scaled_e</tt><br>
+<tt>Airy::Ai_scaled(d1, mode) -> d2</tt><br>
+These routines compute a scaled version of the Airy function S_A(x) Ai(x). 
+For x>0 the scaling factor S_A(x) is \exp(+(2/3) x^(3/2)), and is 1 for x<0.
+<p>
+<a name="Bi_scaled"></a>
+<tt>GSL::Special::Airy::Bi_scaled</tt><br>
+
+<tt>GSL::Special::Airy::Bi_scaled_e</tt><br>
+These routines compute a scaled version of the Airy function S_B(x) Bi(x). 
+For x>0 the scaling factor S_B(x) is exp(-(2/3) x^(3/2)), and is 1 for x<0.
+
+<h4>Derivatives of Airy Functions</h4>
+<a name="zero_Ai_deriv"></a>
+<tt>GSL::Special::Airy::zero_Ai_deriv</tt><br>
+<tt>Airy::Ai_deriv(d1, mode) -> d2</tt><br>
+<tt>GSL::Special::Airy::zero_Ai_deriv_e</tt><br>
+These routines compute the Airy function derivative Ai'(x) with an accuracy 
+specified by mode.
+<p>
+<a name="Bi_deriv"></a>
+<tt>GSL::Special::Airy::Bi_deriv</tt><br>
+<tt>Airy::Bi_deriv(d1, mode) -> d2</tt><br>
+These routines compute the Airy function derivative Bi'(x) with an accuracy 
+specified by mode.
+<a name="Ai_deriv_scaled"></a>
+<tt>GSL::Special::Airy::Ai_deriv_scaled</tt><br>
+<tt>GSL::Special::Airy::Ai_deriv_scaled_e</tt><br>
+<tt>Airy::Ai_deriv_scaled(d1, mode) -> d2</tt><br>
+These routines compute the derivative of the scaled Airy function S_A(x) Ai(x).
+<p>
+<a name="Bi_deriv_scaled"></a>
+<tt>GSL::Special::Airy::Bi_deriv_scaled</tt><br>
+<tt>GSL::Special::Airy::Bi_deriv_scaled_e</tt><br>
+<tt>Airy::Bi_deriv_scaled(d1, mode) -> d2</tt><br>
+These routines compute the derivative of the scaled Airy function S_B(x) Bi(x).
+<p>
+
+<h4>Zeros of Airy Functions</h4>
+<a name="zero_Ai"></a>
+<tt>GSL::Special::Airy::zero_Ai</tt><br>
+<tt>Airy::zero_Ai(s) -> Adouble</tt><br>
+<tt>GSL::Special::Airy::zero_Ai_e</tt><br>
+s is a positive integer.
+These routines compute the location of the s-th zero of the Airy function Ai(x).
+<p>
+<a name="zero_Bi"></a>
+<tt>GSL::Special::Airy::zero_Bi</tt><br>
+<tt>Airy::zero_Bi(s) -> Adouble</tt><br>
+<tt>GSL::Special::Airy::zero_Bi_e</tt><br>
+s is a positive integer.
+These routines compute the location of the s-th zero of the Airy function 
+Bi(x).
+<p>
+<h4>Zeros of Derivatives of Airy Functions</h4>
+<a name="zero_Ai_deriv"></a>
+<tt>GSL::Special::Airy::zero_Ai_deriv</tt><br>
+<tt>Airy::zero_Ai_deriv(s) -> Adouble</tt><br>
+<tt>GSL::Special::Airy::zero_Ai_deriv_e</tt><br>
+<p>
+
+<a name="zero_Bi_deriv"></a>
+<tt>GSL::Special::Airy::zero_Bi_deriv</tt><br>
+<tt>Airy::zero_Bi_deriv(s) -> Adouble</tt><br>
+<tt>GSL::Special::Airy::zero_Bi_deriv_e</tt><br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL::Special; include Math
+require 'gsl_util'
+
+printf "%.15f\n", Airy::Ai(0, PREC_DOUBLE) # 0.355028053887817
+assert Airy::Ai(0, PREC_DOUBLE) == Airy::Bi(0, PREC_DOUBLE)/sqrt(3)
+
+puts "precision modes"
+x = 3.0
+rd =  Airy::Ai(x, PREC_DOUBLE)
+p rd # 0.006591139357
+rs =  Airy::Ai(x, PREC_SINGLE); p rs - rd # 8.630422765e-14
+ra =  Airy::Ai(x, PREC_APPROX); p ra - rd # 8.630422765e-14
+
+r = Airy::Ai_e(x, PREC_DOUBLE)
+printf "%g (err = %g)\n", r.val, r.err # 0.00659114 (err = 1.08527e-17)
+assert r.class == GSL::Result
+
+rbi =  Airy::Bi(x, PREC_DOUBLE)
+p rbi # 14.03732896
+
+r = Airy::Bi_e(x, PREC_DOUBLE)
+printf "%g (err = %g)\n", r.val, r.err # 14.0373 (err = 2.29245e-14)
+
+rs = Airy::Ai_scaled(x, PREC_DOUBLE)
+assert rs =~ [rd*exp(2.0/3 * pow(x,3.0/2)), 1.0e-16]
+
+rs = Airy::Bi_scaled(x, PREC_DOUBLE)
+assert rs =~ [rbi*exp(-2.0/3 * pow(x,3.0/2)), 1.0e-16]
+puts "derivatives of Airy functions"
+x = 0.4
+p Airy::Ai_deriv(x, PREC_DOUBLE)		  
+p Airy::Bi_deriv(x, PREC_DOUBLE)
+p Airy::Ai_deriv_scaled(x, PREC_DOUBLE)
+p Airy::Bi_deriv_scaled(x, PREC_DOUBLE)
+
+puts "Zeros of Airy Functions"
+z1 = Airy::zero_Ai(1) 
+assert Airy::Ai(z1, PREC_DOUBLE) =~ [0, 1.0e-16]
+z2 = Airy::zero_Bi(1)
+assert Airy::Bi(z2, PREC_DOUBLE) =~ [0, 1.0e-16]
+z3 = Airy::zero_Ai_deriv(1)
+assert Airy::Ai_deriv(z3, PREC_DOUBLE) =~ [0, 1.0e-16]
+z4 = Airy::zero_Bi_deriv(1)
+assert Airy::Bi_deriv(z4, PREC_DOUBLE) =~ [0, 1.0e-16]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="bessel.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Airy Functions</td> 
+</tr></tbody></table><hr></body>
+</html>

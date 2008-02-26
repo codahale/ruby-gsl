@@ -1,0 +1,395 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+One dimensional Minimization</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href=".html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="solver.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">One dimensional Minimization</td> 
+</tr></tbody></table><hr><h1>
+One dimensional Minimization</h1>
+<hr>
+
+This chapter describes routines for finding minima of arbitrary
+one-dimensional functions. The library provides low level components for
+a variety of iterative minimizers and convergence tests. These can be
+combined by the user to achieve the desired solution, with full access
+to the intermediate steps of the algorithms. Each class of methods
+uses the same framework, so that you can switch between minimizers at
+runtime without needing to recompile your program. Each instance of a
+minimizer keeps track of its own state, allowing the minimizers to be
+used in multi-threaded programs.
+<p>
+The header file `gsl_min.h' contains prototypes for the minimization
+functions and related declarations. To use the minimization algorithms
+to find the maximum of a function simply invert its sign.  
+
+<h3>Overview</h3>
+
+The minimization algorithms begin with a bounded region known to contain a
+minimum. The region is described by an lower bound a and an upper bound b,
+with an estimate of the location of the minimum x.
+<br>
+The value of the function at x must be less than the value of the function
+at the ends of the interval,
+<br>
+f(a) > f(x) < f(b)
+<br>
+
+This condition guarantees that a minimum is contained somewhere within
+the interval. On each iteration a new point x' is selected using one of
+the available algorithms. If the new point is a better estimate of the
+minimum, f(x') < f(x), then the current estimate of the minimum x is
+updated. The new point also allows the size of the bounded interval to
+be reduced, by choosing the most compact set of points which satisfies
+the constraint f(a) > f(x) < f(b). The interval is reduced until it
+encloses the true minimum to a desired tolerance. This provides a best
+estimate of the location of the minimum and a rigorous error estimate.
+<br>
+Several bracketing algorithms are available within a single framework. The
+user provides a high-level driver for the algorithm, and the library
+provides the individual functions necessary for each of the steps. There
+are three main phases of the iteration. The steps are,
+<ul>
+<li>initialize minimizer state, s, for algorithm T 
+<li>update s using the iteration T 
+<li>test s for convergence, and repeat iteration if necessary
+</ul>
+The state for the minimizers is held in a gsl_min_fminimizer struct. The
+updating procedure uses only function evaluations (not derivatives).
+
+<h3>Caveats</h3>
+
+Note that minimization functions can only search for one minimum at a
+time. When there are several minima in the search area, the first minimum
+to be found will be returned; however it is difficult to predict which
+of the minima this will be. In most cases, no error will be reported if
+you try to find a minimum in an area where there is more than one.
+<br>
+With all minimization algorithms it can be difficult to determine the
+location of the minimum to full numerical precision. The behavior of
+the function in the region of the minimum x^* can be approximated by a
+Taylor expansion,
+<br>
+y = f(x^*) + (1/2) f"(x^*) (x - x^*)^2
+<br>
+and the second term of this expansion can be lost when added to the
+first term at finite precision. This magnifies the error in locating x^*,
+making it proportional to \sqrt \epsilon (where \epsilon is the relative
+accuracy of the floating point numbers). For functions with higher order
+minima, such as x^4, the magnification of the error is correspondingly
+worse. The best that can be achieved is to converge to the limit of
+numerical accuracy in the function values, rather than the location of
+the minimum itself.
+
+<h3>Class Minimizer</h3>
+<tt>GSL::Minimizer::new</tt><br>
+<tt>Minimizer.new(T) -> m1</tt><br>
+
+It returns an instance of a minimizer of type T. 
+<ul>The types are
+<li>Minimizer::GOLDENSECTION
+<br>
+The golden section algorithm is the simplest method of bracketing the
+minimum of a function. It is the slowest algorithm provided by the
+library, with linear convergence.
+<br>
+On each iteration, the algorithm first compares the subintervals from the
+endpoints to the current minimum. The larger subinterval is divided in a
+golden section (using the famous ratio (3-\sqrt 5)/2 = 0.3189660...) and
+the value of the function at this new point is calculated. The new
+value is used with the constraint f(a') > f(x') < f(b') to a select
+new interval containing the minimum, by discarding the least useful
+point. This procedure can be continued indefinitely until the interval is
+sufficiently small. Choosing the golden section as the bisection ratio can
+be shown to provide the fastest convergence for this type of algorithm.
+
+
+<li>Minimizer::BRENT
+<br>
+
+The Brent minimization algorithm combines a parabolic interpolation with
+the golden section algorithm. This produces a fast algorithm which is
+still robust.
+<br>
+The outline of the algorithm can be summarized as follows: on each
+iteration Brent's method approximates the function using an interpolating
+parabola through three existing points. The minimum of the parabola is
+taken as a guess for the minimum. If it lies within the bounds of the
+current interval then the interpolating point is accepted, and used to
+generate a smaller interval. If the interpolating point is not accepted
+then the algorithm falls back to an ordinary golden section step. The
+full details of Brent's method include some additional checks to improve
+convergence.
+
+</ul>
+<p>
+<a name="set"></a>
+<tt>GSL::Minimizer#set</tt><br>
+<tt>m1.set(f, min, x_lower, x_upper) -> status</tt> &sbsp; (Mutating)<br>
+
+This method sets,
+or resets, an existing minimizer m1 to use the function f and the initial
+search interval [x_lower, x_upper], with a guess for the location of
+the minimum x_minimum.
+
+If the interval given does not contain a minimum, then the function
+returns an error code of GSL_FAILURE.
+
+<p>
+<a name="set_with_values"></a>
+<tt>GSL::Minimizer#set_with_values</tt><br>
+<tt>m1.set_with_values(f, min, f_min, x_lower, f_lower, x_upper, f_upper) -> rn1</tt><br>
+This method is equivalent to gsl_min_fminimizer_set but uses 
+the values f_minimum, f_lower and f_upper 
+instead of computing f(x_minimum), f(x_lower) and f(x_upper).<br>
+(SKIPPED)<br>
+<p>
+<a name="name"></a>
+<tt>GSL::Minimizer#name</tt><br>
+<tt>m1.name() -> aString</tt><br>
+This method gives the name of the minimizer.
+
+<h3>Iteration</h3>
+
+The following functions drive the iteration of each algorithm. Each
+function performs one iteration to update the state of any minimizer of
+the corresponding type. The same functions work for all minimizers so
+that different methods can be substituted at runtime without modifications
+to the code.
+<p>
+<a name="iterate"></a>
+<tt>GSL::Minimizer#iterate</tt><br>
+<tt>m1.iterate() -> status</tt><br>
+
+This function performs a single iteration of the minimizer m1. 
+If the iteration
+encounters an unexpected problem then an error code will be returned,
+<ul><li>
+GSL_EBADFUNC <br>
+the iteration encountered a singular point where the
+function evaluated to Inf or NaN. 
+<li>GSL_FAILURE <br>
+the algorithm could not
+improve the current best approximation or bounding interval.
+</ul>
+
+The minimizer maintains a current best estimate of the position of the
+minimum at all times, and the current interval bounding the minimum. This
+information can be accessed with the following auxiliary functions,
+<p>
+<a name="x_minimum"></a>
+<tt>GSL::Minimizer#x_minimum</tt><br>
+<tt>m1.x_minimum() -> aDouble</tt><br>
+
+This method returns the current estimate of the position of the
+minimum for the minimizer m1.
+<p>
+<a name="x_upper"></a>
+<tt>GSL::Minimizer#x_upper</tt><br>
+<tt>m1.x_upper() -> aDouble</tt><br>
+
+<p>
+<a name="x_lower"></a>
+<tt>GSL::Minimizer#x_lower</tt><br>
+<tt>m1.x_lower() -> aDouble</tt><br>
+
+These methods return the current upper and lower bound of the
+interval for the minimizer s.
+<p>
+<a name="f_minimum"></a>
+<tt>GSL::Minimizer#f_minimum</tt><br>
+<tt>m1.f_minimum() -> aDouble</tt><br>
+
+<p>
+<a name="f_upper"></a>
+<tt>GSL::Minimizer#f_upper</tt><br>
+<tt>m1.f_upper() -> aDouble</tt><br>
+
+<p>
+<a name="f_lower"></a>
+<tt>GSL::Minimizer#f_lower</tt><br>
+<tt>m1.f_lower() -> aDouble</tt><br>
+
+These methods return the value of the function at the current estimate 
+of the minimum and at the upper and lower bounds of interval for the 
+minimizer m1.
+
+<h3>Stopping Parameters</h3>
+
+A minimization procedure should stop when one of the following conditions
+is true:
+<ul><li>
+A minimum has been found to within the user-specified precision.
+<li>A user-specified maximum number of iterations has been reached.  
+<li>An error has occurred.
+</ul>
+
+The handling of these conditions is under user control. The function
+below allows the user to test the precision of the current result.
+<p>
+<a name="test_interval"></a>
+<tt>GSL::Minimizer#test_interval</tt><br>
+<tt>m1.test_interval(x_lower, x_upper, epsabs, epsrel) -> status</tt><br>
+
+This function tests for the convergence of
+the interval [x_lower, x_upper] with absolute error epsabs and relative
+error epsrel. The test returns GSL_SUCCESS if the following condition
+is achieved,
+<br>
+|a - b| < epsabs + epsrel min(|a|,|b|)
+<br>
+when the interval x = [a,b] does not include the origin. If the interval
+includes the origin then \min(|a|,|b|) is replaced by zero (which is the
+minimum value of |x| over the interval). This ensures that the relative
+error is accurately estimated for minima close to the origin.
+<br>
+This condition on the interval also implies that any estimate of the
+minimum x_m in the interval satisfies the same condition with respect
+to the true minimum x_m^*,
+<br>
+|x_m - x_m^*| < epsabs + epsrel x_m^*
+<br>
+assuming that the true minimum x_m^* is contained within the interval.
+
+
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+include Math
+
+func = Function.new { |x| cos(x) + 1.0 }
+
+  status = GSL_CONTINUE
+  iter = 0
+  max_iter = 100
+  m = 2.0
+  m_exp = M_PI
+  a = 0.0
+  b = 6.0
+  y = func.eval m
+
+  min = Minimizer.new(Minimizer::BRENT)
+  min.set(func, m, a, b)
+  assert min.name == "brent"
+
+  printf "%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", 
+    "min", "y", "err", "err(est)"
+
+  printf "%5d [%.7f, %.7f] %.7f %.7f% +.7f %.7f\n",
+    iter, a, b, m, y, m - m_exp, b - a
+
+  while (status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter)
+    iter += 1
+    status = min.iterate
+    m = min.x_minimum
+    a = min.x_lower
+    b = min.x_upper
+    y = min.f_minimum
+    status = Minimizer::test_interval(a, b, 0.0, 0.001)
+
+    puts "Converged:" if status == GSL_SUCCESS
+
+    printf "%5d [%.7f, %.7f] %.7f %.7f %+.7f %.7f\n",
+      iter, a, b, m, y, m - m_exp, b - a
+  end
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<h3>Example</h3>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;#!/usr/local/bin/ruby
+
+# $Id: min.html,v 1.1 2003/09/20 12:24:48 pernici Exp $
+
+require "GSL"
+include GSL
+
+# Test class Minimizer
+
+STDERR.puts "Running minimization tests (minimizer)..."
+
+func = Function.new { |x| Special::Trig::cos(x) + 1.0 }
+
+[Minimizer::GOLDENSECTION, Minimizer::BRENT].each do |alg|
+
+  status = GSL_CONTINUE
+  iter = 0
+  max_iter = 100
+  m = 2.0
+  m_exp = Math::M_PI
+  a = 0.0
+  b = 6.0
+  y = func.eval m
+
+  min = Minimizer.new alg
+  min.set func, m, a, b
+
+  puts "\nUsing #{min} method"
+
+  printf "%5s [%9s, %9s] %9s %10s %9s\n", "iter", "lower", "upper", 
+    "min", "y", "err", "err(est)"
+
+  printf "%5d [%.7f, %.7f] %.7f %.7f% +.7f %.7f\n",
+    iter, a, b, m, y, m - m_exp, b - a
+
+  while status == GSL_CONTINUE &amp;&amp; iter &lt; max_iter
+    iter += 1
+    status = min.iterate
+    m = min.x_minimum
+    a = min.x_lower
+    b = min.x_upper
+    y = min.f_minimum
+    status = Minimizer::test_interval(a, b, 0.0, 0.001)
+
+    puts "Converged:" if status == GSL_SUCCESS
+
+    printf "%5d [%.7f, %.7f] %.7f %.7f %+.7f %.7f\n",
+      iter, a, b, m, y, m - m_exp, b - a
+  end
+
+end
+
+STDERR.puts "\ndone."
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>References and Further Reading</h3>
+Further information on Brent's algorithm is available in the following book,
+<ul><li>
+Richard Brent, Algorithms for minimization without derivatives, Prentice-Hall 
+(1973), republished by Dover in paperback (2002), ISBN 0-486-41998-3.
+</ul>
+    
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href=".html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="solver.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">One dimensional Minimization</td> 
+</tr></tbody></table><hr></body>
+</html>

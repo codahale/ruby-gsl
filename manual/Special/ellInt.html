@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Elliptic Integrals</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="ellJac.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="elementary.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Elliptic Integrals</td> 
+</tr></tbody></table><hr>
+<h1>
+Elliptic Integrals</h1>
+<h3>Module EllInt</h3>
+<a href="#D">D</a> ,&nbsp
+<a href="#E">E</a> ,&nbsp
+<a href="#Ecomp">Ecomp</a> ,&nbsp
+<a href="#F">F</a> ,&nbsp
+<a href="#Kcomp">Kcomp</a> ,&nbsp
+<a href="#P">P</a> ,&nbsp
+<a href="#RC">RC</a> ,&nbsp
+<a href="#RD">RD</a> ,&nbsp
+<a href="#RF">RF</a> ,&nbsp
+<a href="#RJ">RJ</a> ,&nbsp
+<p>
+<h4>Definition of Legendre Forms</h4>
+The Legendre forms of elliptic integrals F(\phi,k), E(\phi,k) and P(\phi,k,n) 
+are defined by,
+<pre>
+F(\phi,k) = \int_0^\phi dt 1/\sqrt((1 - k^2 \sin^2(t)))
+E(\phi,k) = \int_0^\phi dt   \sqrt((1 - k^2 \sin^2(t)))
+P(\phi,k,n) = \int_0^\phi dt 1/((1 + n \sin^2(t))\sqrt(1 - k^2 \sin^2(t)))
+</pre>
+The complete Legendre forms are denoted by K(k) = F(\pi/2, k) and 
+E(k) = E(\pi/2, k). Further information on the Legendre forms of elliptic 
+integrals can be found in Abramowitz & Stegun, Chapter 17. The notation 
+used here is based on Carlson, Numerische Mathematik 33 (1979) 1 and 
+differs slightly from that used by Abramowitz & Stegun.
+  
+<h4>Definition of Carlson Forms</h4>
+The Carlson symmetric forms of elliptical integrals 
+RC(x,y), RD(x,y,z), RF(x,y,z) and RJ(x,y,z,p) are defined by,
+<pre>
+RC(x,y) = 1/2 \int_0^\infty dt (t+x)^(-1/2) (t+y)^(-1)
+RD(x,y,z) = 3/2 \int_0^\infty dt (t+x)^(-1/2) (t+y)^(-1/2) (t+z)^(-3/2)
+RF(x,y,z) = 1/2 \int_0^\infty dt (t+x)^(-1/2) (t+y)^(-1/2) (t+z)^(-1/2)
+RJ(x,y,z,p) = 3/2 \int_0^\infty dt 
+                     (t+x)^(-1/2) (t+y)^(-1/2) (t+z)^(-1/2) (t+p)^(-1)
+</pre>
+
+<h4>Legendre Form of Complete Elliptic Integrals</h4>
+<a name="Kcomp"></a>
+<tt>GSL::Special::EllInt::Kcomp</tt><br>
+<tt>GSL::Special::EllInt::Kcomp_e</tt><br>
+<tt>EllInt::Kcomp(k, mode) -> d1</tt><br>
+k is a double.
+These routines compute the complete elliptic integral K(k) to the accuracy 
+specified by the mode variable <tt>mode</tt>.
+<p>
+<tt>GSL::Special::EllInt::Ecomp</tt><br>
+<tt>GSL::Special::EllInt::Ecomp_e</tt><br>
+<tt>EllInt::Ecomp(k, mode) -> d1</tt><br>
+k is a double.
+These routines compute the complete elliptic integral E(k) to the accuracy specified by the mode variable mode.
+<h4>Legendre Form of Incomplete Elliptic Integrals</h4>
+<a name="F"></a>
+<tt>GSL::Special::EllInt::F</tt><br>
+<tt>GSL::Special::EllInt::F_e</tt><br>
+<tt>EllInt::F(phi, k, mode) -> d1</tt><br>
+phi and k are doubles.
+These routines compute the incomplete elliptic integral F(\phi,k) to the 
+accuracy specified by the mode variable <tt>mode</tt>.
+<p>
+<a name="E"></a>
+<tt>GSL::Special::EllInt::E</tt><br>
+<tt>GSL::Special::EllInt::E_e</tt><br>
+<tt>EllInt::E(phi, k, mode) -> d1</tt><br>
+These routines compute the incomplete elliptic integral E(\phi,k) to the 
+accuracy specified by the mode variable mode.
+<p>
+<a name="P"></a>
+<tt>GSL::Special::EllInt::P</tt><br>
+<tt>GSL::Special::EllInt::P_e</tt><br>
+<tt>EllInt::P(phi, k, n, mode) -> d1</tt><br>
+phi, k and n are doubles.
+These routines compute the incomplete elliptic integral P(\phi,k,n) to the 
+accuracy specified by the mode variable mode.
+<p>
+<a name="D"></a>
+<tt>GSL::Special::EllInt::D</tt><br>
+<tt>GSL::Special::EllInt::D_e</tt><br>
+<tt>EllInt::D(phi, k, n, mode) -> d1</tt><br>
+These functions compute the incomplete elliptic integral D(\phi,k,n) which 
+is defined through the Carlson form RD(x,y,z) by the following relation,<br>
+    D(\phi,k,n) = RD (1-\sin^2(\phi), 1-k^2 \sin^2(\phi), 1).
+
+<h4>Carlson Forms</h4>
+<a name="RC"></a>
+<tt>GSL::Special::EllInt::RC</tt><br>
+<tt>GSL::Special::EllInt::RC_e</tt><br>
+<tt>EllInt::RC(x, y, mode) -> d1</tt><br>
+x and y are doubles.
+These routines compute the incomplete elliptic integral RC(x,y) to the 
+accuracy specified by the mode variable mode.
+<p>
+<a name="RD"></a>
+<tt>GSL::Special::EllInt::RD</tt><br>
+<tt>GSL::Special::EllInt::RD</tt><br>
+<tt>EllInt::RD(x, y, z, mode) -> d1</tt><br>
+x, y and z are doubles.
+These routines compute the incomplete elliptic integral RD(x,y,z) to the 
+accuracy specified by the mode variable mode.
+<p>
+<a name="RF"></a>
+<tt>GSL::Special::EllInt::RF</tt><br>
+<tt>GSL::Special::EllInt::RF</tt><br>
+<tt>EllInt::RF(x, y, z, mode) -> d1</tt><br>
+These routines compute the incomplete elliptic integral RF(x,y,z) to the accuracy specified by the mode variable mode.
+<p>
+<a name="RJ"></a>
+<tt>GSL::Special::EllInt::RJ</tt><br>
+<tt>GSL::Special::EllInt::RJ</tt><br>
+<tt>EllInt::RJ(x, y, z, p, mode) -> d1</tt><br>
+x, y, z and p are doubles.
+These routines compute the incomplete elliptic integral RJ(x,y,z,p) to the 
+accuracy specified by the mode variable mode.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+include GSL::Special
+include Math
+
+puts "Kcomp"
+x = 0.6
+# K(0.36) in Abramowitz+Stegun
+r = EllInt::Kcomp(x, PREC_DOUBLE)
+printf("%.18f\n", r)
+
+puts "Ecomp"
+r = EllInt::Ecomp(x, PREC_DOUBLE)
+# E(0.36) in Abramowitz+Stegun
+printf("%.18f\n", r)
+puts "Ecomp_e"
+r = EllInt::Ecomp_e(x, PREC_DOUBLE)
+printf("%.18f\n", r.val); p r.err
+
+puts "F"
+#E(\phi,k) = \int_0^\phi dt   \sqrt((1 - k^2 \sin^2(t)))
+phi = M_PI/3
+#alpha = M_PI/6; k = sin(alpha)
+k = 0.5
+r = EllInt::F(phi,k, PREC_DOUBLE)
+p r
+
+puts "E"
+r = EllInt::E(phi,k, PREC_DOUBLE)
+p r
+
+puts "P"
+n = -0.4
+r = EllInt::P(phi,k, n, PREC_DOUBLE)
+p r
+
+puts "D"
+r = EllInt::D(phi,k, n, PREC_DOUBLE)
+p r
+
+puts "RC"
+x = 0.4; y = 0.7
+r = EllInt::RC(x, y, PREC_DOUBLE)
+p r
+
+puts "RD"
+z = 0.8
+r = EllInt::RD(x, y, z, PREC_DOUBLE)
+p r
+
+puts "RF"
+z = 0.8
+r = EllInt::RF(x, y, z, PREC_DOUBLE)
+p r
+
+puts "RJ"
+p = 0.9
+r = EllInt::RJ(x, y, z, p, PREC_DOUBLE)
+p r
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="ellJac.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="elementary.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Elliptic Integrals</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

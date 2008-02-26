@@ -1,0 +1,1272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Histograms</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="ntuple.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="stats.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Histograms</td> 
+</tr></tbody></table><hr><h1>
+Histograms</h1>
+<hr>
+This chapter describes functions for creating histograms. Histograms
+provide a convenient way of summarizing the distribution of a set of
+data. A histogram consists of a set of bins which count the number of
+events falling into a given range of a continuous variable x. In GSL the
+bins of a histogram contain floating-point numbers, so they can be used
+to record both integer and non-integer distributions. The bins can use
+arbitrary sets of ranges (uniformly spaced bins are the default). Both
+one and two-dimensional histograms are supported.
+<p>
+Once a histogram has been created it can also be converted into a
+probability distribution function. The library provides efficient routines
+for selecting random samples from probability distributions. This can
+be useful for generating simulations based real data.
+<p>
+The functions are declared in the header files `gsl_histogram.h' and
+`gsl_histogram2d.h'.
+
+<h3>The histogram struct</h3>
+A histogram is defined by the following struct,
+<br>
+Data Type: gsl_histogram
+<ul>
+<li>size_t n <br>
+This is the number of histogram bins 
+<li>
+double * range <br>
+The ranges of the bins are stored in an array of n+1 elements pointed to
+by range. 
+<li>
+double * bin <br>
+The counts for each bin are stored in an array
+of n elements pointed to by bin. The bins are floating-point numbers,
+so you can increment them by non-integer values if necessary.
+</ul>
+The range for bin[i] is given by range[i] to range[i+1]. 
+For n bins there
+are n+1 entries in the array range. Each bin is inclusive at the lower
+end and exclusive at the upper end. Mathematically this means that the
+bins are defined by the following inequality,
+<br>
+bin[i] corresponds to range[i] <= x < range[i+1]
+<br>
+Here is a diagram of the correspondence between ranges and bins on the
+number-line for x,
+<pre>
+[ bin[0] )[ bin[1] )[ bin[2] )[ bin[3] )[ bin[5] )
+  ---|---------|---------|---------|---------|---------|---  x
+    r[0]      r[1]      r[2]      r[3]      r[4]      r[5]
+</pre>
+
+<h2>Class Hist</h3>
+The class Hist is a wrapper of the struct gsl_histogram; it is a subclass
+of the module Histogram.
+
+<h3>Class methods</h3>
+<a name="new"></a>
+<tt>GSL::Histogram::Hist::new</tt><br>
+<tt>Hist::new(n) -> h1</tt><br>
+integer n<br>
+It gives an histogram h1 with n bins.<br>
+<a name="new2"></a>
+<tt>GSL::Histogram::Hist::new2</tt><br>
+<tt>Hist::new2(n, xmin, xmax) -> h1</tt><br>
+Return an instance h1 of the Hist class, in which the ranges are chosen in
+such a way to cover the range xmin to xmax uniformly. 
+The bin ranges are shown in the table below,
+<pre>
+bin[0] corresponds to xmin <= x < xmin + d
+bin[1] corresponds to xmin + d <= x < xmin + 2 d
+......
+bin[n-1] corresponds to xmin + (n-1)d <= x < xmax
+</pre>	
+where d is the bin spacing, d = (xmax-xmin)/n.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL::Histogram
+
+puts "new"
+h = Hist.new(10)
+v = [7, 7, 5, 1, 3, 5, 2, 4, 4, 4, 7, 7, 1, 9]
+hs = Hash.new(0)
+v.each do |x|
+  h.increment(x)
+  hs[x] += 1
+end
+h.dump
+
+10.times{|i| assert h[i] == hs[i]} 
+assert h.get(3) == 1
+
+puts "new2"
+h2 = Hist.new2(4,0,10)
+v.each {|x| h2.increment(x) }
+h2.dump
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<h3>Instance methods</h3>
+
+<h4>Updating and accessing histogram elements</h4>
+
+There are two ways to access histogram bins, either by specifying an
+x coordinate or by using the bin-index directly. The functions for
+accessing the histogram through x coordinates use a binary search to
+identify the bin which covers the appropriate range.
+<p>
+<a name="increment"></a>
+<tt>GSL::Histogram::Hist#increment</tt><br>
+<tt>h.increment(x)-> h</tt><br>
+double x<br>
+This function updates the histogram h by adding one (1.0) to the bin
+whose range contains the coordinate x.
+<br>
+If x lies in the valid range of the histogram then the function returns
+zero to indicate success. If x is less than the lower limit of the
+histogram then the function returns GSL_EDOM, and none of bins are
+modified. Similarly, if the value of x is greater than or equal to the
+upper limit of the histogram then the function returns GSL_EDOM, and
+none of the bins are modified. The error handler is not called, however,
+since it is often necessary to compute histogram for a small range of
+a larger dataset, ignoring the values outside the range of interest.
+<p>
+<a name="accumulate"></a>
+<tt>GSL::Histogram::Hist#accumulate</tt><br>
+<tt>h.accumulate(x, w) -> h</tt><br>
+double x, w<br>
+This function is similar to gsl_histogram_increment but
+increases the value of the appropriate bin in the histogram h by the
+floating-point number <tt>weight</tt> instead of 1.0 .
+<p>
+<a name="get"></a>
+<tt>GSL::Histogram::Hist#get</tt><br>
+<tt>h.get(i) -> aDouble</tt><br>
+integer i<br>
+This function returns the contents of the ith bin of the histogram h. If
+i lies outside the valid range of indices for the histogram then the
+error handler is called. 
+<p>
+<a name="get_range"></a>
+<tt>GSL::Histogram::Hist#get_range</tt><br>
+<tt>h.get_range(i) -> [lower, upper]</tt><br>
+integer i; double lower, upper<br>
+This function finds the upper and lower
+range limits of the ith bin of the histogram h. If the index i is valid
+then the corresponding range limits are stored in lower and upper. The
+lower limit is inclusive (i.e. events with this coordinate are included in
+the bin) and the upper limit is exclusive (i.e. events with the coordinate
+of the upper limit are excluded and fall in the neighboring higher bin,
+if it exists). 
+If i lies outside the valid range of indices for the histogram then the error
+handler is called.
+<p>
+<a name="max"></a>
+<tt>GSL::Histogram::Hist#max</tt><br>
+<tt>h.max() -> aDouble</tt><br>
+This method return the max value of the range of the histogram.
+<p>
+<a name="min"></a>
+<tt>GSL::Histogram::Hist#min</tt><br>
+<tt>h.min() -> aDouble</tt><br>
+This method return the min value of the range of the histogram.
+<p>
+<a name="bins"></a>
+<tt>GSL::Histogram::Hist#bins</tt><br>
+<tt>h.bins() -> anInteger</tt><br>
+This method returns the number of bins of the histogram h.
+<p>
+<a name="reset"></a>
+<tt>GSL::Histogram::Hist#reset</tt><br>
+<tt>h.reset() -> h</tt><br>
+This function resets all the bins in the histogram h to zero.
+
+<h3>Searching histogram ranges</h3>
+
+The following methods are used by the access and update routines to
+locate the bin which corresponds to a given x coordinate.
+<p>
+<a name="find"></a>
+<tt>GSL::Histogram::Hist#find</tt><br>
+<tt>h.find(x) -> anInteger</tt><br>
+double x<br>
+This method finds and sets the index i to the bin number
+which covers the coordinate x in the histogram h. The bin is located
+using a binary search. The search includes an optimization for histograms
+with uniform range, and will return the correct bin immediately in this
+case. 
+If x lies outside the valid range of the histogram then an exception is raised.
+
+<h4>Histogram Statistics</h4>
+
+<a name="max_val"></a>
+<tt>GSL::Histogram::Hist#max_val</tt><br>
+<tt>h.max_val() -> aDouble</tt><br>
+
+This function returns the maximum value contained in the histogram bins.
+<p>
+<a name="max_bin"></a>
+<tt>GSL::Histogram::Hist#max_bin</tt><br>
+<tt>h.max_bin() -> anInteger</tt><br>
+
+This function returns the index of the bin containing the maximum value. In
+the case where several bins contain the same maximum value the smallest
+index is returned.
+<p>
+<a name="min_val"></a>
+<tt>GSL::Histogram::Hist#min_val</tt><br>
+<tt>h.min_val() -> aDouble</tt><br>
+
+This function returns the minimum value contained in the histogram bins.
+<p>
+<a name="min_bin"></a>
+<tt>GSL::Histogram::Hist#min_bin</tt><br>
+<tt>h.min_bin() -> anInteger</tt><br>
+
+This function returns the index of the bin containing the minimum value. In
+the case where several bins contain the same maximum value the smallest
+index is returned.
+<p>
+<a name="mean"></a>
+<tt>GSL::Histogram::Hist#mean</tt><br>
+<tt>h.mean() -> aDouble</tt><br>
+
+This function returns the mean of the histogrammed variable, where the
+histogram is regarded as a probability distribution. Negative bin values
+are ignored for the purposes of this calculation. The accuracy of the
+result is limited by the bin width.
+<p>
+<a name="sigma"></a>
+<tt>GSL::Histogram::Hist#sigma</tt><br>
+<tt>h.sigma() -> aDouble</tt><br>
+
+This function returns the standard deviation of the histogrammed variable,
+where the histogram is regarded as a probability distribution. Negative
+bin values are ignored for the purposes of this calculation. The accuracy
+of the result is limited by the bin width.
+<p>
+<a name="sum"></a>
+<tt>GSL::Histogram::Hist#sum</tt><br>
+<tt>h.sum() -> aDouble</tt><br>
+
+This function returns the sum of all bin values. 
+Negative bin values are included in the sum.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include GSL::Histogram
+
+h = Hist.new(10)
+v = [7, 7, 5, 1, 3, 5, 2, 4, 4, 4, 7, 7, 1, 9]
+
+puts "increment"
+v.each{ |x| h.increment(x) }
+
+assert h.find(3) == 3
+
+puts "max_val, min_val, max_bin, min_bin"
+assert h.max_val == 4 &amp;&amp; h.min_val
+assert h.max_bin == 7 &amp;&amp; h[7] == 4 &amp;&amp; h.min_bin == 0
+
+puts "mean"
+sum = 0; 10.times{|i| sum += (i+0.5) * h.get(i)}; sum /= v.size
+mean = h.mean
+assert sum == mean
+p mean
+
+puts "sigma"
+p h.sigma
+
+puts "h.n"
+n = h.n
+assert n == 10
+
+mean1 = 0.0
+wsum = 0.0; 
+10.times do |i|
+  xi = (h.range(i+1) + h.range(i)) / 2
+  wi = h.bin(i)
+  if (wi &gt; 0)
+    wsum += wi
+    mean1 += (xi - mean1) * (wi / wsum)
+  end
+end
+
+assert mean1 == h.mean
+
+sigma1 = nil
+wsum = 0; wvariance = 0
+10.times do |i|
+  #  xi = (i + 0.5)
+  xi = (h.range(i+1) + h.range(i)) / 2
+  wi = h.bin(i)
+  if (wi &gt; 0)
+    delta = xi - mean
+    wsum += wi
+    wvariance += (delta * delta - wvariance) * (wi / wsum)
+  end
+  sigma1 = Math::sqrt(wvariance)
+end
+
+assert sigma1 == h.sigma
+
+assert h.sum == 14
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Histogram Operations</h3>
+
+<a name="equal_bins_p"></a>
+<tt>GSL::Histogram::Hist#equal_bins_p</tt><br>
+<tt>h1.equal_bins_p(h2) -> bool</tt><br>
+
+This function returns 1 if the all of the individual
+bin ranges of the two histograms are identical, and 0 otherwise.
+<p>
+<a name="add"></a>
+<tt>GSL::Histogram::Hist#add</tt>&nbsp; (Mutating)<br>
+<tt>h1.add(h2) -> h1</tt><br>
+
+This function adds the contents of the bins in histogram h2 to the
+corresponding bins of histogram h1, i.e. h'_1(i) = h_1(i) + h_2(i). The
+two histograms must have identical bin ranges.
+<p>
+<a name="sub"></a>
+<tt>GSL::Histogram::Hist#sub</tt>&nbsp; (Mutating)<br>
+<tt>h1.sub(h2) -> h1</tt><br>
+
+This function subtracts the contents of the bins in histogram h2
+from the corresponding bins of histogram h1, i.e. 
+h'_1(i) = h_1(i) - h_2(i). 
+The two histograms must have identical bin ranges.
+<p>
+<a name="mul"></a>
+<tt>GSL::Histogram::Hist#mul</tt>&nbsp; (Mutating)<br>
+<tt>h1.mul(h2) -> h1</tt><br>
+
+This function multiplies the contents of the bins of histogram h1
+by the contents of the corresponding bins in histogram h2, i.e. h'_1(i)
+= h_1(i) * h_2(i). The two histograms must have identical bin ranges.
+
+<p>
+<a name="div"></a>
+<tt>GSL::Histogram::Hist#div</tt>&nbsp; (Mutating)<br>
+<tt>h1.div(h2) -> h1</tt><br>
+
+This function divides the contents of the bins of histogram h1 by
+the contents of the corresponding bins in histogram h2, i.e. h'_1(i) =
+h_1(i) / h_2(i). The two histograms must have identical bin ranges.
+<p>
+<a name="scale"></a>
+<tt>GSL::Histogram::Hist#scale</tt>&nbsp; (Mutating)<br>
+<tt>h.scale(scale) -> h</tt><br>
+double scale<br>
+This function multiplies the contents of the bins of histogram h by the
+constant scale, i.e. h'_1(i) = h_1(i) * scale.
+<p>
+<a name="shift"></a>
+<tt>GSL::Histogram::Hist#shift</tt>&nbsp; (Mutating)<br>
+<tt>h.shifti(offset) -> h</tt><br>
+
+This function shifts the contents of the bins of histogram h by the
+constant offset, i.e. h'_1(i) = h_1(i) + offset.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include GSL::Histogram
+
+h = Hist.new(10)
+v = [7, 7, 5, 1, 3, 5, 2, 4, 4, 4, 7, 7, 1, 9]
+v.each{ |x| h.increment(x) }
+w = []; 10.times{|i| w[i] = h.get(i)}
+
+h_dup = h.clone
+assert h_dup.equal_bins_p(h)
+
+h1 = Hist.new(10)
+v1 = [7, 7, 5, 2, 3, 5, 2, 4, 5, 4, 7, 7, 1, 4]
+v1.each{ |x| h1.increment(x) }
+w1 = []; 10.times{|i| w1[i] = h1.get(i)}
+
+h.add(h1)
+w2 = []; 10.times{|i| w2[i] = h.get(i)}
+10.times{|i| assert w2[i] == w[i] + w1[i]}
+h.sub(h1)
+10.times{|i| assert h[i] == w[i]}
+
+h.mul(h1)
+10.times{|i| assert h[i] == w[i] * w1[i]}
+h.div(h1)
+10.times{|i| assert(h[i] == w[i]) if h1[i] != 0 }
+
+h1.scale(2.5)
+10.times{|i| assert h1[i] == w1[i] * 2.5}
+
+h1.shift(0.3)
+10.times{|i| assert h1[i] == w1[i] * 2.5 + 0.3}
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Reading and writing histograms</h3>
+
+The library provides functions for reading and writing histograms to a
+file as binary data or formatted text.
+<a name="fwrite"></a>
+<tt>GSL::Histogram::Hist#fwrite</tt><br>
+<tt>h.fwrite(stream) -> h</tt><br>
+
+This function writes the ranges and bins of the histogram h to the
+stream <tt>stream</tt> in binary format.
+Since the data is written in the native binary format 
+it may not be portable between different architectures.
+<p>
+<a name="fread"></a>
+<tt>GSL::Histogram::Hist#fread</tt><br>
+<tt>h.fread(stream) -> h</tt><br>
+
+This function reads into the histogram h from the open stream stream in
+binary format. The histogram h must be preallocated with the correct
+size since the function uses the number of bins in h to determine how
+many bytes to read.  The data is assumed to
+have been written in the native binary format on the same architecture.
+
+<p>
+<a name="fprintf"></a>
+<tt>GSL::Histogram::Hist#fprintf</tt><br>
+<tt>h.fprintf(stream, range_format, bin_format) -> h</tt><br>
+
+
+Function: int gsl_histogram_fprintf (FILE * stream, const gsl_histogram
+* h, const char * range_format, const char * bin_format) 
+This method
+writes the ranges and bins of the histogram h line-by-line to the stream
+<tt>stream</tt> using the format specifiers range_format and bin_format. These
+should be one of the %g, %e or %f formats for floating point numbers. The
+function returns 0 for success and GSL_EFAILED if there was a problem
+writing to the file. The histogram output is formatted in three columns,
+and the columns are separated by spaces, like this,
+<pre>
+range[0] range[1] bin[0] 
+range[1] range[2] bin[1] 
+range[2] range[3] bin[2] 
+....  
+range[n-1] range[n] bin[n-1]
+</pre>
+The values of the ranges are formatted using range_format and the value
+of the bins are formatted using bin_format. Each line contains the
+lower and upper limit of the range of the bins and the value of the bin
+itself. Since the upper limit of one bin is the lower limit of the next
+there is duplication of these values between lines but this allows the
+histogram to be manipulated with line-oriented tools.
+<p>
+<a name="fscanf"></a>
+<tt>GSL::Histogram::Hist#fscanf</tt><br>
+<tt>h.fscanf(stream) -> h</tt><br>
+
+This function reads formatted data from the stream stream into the
+histogram h. The data is assumed to be in the three-column format used
+by gsl_histogram_fprintf. The histogram h must be preallocated with the
+correct length since the function uses the size of h to determine how
+many numbers to read. The function returns 0 for success and GSL_EFAILED
+if there was a problem reading from the file.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include GSL::Histogram
+
+h = Hist.new(10)
+v = [7, 7, 5, 1, 3, 5, 2, 4, 4, 4, 7, 7, 1, 9]
+v.each{ |x| h.increment(x) }
+
+File.open("dump", "w"){|f| h.fwrite(f)}
+h1 = Hist.new(10)
+File.open("dump"){|f| h.fread(f)}
+assert h1.equal_bins_p(h)
+
+File.open("data","w"){|f| h.fprintf(f, "%g", "%g")}
+
+h2 = Hist.new(10)
+File.open("data"){|f| h2.fscanf(f)}
+assert h2.equal_bins_p(h)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Resampling from histograms</h3>
+
+A histogram made by counting events can be regarded as a measurement of
+a probability distribution. Allowing for statistical error, the height
+of each bin represents the probability of an event where the value of
+x falls in the range of that bin. The probability distribution function
+has the one-dimensional form p(x)dx where,
+<br>
+p(x) = n_i/ (N w_i)
+<br>
+In this equation n_i is the number of events in the bin which contains
+x, w_i is the width of the bin and N is the total number of events. The
+distribution of events within each bin is assumed to be uniform.
+
+<h4>The histogram probability distribution struct</h4>
+
+The probability distribution function for a histogram consists of a set
+of bins which measure the probability of an event falling into a given
+range of a continuous variable x. A probability distribution function is
+defined by the following struct, which actually stores the cumulative
+probability distribution function. This is the natural quantity for
+generating samples via the inverse transform method, because there is
+a one-to-one mapping between the cumulative probability distribution
+and the range [0,1]. It can be shown that by taking a uniform random
+number in this range and finding its corresponding coordinate in the
+cumulative probability distribution we obtain samples with the desired
+probability distribution.
+<ul>Data Type: gsl_histogram_pdf 
+<li>
+size_t n <br>
+This is the number of bins used to approximate the probability
+distribution function. 
+<li>double * range <br>
+The ranges of the bins are stored in
+an array of n+1 elements pointed to by range. 
+<li>double * sum <br>
+The cumulative
+probability for the bins is stored in an array of n elements pointed to
+by sum.
+</ul>
+<p>
+The following functions allow you to create a gsl_histogram_pdf struct
+which represents this probability distribution and generate random samples
+from it.  Function: gsl_histogram_pdf * gsl_histogram_pdf_alloc (size_t
+n) This function allocates memory for a probability distribution with
+n bins and returns a pointer to a newly initialized gsl_histogram_pdf
+struct. If insufficient memory is available a null pointer is returned
+and the error handler is invoked with an error code of GSL_ENOMEM.
+<p>
+The class Hist_PDF, subclass of the module Histogram.
+<p>
+<a name="Hist_PDF::initialize"></a>
+<tt>GSL::Histogram::Hist_PDF::initialize</tt><br>
+SKIPPED<br>
+Function: int gsl_histogram_pdf_init (gsl_histogram_pdf * p, const
+gsl_histogram * h) 
+<p>
+<a name="Hist_PDF::new"></a>
+<tt>GSL::Histogram::Hist_PDF::new</tt><br>
+<tt>Hist_PDF.new(h) -> p</tt><br>
+Hist h; Hist_PDF p<br>
+This function initializes the probability distribution
+p with the contents of the histogram h. 
+If any of the bins of h are
+negative then the error handler is invoked
+because a probability distribution cannot contain negative values.
+<p>
+<a name="Hist_PDF#sample"></a>
+<tt>GSL::Histogram::Hist_PDF#sample</tt><br>
+<tt>p.sample(r) -> p</tt><br>
+Hist_PDF p; double r<br>
+This function uses r, a uniform random number between zero and one, 
+to compute a single random sample from the probability distribution p. 
+The algorithm used to compute the sample s is given by the following formula,
+<br>
+s = range[i] + delta * (range[i+1] - range[i])
+<br>
+where i is the index which satisfies sum[i] <= r < sum[i+1] and delta is
+(r - sum[i])/(sum[i+1] - sum[i]).
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include GSL::Histogram
+
+h = Hist.new(10)
+v = [7, 7, 5, 1, 3, 5, 2, 4, 4, 4, 7, 7, 1, 9]
+v.each{ |x| h.increment(x) }
+
+p = Hist_PDF.new(h)
+puts p.sample(0.7)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Example</h3>
+See <a href="rnd.html#example">here</a> an example in which histograms
+are used with a random generaring function.
+
+<h2>Two dimensional histograms</h2>
+
+A two dimensional histogram consists of a set of bins which count the
+number of events falling in a given area of the (x,y) plane. The simplest
+way to use a two dimensional histogram is to record two-dimensional
+position information, n(x,y). Another possibility is to form a joint
+distribution by recording related variables. For example a detector might
+record both the position of an event (x) and the amount of energy it
+deposited E. These could be histogrammed as the joint distribution n(x,E).
+
+<h3>The 2D histogram struct</h3>
+
+Two dimensional histograms are defined by the following struct,
+<ul>
+Data Type: gsl_histogram2d
+<li>
+size_t nx, ny <br>
+This is the number of histogram bins in the x and y
+directions. 
+<li>double * xrange <br>
+The ranges of the bins in the x-direction
+are stored in an array of nx + 1 elements pointed to by xrange. 
+<li>double * yrange <br>
+The ranges of the bins in the y-direction are stored in an array
+of ny + 1 pointed to by yrange. 
+<li>double * bin <br>
+The counts for each bin are
+stored in an array pointed to by bin. The bins are floating-point numbers,
+so you can increment them by non-integer values if necessary. The array
+bin stores the two dimensional array of bins in a single block of memory
+according to the mapping bin(i,j) = bin[i * ny + j].
+</ul>
+The range for bin(i,j) is given by xrange[i] to xrange[i+1] in the
+x-direction and yrange[j] to yrange[j+1] in the y-direction. Each bin is
+inclusive at the lower end and exclusive at the upper end. Mathematically
+this means that the bins are defined by the following inequality,
+bin(i,j) corresponds to xrange[i] <= x < xrange[i+1] and yrange[j] <=
+y < yrange[j+1]
+<p>
+Note that any samples which fall on the upper sides of the histogram are
+excluded. If you want to include these values for the side bins you will
+need to add an extra row or column to your histogram.
+<p>
+The gsl_histogram2d struct and its associated functions are defined in
+the header file `gsl_histogram2d.h'.
+
+<h3>2D Histogram allocation</h3>
+
+<a name="new"></a>
+<tt>GSL::Histogram::Hist2D::new</tt><br>
+<tt>Hist2D.new(nx, ny) -> h</tt><br>
+
+This function allocates memory for a two-dimensional histogram
+with nx bins in the x direction and ny bins in the y direction. 
+<p>
+<a name="new2"></a>
+<tt>GSL::Histogram::Hist2D::new2</tt><br>
+<tt>Hist2D.new2(nx, ny, xmin, xmax, ymin, ymax) -> h</tt><br>
+It returns a histogram h with a uniform sets the ranges 
+xmin to xmax and ymin to ymax. 
+The values of the histogram bins are reset to zero.
+
+<p>
+<a name="set_ranges"></a>
+<tt>GSL::Histogram::Hist2D#set_ranges</tt><br>
+<tt>h.set_ranges(xrange, yrange) -> anInteger</tt><br>
+Array xrange, yrange<br>
+This function sets the ranges of the existing histogram h using the arrays
+xrange and yrange of size xsize and ysize respectively. The values of
+the histogram bins are reset to zero.
+<p>
+<a name="set_ranges_uniform"></a>
+<tt>GSL::Histogram::Hist2D#set_ranges_uniform</tt><br>
+<tt>h.set_ranges_uniform(xmin, xmax, ymin, ymax) -> h</tt><br>
+
+This function sets
+the ranges of the existing histogram h to cover the ranges xmin to xmax
+and ymin to ymax uniformly. The values of the histogram bins are reset
+to zero.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require "GSL";  include GSL
+include GSL::Histogram
+
+h = Hist2D.new(3, 3)
+h.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+
+r = Random::RNG.new
+
+1000.times{  h.increment(r.uniform,r.uniform) }
+h.dump
+
+h.set_ranges([0.0,0.4,0.5,1.0], [0.0,0.4,0.5,1.0])
+1000.times{  h.increment(r.uniform,r.uniform) }
+h.dump
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Copying 2D Histograms</h3>
+<a name="memcpy"></a>
+<tt>GSL::Histogram::Hist2D#memcpy</tt><br>
+<tt>h.memcpy(dest, src) -> status</tt><br>
+
+This function copies the histogram src into the
+pre-existing histogram dest, making dest into an exact copy of src. The
+two histograms must be of the same size.
+<p>
+<a name="clone"></a>
+<tt>GSL::Histogram::Hist2D#clone</tt><br>
+<tt>h.clone() -> h1</tt><br>
+
+This function returns a a newly created histogram h1 which
+is an exact copy of the histogram h.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL
+include GSL::Histogram
+
+h = Hist2D.new(3, 3)
+h.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+
+r = Random::RNG.new
+
+1000.times{  h.increment(r.uniform,r.uniform) }
+
+h1 = Hist2D.new(3, 3)
+Hist2D::memcpy(h1, h)
+assert h.xmean == h1.xmean
+
+h2 = h.clone
+assert h.xmean == h2.xmean
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Updating and accessing 2D histogram elements</h3>
+
+You can access the bins of a two-dimensional histogram either by
+specifying a pair of (x,y) coordinates or by using the bin indices
+(i,j) directly. The functions for accessing the histogram through (x,y)
+coordinates use binary searches in the x and y directions to identify
+the bin which covers the appropriate range.
+<p>
+<a name="increment"></a>
+<tt>GSL::Histogram::Hist2D#increment</tt>&nbsp; (Mutating)<br>
+<tt>h.increment(x, y) -> h</tt><br>
+double x, y<br>
+This function updates the histogram h by adding one (1.0)
+to the bin whose x and y ranges contain the coordinates (x,y).
+<br>
+If the point (x,y) lies inside the valid ranges of the histogram then
+the function returns zero to indicate success. If (x,y) lies outside the
+limits of the histogram then the function returns GSL_EDOM, and none of
+bins are modified. The error handler is not called, since it is often
+necessary to compute histogram for a small range of a larger dataset,
+ignoring any coordinates outside the range of interest. 
+(EXCEPTION RAISED)
+<p>
+<a name="accumulate"></a>
+<tt>GSL::Histogram::Hist2D#accumulate</tt>&nbsp; (Mutating)<br>
+<tt>h.accumulate(x, y, weight) -> h</tt><br>
+double x, y, weight<br>
+This function is similar to
+gsl_histogram2d_increment but increases the value of the appropriate
+bin in the histogram h by the floating-point number weight.
+<p>
+<a name="get"></a>
+<tt>GSL::Histogram::Hist2D#get</tt><br>
+<tt>h.get(i,j) -> aDouble</tt><br>
+
+This function returns the contents of the (i,j)th bin of
+the histogram h. If (i,j) lies outside the valid range of indices for
+the histogram then the error handler is called.
+<p>
+<a name="get_xrange"></a>
+<tt>GSL::Histogram::Hist2D#get_xrange</tt><br>
+<tt>h.get_xrange(i) -> [lower, upper]</tt><br>
+
+<a name="get_yrange"></a>
+<tt>GSL::Histogram::Hist2D#get_yrange</tt><br>
+<tt>h.get_yrange(i) -> [lower, upper] </tt><br>
+
+These functions find the upper and
+lower range limits of the ith and jth bins in the x and y directions
+of the histogram h. The range limits are stored in xlower and xupper or
+ylower and yupper. The lower limits are inclusive (i.e. events with these
+coordinates are included in the bin) and the upper limits are exclusive
+(i.e. events with the value of the upper limit are not included and fall
+in the neighboring higher bin, if it exists). 
+If i or j lies outside the valid range of indices
+for the histogram then the error handler is called.
+<p>
+<a name="xmax"></a>
+<tt>GSL::Histogram::Hist2D#xmax</tt><br>
+<tt>h.xmax() -> aDouble</tt><br>
+This method returns the upper value of the x-range.
+<p>
+<a name="xmin"></a>
+<tt>GSL::Histogram::Hist2D#xmin</tt><br>
+<tt>h.xmin() -> aDouble</tt><br>
+This method returns the lower value of the x-range.
+<p>
+<a name="nx"></a>
+<tt>GSL::Histogram::Hist2D#nx</tt><br>
+<tt>h.nx() -> anInteger</tt><br>
+This method returns the number of bins for the x direction of the histogram h.
+<p>
+<a name="ymax"></a>
+<tt>GSL::Histogram::Hist2D#ymax</tt><br>
+<tt>h.ymax() -> aDouble</tt><br>
+<p>
+<a name="ymin"></a>
+<tt>GSL::Histogram::Hist2D#ymin</tt><br>
+<tt>h.ymin() -> aDouble</tt><br>
+This method returns the upper value of the y-range.
+<p>
+<a name="ny"></a>
+<tt>GSL::Histogram::Hist2D#ny</tt><br>
+<tt>h.ny() -> anInteger</tt><br>
+This method returns the number of bins for the y direction of the histogram h.
+<p>
+<a name="reset"></a>
+<tt>GSL::Histogram::Hist2D#reset</tt><br>
+<tt>h.reset() -> h</tt><br>
+
+This function resets all the bins of the histogram h to zero.
+
+<h3>Searching 2D histogram ranges</h3>
+
+The following functions are used by the access and update routines to
+locate the bin which corresponds to a given (x\,y) coordinate.
+<p>
+<a name="find"></a>
+<tt>GSL::Histogram::Hist2D#find</tt><br>
+<tt>h.find(x, y) -> [i, j]</tt><br>
+double x, y; integer i, j<br>
+This function finds and sets the indices
+i and j to the to the bin which covers the coordinates (x,y). The bin
+is located using a binary search. The search includes an optimization
+for histogram with uniform ranges, and will return the correct bin
+immediately in this case. If (x,y) is found then the function sets the
+indices (i,j).
+If (x,y) lies outside the valid
+range of the histogram then the handler is invoked.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL
+include GSL::Histogram
+
+h1 = Hist2D.new(3, 3)
+h1.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+r1 = Random::RNG.new
+10.times{  h1.increment(r1.uniform,r1.uniform) }
+
+h2 = Hist2D.new(3, 3)
+h2.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+r2 = Random::RNG.new
+10.times{  h2.accumulate(r2.uniform,r2.uniform,0.3) }
+
+assert h2.get(1,2) == h1.get(1,2) * 0.3
+
+assert h1.get_xrange(1) == [1.0/3, 2.0/3]
+assert h1.get_yrange(1) == [1.0/3, 2.0/3]
+assert h1.xmax == 1 &amp;&amp; h1.ymax == 1 &amp;&amp;  h1.xmin == 0 &amp;&amp; h1.ymin == 0
+assert h1.nx == 3 &amp;&amp; h1.ny == 3
+h2.reset
+assert h2.get(1,2) == 0
+assert h1.find(1.1/3,2.1/3) == [1,2]
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>2D Histogram Statistics</h3>
+
+<a name="max_val"></a>
+<tt>GSL::Histogram::Hist2D#max_val</tt><br>
+<tt>h.max_val() -> aDouble</tt><br>
+This method returns the maximum value contained in the histogram bins.
+<p>
+<a name="max_bin"></a>
+<tt>GSL::Histogram::Hist2D#max_bin</tt><br>
+<tt>h.max_bin() -> [i, j]</tt><br>
+
+This method returns the indices (i,j) of the bin
+containing the maximum value in the histogram h. In the case where several
+bins contain the same maximum value the first bin found is returned.
+<p>
+<a name="min_val"></a>
+<tt>GSL::Histogram::Hist2D#min_val</tt><br>
+<tt>h.min_val() -> aDouble</tt><br>
+
+This method returns the minimum value contained in the histogram bins.
+<p>
+<a name="min_bin"></a>
+<tt>GSL::Histogram::Hist2D#min_bin</tt><br>
+<tt>h.min_bin() -> [i, j]</tt><br>
+
+This method returns the indices (i,j) of the bin
+containing the minimum value in the histogram h. In the case where several
+bins contain the same maximum value the first bin found is returned.
+<p>
+<a name="xmean"></a>
+<tt>GSL::Histogram::Hist2D#xmean</tt><br>
+<tt>h.xmean() -> aDouble</tt><br>
+
+This method returns the mean of the histogrammed x variable, where
+the histogram is regarded as a probability distribution. Negative bin
+values are ignored for the purposes of this calculation.
+<p>
+<a name="ymean"></a>
+<tt>GSL::Histogram::Hist2D#ymean</tt><br>
+<tt>h.ymean() -> aDouble</tt><br>
+
+This method returns the mean of the histogrammed y variable, where
+the histogram is regarded as a probability distribution. Negative bin
+values are ignored for the purposes of this calculation.
+<p>
+<a name="xsigma"></a>
+<tt>GSL::Histogram::Hist2D#xsigma</tt><br>
+<tt>h.xsigma() -> aDouble</tt><br>
+
+This method returns the standard deviation of the histogrammed x variable,
+where the histogram is regarded as a probability distribution. Negative
+bin values are ignored for the purposes of this calculation.
+<p>
+<a name="ysigma"></a>
+<tt>GSL::Histogram::Hist2D#ysigma</tt><br>
+<tt>h.ysigma() -> aDouble</tt><br>
+
+This method returns the standard deviation of the histogrammed y variable,
+where the histogram is regarded as a probability distribution. Negative
+bin values are ignored for the purposes of this calculation.
+<p>
+<a name="cov"></a>
+<tt>GSL::Histogram::Hist2D#cov</tt><br>
+<tt>h.cov() -> aDouble</tt><br>
+
+This method returns the covariance of the histogrammed x and y variables,
+where the histogram is regarded as a probability distribution. Negative
+bin values are ignored for the purposes of this calculation.
+<p>
+<a name="sum"></a>
+<tt>GSL::Histogram::Hist2D#sum</tt><br>
+<tt>h.sum() -> aDouble</tt><br>
+
+This method returns the sum of all bin values. Negative bin values are
+included in the sum.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL
+include GSL::Histogram
+
+h = Hist2D.new(3, 3)
+h.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+r1 = Random::RNG.new
+10.times{  h.increment(r1.uniform,r1.uniform) }
+h.dump
+assert h.max_val == 2 &amp;&amp; h.min_val == 1
+assert h.max_bin == [0,2] &amp;&amp;  h.min_bin == [0,0]
+puts "xmean, ymean, xsigma, ysigma, cov, sum"
+p h.xmean, h.ymean, h.xsigma, h.ysigma, h.cov, h.sum
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>2D Histogram Operations</h3>
+
+<a name="equal_bins_p"></a>
+<tt>GSL::Histogram::Hist2D#equal_bins_p</tt><br>
+<tt>h1.equal_bins_p(h2) -> aBool</tt><br>
+
+This method returns true if the all
+of the individual bin ranges of the two histograms are identical, and
+false otherwise.
+<p>
+<a name="equal_bins?"></a>
+<tt>GSL::Histogram::Hist2D#equal_bins?</tt><br>
+<tt>h1.equal_bins_p(h2) -> aBool</tt><br>
+Alias of equal_bins_p .
+<p>
+<a name="add"></a>
+<tt>GSL::Histogram::Hist2D#add</tt>&nbsp; (Mutating)<br>
+<tt>h1.add(h2) -> h1</tt><br>
+
+This method adds the contents of the bins in
+histogram h2 to the corresponding bins of histogram h1, i.e. h'_1(i,j)
+= h_1(i,j) + h_2(i,j). The two histograms must have identical bin ranges.
+<p>
+<a name="sub"></a>
+<tt>GSL::Histogram::Hist2D#sub</tt>&nbsp; (Mutating)<br>
+<tt>h1.sub(h2) -> h1</tt><br>
+
+This method subtracts the contents of the bins in
+histogram h2 from the corresponding bins of histogram h1, i.e. h'_1(i,j)
+= h_1(i,j) - h_2(i,j). The two histograms must have identical bin ranges.
+<p>
+<a name="mul"></a>
+<tt>GSL::Histogram::Hist2D#mul</tt>&nbsp; (Mutating)<br>
+<tt>h1.mul(h2) -> h1</tt><br>
+
+This method multiplies the contents of the bins
+of histogram h1 by the contents of the corresponding bins in histogram
+h2, i.e. h'_1(i,j) = h_1(i,j) * h_2(i,j). The two histograms must have
+identical bin ranges.
+<p>
+<a name="div"></a>
+<tt>GSL::Histogram::Hist2D#div</tt>&nbsp; (Mutating)<br>
+<tt>h1.div(h2) -> h1</tt><br>
+
+This method divides the contents of the bins
+of histogram h1 by the contents of the corresponding bins in histogram
+h2, i.e. h'_1(i,j) = h_1(i,j) / h_2(i,j). The two histograms must have
+identical bin ranges.
+<p>
+<a name="scale"></a>
+<tt>GSL::Histogram::Hist2D#scale</tt>&nbsp; (Mutating)<br>
+<tt>h.scale(scale) -> h</tt><br>
+
+This method multiplies the contents of the bins of histogram h by the
+constant scale, i.e. h'_1(i,j) = h_1(i,j) scale.
+<p>
+<a name="shift"></a>
+<tt>GSL::Histogram::Hist2D#shift</tt>&nbsp; (Mutating)<br>
+<tt>h.shift(offset) -> h</tt><br>
+
+This method shifts the contents of the bins of histogram h by the
+constant offset, i.e. h'_1(i,j) = h_1(i,j) + offset.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL
+include GSL::Histogram
+
+h1 = Hist2D.new(3, 3)
+h1.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+r1 = Random::RNG.new
+10.times{  h1.increment(r1.uniform,r1.uniform) }
+
+h1_dup = h1.clone
+
+assert h1.equal_bins_p(h1_dup)
+
+h2 = Hist2D.new(3, 3)
+h2.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+10.times{  h2.increment(r1.uniform,r1.uniform) }
+h1.dump
+h2.dump
+h1_dup.add(h2)
+assert h1_dup.get(1,2) == h1.get(1,2) +  h2.get(1,2)
+h1_dup.sub(h2)
+assert h1_dup.get(1,2) == h1.get(1,2)
+h1_dup.mul(h2)
+assert h1_dup.get(1,2) == h1.get(1,2) *  h2.get(1,2)
+h1_dup.div(h2)
+assert h1_dup.get(1,2) == h1.get(1,2)
+h1_dup.scale(1.3)
+assert h1_dup.get(1,2) == h1.get(1,2) * 1.3
+h1_dup.shift(0.4)
+assert h1_dup.get(1,2) == h1.get(1,2) * 1.3 + 0.4
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Reading and writing 2D histograms</h3>
+
+The library provides functions for reading and writing two dimensional
+histograms to a file as binary data or formatted text.
+<p>
+<a name="fwrite"></a>
+<tt>GSL::Histogram::Hist2D#fwrite</tt><br>
+<tt>h.fwrite(stream) -> h</tt><br>
+
+This function writes the ranges and bins of the histogram h to the
+stream stream in binary format. The return value is 0 for success and
+GSL_EFAILED if there was a problem writing to the file. Since the data
+is written in the native binary format it may not be portable between
+different architectures.
+<p>
+<a name="fread"></a>
+<tt>GSL::Histogram::Hist2D#fread</tt><br>
+<tt>h.fread(stream) -> h</tt><br>
+
+This function reads into the histogram h from the stream stream in
+binary format. The histogram h must be preallocated with the correct size
+since the function uses the number of x and y bins in h to determine how
+many bytes to read. The return value is 0 for success and GSL_EFAILED
+if there was a problem reading from the file. The data is assumed to
+have been written in the native binary format on the same architecture.
+
+<p>
+<a name="fprintf"></a>
+<tt>GSL::Histogram::Hist2D#fprintf</tt><br>
+<tt>h.fprintf(stream, range_format, bin_format) -> h</tt><br>
+
+This function writes the ranges and bins of the histogram h line-by-line
+to the stream stream using the format specifiers range_format and
+bin_format. These should be one of the %g, %e or %f formats for floating
+point numbers. The function returns 0 for success and GSL_EFAILED if there
+was a problem writing to the file. The histogram output is formatted in
+five columns, and the columns are separated by spaces, like this,
+<pre>
+xrange[0] xrange[1] yrange[0] yrange[1] bin(0,0) 
+xrange[0] xrange[1] yrange[1] yrange[2] bin(0,1) 
+xrange[0] xrange[1] yrange[2] yrange[3] bin(0,2) 
+....
+xrange[0] xrange[1] yrange[ny-1] yrange[ny] bin(0,ny-1)
+xrange[1] xrange[2] yrange[0] yrange[1] bin(1,0) 
+xrange[1] xrange[2] yrange[1] yrange[2] bin(1,1) 
+xrange[1] xrange[2] yrange[1] yrange[2] bin(1,2) 
+....  
+xrange[1] xrange[2] yrange[ny-1] yrange[ny] bin(1,ny-1)
+....
+xrange[nx-1] xrange[nx] yrange[0] yrange[1] bin(nx-1,0) 
+xrange[nx-1] xrange[nx] yrange[1] yrange[2] bin(nx-1,1) 
+xrange[nx-1] xrange[nx] yrange[1] yrange[2] bin(nx-1,2) 
+....  
+xrange[nx-1] xrange[nx] yrange[ny-1] yrange[ny] bin(nx-1,ny-1)
+</pre>
+
+Each line contains the lower and upper limits of the bin and the
+contents of the bin. Since the upper limits of the each bin are the lower
+limits of the neighboring bins there is duplication of these values but
+this allows the histogram to be manipulated with line-oriented tools.
+
+<p>
+<a name="fscanf"></a>
+<tt>GSL::Histogram::Hist2D#fscanf</tt><br>
+<tt>h.fscanf(stream) -> h</tt><br>
+
+This function reads formatted data from the stream stream into the
+histogram h. The data is assumed to be in the five-column format used
+by gsl_histogram_fprintf. The histogram h must be preallocated with the
+correct lengths since the function uses the sizes of h to determine how
+many numbers to read. The function returns 0 for success and GSL_EFAILED
+if there was a problem reading from the file.
+<p>
+<a name="dump"></a>
+<tt>GSL::Histogram::Hist2D#dump</tt><br>
+<tt>h.dump() -> h</tt><br>
+It prints the histogram to stdout .
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL
+include GSL::Histogram
+
+h1 = Hist2D.new(3, 3)
+h1.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+r1 = Random::RNG.new
+10.times{  h1.increment(r1.uniform,r1.uniform) }
+
+File.open("dump2d", "w"){|f| h1.fwrite(f)}
+h2 = Hist2D.new(3, 3)
+File.open("dump2d"){|f| h2.fread(f)}
+assert h1.equal_bins_p(h2)
+
+File.open("data2d","w"){|f| h1.fprintf(f, "%.16f", "%.16f")}
+
+h3 = Hist2D.new(3, 3)
+File.open("data2d"){|f| h3.fscanf(f)}
+assert h3.equal_bins_p(h1)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Resampling from 2D histograms</h3>
+
+As in the one-dimensional case, a two-dimensional histogram made by
+counting events can be regarded as a measurement of a probability
+distribution. Allowing for statistical error, the height of each bin
+represents the probability of an event where (x,y) falls in the range of
+that bin. For a two-dimensional histogram the probability distribution
+takes the form p(x,y) dx dy where,
+<br>
+p(x,y) = n_{ij}/ (N A_{ij})
+<br>
+In this equation n_{ij} is the number of events in the bin which
+contains (x,y), A_{ij} is the area of the bin and N is the total number
+of events. The distribution of events within each bin is assumed to
+be uniform.
+<ul>
+Data Type: gsl_histogram2d_pdf
+<li>
+size_t nx, ny <br>
+This is the number of histogram bins used to approximate
+the probability distribution function in the x and y directions. 
+<li>double * xrange <br>
+The ranges of the bins in the x-direction are stored in an array
+of nx + 1 elements pointed to by xrange. 
+<li>double * yrange<br>
+The ranges of
+the bins in the y-direction are stored in an array of ny + 1 pointed
+to by yrange. 
+<li>double * sum<br> 
+The cumulative probability for the bins is
+stored in an array of nx*ny elements pointed to by sum.
+</ul>
+Hist2D_PDF is the class wrapping the struct gsl_histogram2d_pdf.<p>
+
+The following functions allow you to create a gsl_histogram2d_pdf
+struct which represents a two dimensional probability distribution
+and generate random samples from it.  
+<a name="Hist2D_PDF::new"></a>
+<tt>GSL::Histogram::Hist2D_PDF::new</tt><br>
+<tt>Hist2D_PDF::new(h) -> p</tt><br>
+Hist2D h; Hist2D_PDF p<br>
+This function initializes the probability distribution
+p with the contents of the histogram h. 
+If any of the bins of h are
+negative then the error handler is invoked 
+because a probability distribution cannot contain negative values.
+<p>
+<a name="Hist2D_PDF#sample"></a>
+<tt>GSL::Histogram::Hist_PDF#sample</tt><br>
+<tt>p.sample(r1, r2) -> [x, y]</tt><br>
+Hist2D_PDF p; double r1, r2, x, y<br>
+
+This function uses two
+uniform random numbers between zero and one, r1 and r2, to compute a
+single random sample from the two-dimensional probability distribution p.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL
+include GSL::Histogram
+
+h1 = Hist2D.new(3, 3)
+h1.set_ranges_uniform(0.0, 1.0, 0.0, 1.0)
+r1 = Random::RNG.new
+10.times{  h1.increment(r1.uniform,r1.uniform) }
+
+p = Hist2D_PDF.new(h1)
+p p.sample(0.7, 0.5)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Example</h3>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;#!/usr/local/bin/ruby
+
+# $Id: hist.html,v 1.1 2003/09/07 22:28:07 pernici Exp $
+
+require "GSL"
+include GSL
+include GSL::Histogram
+
+# Test 2D histogramms
+
+STDERR.puts "Running tests for 2D histograms..."
+
+h = Hist2D.new 10, 10
+h.set_ranges_uniform 0.0, 1.0, 0.0, 1.0
+h.accumulate 0.3, 0.3, 1
+h.accumulate 0.8, 0.1, 5
+h.accumulate 0.7, 0.9, 0.5
+
+#puts "\nA simple 2D Histogram:"
+#h.fprintf(STDOUT, "%g", "%g")
+#h2 = Hist2D.new(10, 10)
+#Hist2D::memcpy(h2, h)
+#puts "\nDeep copy:"
+#h2.fprintf(STDOUT, "%g", "%g")
+
+r = Random::RNG.new
+p = Hist2D_PDF.new h
+i = 0
+
+while (i &lt; 1000)
+  i += 1
+  u = r.uniform
+  v = r.uniform
+
+  x, y = p.sample(u, v)
+  
+  printf "%g %g\n", x, y
+end
+
+STDERR.printf "\n  xmean: %f\n", h.xmean
+STDERR.printf "  ymean: %f\n", h.ymean
+STDERR.printf "  xsigma: %f\n", h.xsigma
+STDERR.printf "  ysigma: %f\n", h.ysigma
+STDERR.printf "  cov: %f\n", h.cov
+STDERR.printf "  sum: %f\n", h.sum
+
+# h.fprintf(STDOUT, "%g", "%g")
+
+STDERR.puts "\ndone."
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="ntuple.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="stats.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Histograms</td> 
+</tr></tbody></table><hr></body>
+</html>

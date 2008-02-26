@@ -1,0 +1,708 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Numerical Integration</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="rng.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="sort.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Numerical Integration</td> 
+</tr></tbody></table><hr><h1>
+Numerical Integration</h1>
+<ul>
+<li><a href="#Introduction">Introduction</a>
+<li><a href="#QNG">QNG non-adaptive Gauss-Kronrod integration</a>
+<li><a href="#QAG">QAG adaptive integration</a>
+<li><a href="#QAGS">QAGS adaptive integration with singularities</a>
+<li><a href="#QAGP">QAGP adaptive integration with known singular points</a>
+<li><a href="#QAGI">QAGI adaptive integration on infinite intervals</a>
+<li><a href="#QAGC">QAWC adaptive integration for Cauchy principal values</a>
+<li><a href="#QAWS">QAWS adaptive integration for singular functions</a>
+<li><a href="#QAWF">QAWF adaptive integration for Fourier integrals</a>
+<li><a href="#Error">GSL Error codes</a>
+</ul>
+<hr>
+This chapter describes routines for performing numerical integration
+(quadrature) of a function in one dimension. There are routines for
+adaptive and non-adaptive integration of general functions, with
+specialised routines for specific cases. These include integration
+over infinite and semi-infinite ranges, singular integrals, including
+logarithmic singularities, computation of Cauchy principal values and
+oscillatory integrals. The library reimplements the algorithms used
+in QUADPACK, a numerical integration package written by Piessens,
+Doncker-Kapenga, Uberhuber and Kahaner. Fortran code for QUADPACK is
+available on Netlib.
+
+The functions described in this chapter are declared in the header file
+`gsl_integration.h'.  
+
+<a name="Introduction"></a>
+<h2>Introduction</h2>
+
+Each algorithm computes an approximation to a definite integral of
+the form,<br>
+
+I = \int_a^b f(x) w(x) dx
+<br>
+where w(x) is a weight function (for general integrands w(x)=1). The
+user provides absolute and relative error bounds (epsabs, epsrel) which
+specify the following accuracy requirement,
+<br>
+|RESULT - I|  <= max(epsabs, epsrel |I|)
+<br>
+where RESULT is the numerical approximation obtained by the algorithm. The
+algorithms attempt to estimate the absolute error ABSERR = |RESULT - I|
+in such a way that the following inequality holds,
+<br>
+|RESULT - I| <= ABSERR <= max(epsabs, epsrel |I|)
+<br>
+The routines will fail to converge if the error bounds are too stringent,
+but always return the best approximation obtained up to that stage.
+<br>
+The algorithms in QUADPACK use a naming convention based on the following
+letters,
+<pre>
+Q - quadrature routine
+
+N - non-adaptive integrator A - adaptive integrator
+
+G - general integrand (user-defined) W - weight function with integrand
+
+S - singularities can be more readily integrated 
+P - points of special difficulty can be supplied 
+I - infinite range of integration 
+O - oscillatory weight function, cos or sin 
+F - Fourier integral 
+C - Cauchy principal value
+</pre>
+The algorithms are built on pairs of quadrature rules, a higher order
+rule and a lower order rule. The higher order rule is used to compute
+the best approximation to an integral over a small range. The difference
+between the results of the higher order rule and the lower order rule
+gives an estimate of the error in the approximation.
+<br>
+The algorithms for general functions (without a weight function)
+are based on Gauss-Kronrod rules. A Gauss-Kronrod rule begins with a
+classical Gaussian quadrature rule of order m. This is extended with
+additional points between each of the abscissae to give a higher order
+Kronrod rule of order 2m+1. The Kronrod rule is efficient because it
+reuses existing function evaluations from the Gaussian rule. The higher
+order Kronrod rule is used as the best approximation to the integral,
+and the difference between the two rules is used as an estimate of the
+error in the approximation.
+<br>
+For integrands with weight functions the algorithms use Clenshaw-Curtis
+quadrature rules. A Clenshaw-Curtis rule begins with an n-th order
+Chebyschev polynomial approximation to the integrand. This polynomial can
+be integrated exactly to give an approximation to the integral of the
+original function. The Chebyschev expansion can be extended to higher
+orders to improve the approximation. The presence of singularities
+(or other behavior) in the integrand can cause slow convergence in
+the Chebyschev approximation. The modified Clenshaw-Curtis rules used
+in QUADPACK separate out several common weight functions which cause
+slow convergence. These weight functions are integrated analytically
+against the Chebyschev polynomials to precompute modified Chebyschev
+moments. Combining the moments with the Chebyschev approximation to the
+function gives the desired integral. The use of analytic integration
+for the singular part of the function allows exact cancellations
+and substantially improves the overall convergence behavior of the
+integration.
+
+<h2>Module Integration</h2>
+
+<a name="QNG"></a>
+<h3>QNG non-adaptive Gauss-Kronrod integration</h3>
+
+The QNG algorithm is non-adaptive procedure which uses fixed Gauss-Kronrod
+abscissae to sample the integrand at a maximum of 87 points. It is
+provided for fast integration of smooth functions.
+<p>
+<a name="integration_qng"></a>
+<tt>GSL::Integration#integration_qng</tt><br>
+<tt>f.integration_qng(a, b, epsabs, epsrel) -> [result, abserr, neval,
+status]</tt><br>
+This method applies the Gauss-Kronrod 10-point, 21-point, 43-point
+and 87-point integration rules in succession until an estimate of
+the integral of f over (a,b) is achieved within the desired absolute
+and relative error limits, epsabs and epsrel. The function returns
+the final approximation, result, an estimate of the absolute error,
+abserr and the number of function evaluations used, neval. The
+Gauss-Kronrod rules are designed in such a way that each rule uses
+all the results of its predecessors, in order to minimize the total
+number of function evaluations.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qng"
+f = Function.new{ |x| x*x }
+result, abserr, neval, status = f.integration_qng(0, 1, 1.0e-16, 1)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result == 1.0/3
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QAG"></a>
+<h3>QAG adaptive integration</h3>
+
+The QAG algorithm is a simple adaptive integration procedure. The
+integration region is divided into subintervals, and on each iteration
+the subinterval with the largest estimated error is bisected. This reduces
+the overall error rapidly, as the subintervals become concentrated around
+local difficulties in the integrand. These subintervals are managed by
+a gsl_integration_workspace struct, which handles the memory for the
+subinterval ranges, results and error estimates.
+<p>
+<a name="integration_qag"></a>
+<tt>GSL::Integration#integration_qag</tt><br>
+<tt>f.integration_qag(a, b, epsabs, epsrel, limit, key) -> [result, abserr, neval, status]</tt><br>
+
+This method applies an integration rule adaptively until an estimate
+of the integral of f over (a,b) is achieved within the desired absolute
+and relative error limits, epsabs and epsrel. The function returns the
+final approximation, result, and an estimate of the absolute error,
+abserr. The integration rule is determined by the value of key, which
+should be chosen from the following symbolic names,
+<pre>
+Integration::GAUSS15  (key = 1) 
+Integration::GAUSS21  (key = 2)
+Integration::GAUSS31  (key = 3) 
+Integration::GAUSS41  (key = 4)
+Integration::GAUSS51  (key = 5) 
+Integration::GAUSS61  (key = 6)
+</pre>
+corresponding to the 15, 21, 31, 41, 51 and 61 point Gauss-Kronrod
+rules. The higher-order rules give better accuracy for smooth functions,
+while lower-order rules save time when the function contains local
+difficulties, such as discontinuities.
+<br>
+On each iteration the adaptive integration strategy bisects the interval
+with the largest error estimate. The subintervals and their results
+are stored in the memory provided by workspace. The maximum number of
+subintervals is given by limit, which may not exceed the allocated size
+of the workspace (i.e. limit)
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qag"
+f = Function.new{ |x| x*x }
+result, abserr, neval, status = f.integration_qag(0, 1, 1.0e-16, 1, 10, Integration::GAUSS15)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result == 1.0/3
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<a name="QAGS"></a>
+<h3>QAGS adaptive integration with singularities</h3>
+
+The presence of an integrable singularity in the integration region
+causes an adaptive routine to concentrate new subintervals around
+the singularity. As the subintervals decrease in size the successive
+approximations to the integral converge in a limiting fashion. This
+approach to the limit can be accelerated using an extrapolation
+procedure. The QAGS algorithm combines adaptive bisection with the
+Wynn epsilon-algorithm to speed up the integration of many types of
+integrable singularities.
+<p>
+<a name="integration_qags"></a>
+<tt>GSL::Integration#integration_qags</tt><br>
+<tt>f.integration_qags(a, b, epsabs, epsrel, limit) -> [result, abserr, neval, status]</tt><br>
+
+This function applies the Gauss-Kronrod 21-point integration rule
+adaptively until an estimate of the integral of f over (a,b) is
+achieved within the desired absolute and relative error limits, epsabs
+and epsrel. The results are extrapolated using the epsilon-algorithm,
+which accelerates the convergence of the integral in the presence of
+discontinuities and integrable singularities. The function returns
+the final approximation from the extrapolation, result, and an
+estimate of the absolute error, abserr. The subintervals and their
+results are stored in the memory provided by workspace. The maximum
+number of subintervals is given by limit, which may not exceed the
+allocated size of the workspace.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qags"
+alpha = 1.0
+f = Function.new{ |x| log(alpha*x) / sqrt(x)}
+result, abserr, neval, status = f.integration_qags(0, 1, 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result =~ [ -4, 1.0e-13]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QAGP"></a>
+<h3>QAGP adaptive integration with known singular points</h3>
+<a name="integration_qagp"></a>
+<tt>GSL::Integration#integration_qagp</tt><br>
+<tt>f.integration_qagp(ary, epsabs, epsrel,limit) -> [result, abserr, neval,
+status]</tt><br>
+
+This method applies the adaptive integration algorithm QAGS taking
+account of the user-supplied locations of singular points. The array ary
+should contain the endpoints of the integration ranges
+defined by the integration region and locations of the singularities. For
+example, to integrate over the region (a,b) with break-points at x_1, x_2,
+x_3 (where a < x_1 < x_2 < x_3 < b) the following array should be used<br>
+ary = [a, x_1, x_2, x_3, b]<br>
+
+If you know the locations of the singular points in the integration
+region then this routine will be faster than QAGS.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qagp"
+alpha = 1.0
+f = Function.new{ |x| y = 1 - x; y = y.abs; log(y)}
+result, abserr, neval, status = f.integration_qagp([0,1,2], 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result =~ [ -2, 1.0e-14]
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QAGI"></a>
+<h3>QAGI adaptive integration on infinite intervals</h3>
+
+<a name="integration_qagi"></a>
+<tt>GSL::Integration#integration_qagi</tt><br>
+<tt>f.integration_qagi(epsabs, epsrel, limit) -> [result, abserr, neval,
+status]</tt><br>
+
+This method computes the integral of the function f over the infinite
+interval (-\infty,+\infty). The integral is mapped onto the interval
+(0,1] using the transformation x = (1-t)/t,<br>
+
+\int_{-\infty}^{+\infty} dx f(x) = \int_0^1 dt (f((1-t)/t) +
+f((-1+t)/t))/t^2.
+<br>
+It is then integrated using the QAGS algorithm. The normal 21-point
+Gauss-Kronrod rule of QAGS is replaced by a 15-point rule, because the
+transformation can generate an integrable singularity at the origin. In
+this case a lower-order rule is more efficient.
+<p> 
+<a name="integration_qagiu"></a>
+<tt>GSL::Integration#integration_qagiu</tt><br>
+<tt>f.integration_qagiu(a, epsabs, epsrel, limit) -> [result, abserr, neval,
+    status]</tt><br>
+
+This method computes the integral of the function f over the
+semi-infinite interval (a,+\infty). The integral is mapped onto the
+interval (0,1] using the transformation x = a + (1-t)/t,
+<br>
+\int_{a}^{+\infty} dx f(x) =
+\int_0^1 dt f(a + (1-t)/t)/t^2 
+<br>
+and then integrated using the QAGS algorithm. 
+<p>
+<a name="integration_qagil"></a>
+<tt>GSL::Integration#integration_qagil</tt><br>
+<tt>f.integration_qagil(b, epsabs, epsrel, limit) -> [result, abserr, neval,
+    status]</tt><br>
+    
+This method computes the integral of the function
+f over the semi-infinite interval (-\infty,b). The
+integral is mapped onto the region (0,1] using the
+transformation x = b - (1-t)/t,
+<br>
+\int_{+\infty}^{b} dx f(x) =
+\int_0^1 dt f(b - (1-t)/t)/t^2
+<br>
+and then integrated using the QAGS algorithm.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qagi"
+f = Function.new{ |x| exp(-x*x)}
+result, abserr, neval, status = f.integration_qagi(0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result =~ [sqrt(M_PI), 1.0e-14]
+
+puts "integration_qagiu"
+result, abserr, neval, status = f.integration_qagiu(0, 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n",
+        result, abserr, neval, status)
+assert result =~ [sqrt(M_PI)/2, 1.0e-14]
+
+puts "integration_qagil"
+result, abserr, neval, status = f.integration_qagil(0, 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n",
+        result, abserr, neval, status)
+assert result =~ [sqrt(M_PI)/2, 1.0e-14]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QAGC"></a>
+<h3>QAWC adaptive integration for Cauchy principal values</h3>
+
+<a name="integration_qawc"></a>
+<tt>GSL::Integration#integration_qawc</tt><br>
+<tt>f.integration_qawc(a, b, c, epsabs, epsrel -> [result, abserr, neval,
+    status]</tt><br>
+    
+Function: int gsl_integration_qawc (gsl_function *f, double a,
+double b, double c, double epsabs, double epsrel, size_t limit,
+gsl_integration_workspace * workspace, double * result, double * abserr)
+
+This function computes the Cauchy principal value of the integral of f
+over (a,b), with a singularity at c,<br>
+
+I = \int_a^b dx f(x) / (x - c)
+<br>
+The adaptive bisection algorithm of QAG is used, with modifications
+to ensure that subdivisions do not occur at the singular point x =
+c. When a subinterval contains the point x = c or is close to it then a
+special 25-point modified Clenshaw-Curtis rule is used to control the
+singularity. Further away from the singularity the algorithm uses an
+ordinary 15-point Gauss-Kronrod integration rule.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qawc"
+f = Function.new{ |x| 1 }
+result, abserr, neval, status = f.integration_qawc(-4, 4, 3, 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result =~ [ -log(7), 1.0e-15]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QAWS"></a>
+<h3>QAWS adaptive integration for singular functions</h3>
+
+The QAWS algorithm is designed for integrands with algebraic-logarithmic
+singularities at the end-points of an integration region. In order to
+work efficiently the algorithm requires a precomputed table of Chebyschev
+moments.
+<p>
+<a name="alloc"></a>
+<tt>GSL::Integration::QAWSTable::alloc</tt><br>
+<tt>GSL::Integration::QAWSTable::new</tt>&nbsp; (alias)<br>
+<tt>GSL::Integration::QAWSTable::alloc(alpha, beta, mu, nu)-> t </tt><br>
+double alpha, beta; int mu, nu; GSL::QAWSTable t<br>    
+This function allocates space for a GSL::QAWSTable object
+and associated workspace describing a singular weight function W(x)
+with the parameters (alpha, beta, mu, nu),<br>
+
+W(x) = (x-a)^alpha (b-x)^beta log^mu (x-a) log^nu (b-x)
+<br>
+where alpha > -1, beta > -1, and mu = 0, 1, nu = 0, 1. The weight
+function can take four different forms depending on the values of mu
+and nu,
+<pre>
+W(x) = (x-a)^alpha (b-x)^beta                       (mu = 0, nu = 0) 
+W(x) = (x-a)^alpha (b-x)^beta log(x-a)              (mu = 1, nu = 0) 
+W(x) = (x-a)^alpha (b-x)^beta log(b-x)              (mu = 0, nu = 1) 
+W(x) = (x-a)^alpha (b-x)^beta log(x-a) log(b-x)     (mu = 1, nu = 1)
+</pre>
+The singular points (a,b) do not have to be specified until the integral
+is computed, where they are the endpoints of the integration range.
+<br>
+The function returns a pointer to the newly allocated
+gsl_integration_qaws_table if no errors were detected, and 0 in the case
+of error.
+<p>
+<a name="set"></a>
+<tt>GSL::QAWSTable#set</tt><br>
+<tt>t.set(type,alpha,beta,mu,nu)</tt><br>
+GSL::QAWSTable t
+This method modifies the parameters (\alpha, \beta, \mu, \nu) of an existing
+GSL::QAWSTable t.
+<p>
+<a name="integration_qaws"></a>
+<tt>GSL::QAWOTable#integration_qaws</tt><br>
+<tt>f.integration_qaws(a, b, t, epsabs, epsrel, limit) -> [result, abserr, neval, status]</tt><br>
+
+This method computes the integral of the function f(x) over the interval
+(a,b) with the singular weight function (x-a)^\alpha (b-x)^\beta \log^\mu
+(x-a) \log^\nu (b-x). The parameters of the weight function (\alpha,
+\beta, \mu, \nu) are taken from the table t. The integral is,
+<br>
+I = \int_a^b dx f(x) (x-a)^alpha (b-x)^beta log^mu (x-a) log^nu (b-x).
+<br>
+The adaptive bisection algorithm of QAG is used. When a subinterval
+contains one of the endpoints then a special 25-point modified
+Clenshaw-Curtis rule is used to control the singularities. For
+subintervals which do not include the endpoints an ordinary 15-point
+Gauss-Kronrod integration rule is used.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qaws"
+# f(x) = 1
+# integ(x**(-0.5) f(x),x,0,1) = 2
+f = Function.new{ |x| 1}
+t = Integration::QAWSTable.new(-0.5, 0, 0, 0)
+result, abserr, neval, status = f.integration_qaws(0, 1, t, 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n", 
+        result, abserr, neval, status)
+assert result == 2
+
+
+def f1a(x)
+  return 0 if ( x == 0)
+  u = log(x)
+  v = 1 + u * u
+  1.0 / (v * v)
+end
+
+# f1(x) = 1/(1 + log(x)^2)^2
+# integ(log(x) f1(x),x,0,1) = (Ci(1) sin(1) + (pi/2 - Si(1)) cos(1))/pi = -0.1892752
+f1 = Function.new{ |x| f1a(x)}
+t.set(0, 0, 1, 0)
+result, abserr, neval, status = f1.integration_qaws(0, 1, t, 0, 1.0e-7, 1000)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n",
+        result, abserr, neval, status)
+assert result =~ [ -1.892751853489401670E-01, 1.0e-16]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>QAWO adaptive integration for oscillatory functions</h3>
+
+The QAWO algorithm is designed for integrands with an oscillatory
+factor, \sin(\omega x) or \cos(\omega x). In order to work efficiently
+the algorithm requires a table of Chebyschev moments which must be
+pre-computed with calls to the functions below.
+<p>
+<a name="alloc"></a>
+<tt>GSL::Integration::QAWOTable#alloc</tt><br>
+<tt>GSL::Integration::QAWOTable#new</tt>&nbsp; (alias)<br>
+<tt>GSL::Integration.new(omega, L, sine, n) -> t</tt><br>
+double omega, L; int sine, n; GSL::Integration::QAWOTable t<br>
+
+This function allocates space for an object of type 
+GSL::Integration::QAWOTable and
+its associated workspace describing a sine or cosine weight function W(x)
+with the parameters (omega, L),
+<pre>
+W(x) = sin(omega x) 
+W(x) = cos(omega x)
+</pre>
+The parameter L must be the length of the interval over which the function
+will be integrated L = b - a. The choice of sine or cosine is made with
+the parameter sine which should be chosen from one of the two following
+symbolic values:
+<pre>
+GSL_INTEG_COSINE 
+GSL_INTEG_SINE
+</pre>
+The GSL::Integration::QAWOTable object is a table of the trigonometric
+coefficients required in the integration process. The parameter n
+determines the number of levels of coefficients that are computed. Each
+level corresponds to one bisection of the interval L, so that n levels
+are sufficient for subintervals down to the length L/2^n. The integration
+routine integration_qawo returns the error GSL_ETABLE if the number
+of levels is insufficient for the requested accuracy.  
+<p>
+<a name="set"></a>
+<tt>GSL::Integration#QAWOTable#set</tt><br>
+<tt>t.set(omega, L, sine) -> t</tt><br>
+<tt>t.set([omega, L, sine]) -> t</tt><br>
+This method
+changes the parameters omega, L and sine of the existing workspace t.
+<p>
+<a name="set_length"></a>
+<tt>GSL::Integration::QAWOTable#set_length</tt><br>
+<tt>t.set_length(L) -> t</tt><br>
+This method allows the length parameter L of the workspace t to be changed.
+
+<p>
+<a name="integration_qawo"></a>
+<tt>GSL::Integration::QAWOTable#integration_qawo</tt><br>
+<tt>f.integration_qawo(a, epsabs, epsrel, limit, t) -> [result, abserr, neval,
+    status]</tt><br>
+    
+This method uses an adaptive algorithm to compute the integral of f
+over (a,b) with the weight function \sin(\omega x) or \cos(\omega x)
+defined by the table wf.
+<pre>
+I = \int_a^b dx f(x) sin(omega x) 
+I = \int_a^b dx f(x) cos(omega x)
+</pre>
+The results are extrapolated using the epsilon-algorithm to accelerate the
+convergence of the integral. The function returns the final approximation
+from the extrapolation, result, and an estimate of the absolute error,
+abserr. The subintervals and their results are stored in the memory
+provided by workspace. The maximum number of subintervals is given by
+limit, which may not exceed the allocated size of the workspace.
+<br>
+Those subintervals with "large" widths d, d\omega > 4 are computed
+using a 25-point Clenshaw-Curtis integration rule, which handles the
+oscillatory behavior. Subintervals with a "small" width d\omega < 4 are
+computed using a 15-point Gauss-Kronrod integration.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qawo"
+
+def f1a(x)
+  return 0 if ( x == 0)
+  log(x)
+end
+
+# f1(x) = log(x)
+# integ(f1(x)*sin(10 pi x),x,0,1) = =  -(gamma + log(10pi) - Ci(10pi))/(10pi) 
+#                                = -1.281368483991674190E-01
+f1 = Function.new{ |x| f1a(x)}
+t = Integration::QAWOTable.new(10.0 * M_PI, 1.0,Integration::SINE, 1000)
+  
+result, abserr, neval, status = f1.integration_qawo(0, 0, 1.0e-7, 1000, t)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n",
+        result, abserr, neval, status)
+assert result =~ [ -1.281368483991674190E-01, 1.0e-16]
+
+# both forms allowed
+#t.set(1, 2 * M_PI, Integration::SINE, 1000)
+t.set([1, 2 * M_PI, Integration::SINE, 1000])
+f2 = Function.new{|x| sin(x)}
+result, abserr, neval, status = f2.integration_qawo(0, 1.0e-11, 1.0e-7, 1000, t)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n",
+        result, abserr, neval, status)
+assert result =~ [M_PI, 1.0e-15]
+t.set_length(4 * M_PI)
+result, abserr, neval, status = f2.integration_qawo(0, 1.0e-9, 1.0e-7, 1000, t)
+assert result =~ [2 * M_PI, 1.0e-15]
+
+f3 =  Function.new{|x| cos(x)}
+result, abserr, neval, status = f3.integration_qawo(0, 1.0e-11, 1.0e-7, 1000, t)
+assert result =~ [0, 1.0e-16]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="QAWF"></a>
+<h3>QAWF adaptive integration for Fourier integrals</h3>
+
+<a name="integration_qawf"></a>
+<tt>GSL::Integration#integration_qawf</tt><br>
+<tt>f.integration_qawf(a, epsabs, limit, t) -> [result, abserr, neval,
+    status]</tt><br>
+
+This method attempts to compute a Fourier integral of the function f
+over the semi-infinite interval [a,+\infty).
+<br>
+I = \int_a^{+\infty} dx f(x) sin(omega x) I = \int_a^{+\infty} dx f(x)
+cos(omega x)
+<br>
+The parameter omega is taken from the table wf (the length L can take
+any value, since it is overridden by this function to a value appropriate
+for the fourier integration). The integral is computed using the QAWO
+algorithm over each of the subintervals,
+<pre>
+C_1 = [a, a + c] 
+C_2 = [a + c, a + 2 c] 
+... = ...  
+C_k = [a + (k-1) c, a + k c]
+</pre>
+where c = (2 floor(|omega|) + 1) pi/|omega|. The width c is chosen
+to cover an odd number of periods so that the contributions from the
+intervals alternate in sign and are monotonically decreasing when f
+is positive and monotonically decreasing. The sum of this sequence of
+contributions is accelerated using the epsilon-algorithm.
+<br>
+This function works to an overall absolute tolerance of abserr. The
+following strategy is used: on each interval C_k the algorithm tries to
+achieve the tolerance
+<br>
+TOL_k = u_k abserr
+<br>
+where u_k = (1 - p)p^{k-1} and p = 9/10. The sum of the geometric series
+of contributions from each interval gives an overall tolerance of abserr.
+<br>
+If the integration of a subinterval leads to difficulties then the
+accuracy requirement for subsequent intervals is relaxed,
+<br>
+TOL_k = u_k max(abserr, max_{i &lt; k}{E_i})
+<br>
+where E_k is the estimated error on the interval C_k.
+<br>
+The subintervals and their results are stored in the memory provided by
+workspace. The maximum number of subintervals is given by limit, which
+may not exceed the allocated size of the workspace. The integration
+over each subinterval uses the memory provided by cycle_workspace as
+workspace for the QAWO algorithm.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL; include Math
+require 'gsl_util'
+
+puts "integration_qawo"
+# f(x) = 1/sqrt(x)
+# integ(f*cos(pi x / 2),x,0,+inf) = 1
+
+def f1a(x)
+  return 0 if ( x == 0)
+  1/sqrt(x)
+end
+
+f1 = Function.new{ |x| f1a(x)}
+t = Integration::QAWOTable.new(M_PI / 2.0, 1.0,Integration::SINE, 1000)
+  
+result, abserr, neval, status = f1.integration_qawf(0, 1.0e-7, 1000, t)
+printf("result = %g, abserr = %g, neval = %d, status = %d\n",
+        result, abserr, neval, status)
+assert result =~ [1, 1.0e-9]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="Error"></a>
+<h3>GSL Error codes</h3>
+
+In addition to the standard error codes for invalid arguments the functions 
+can return the following values,
+<ul>
+<li>
+GSL_EMAXITER<br>
+the maximum number of subdivisions was exceeded. 
+<li>GSL_EROUND<br>
+cannot reach tolerance because of roundoff error, or roundoff error was 
+detected in the extrapolation table. 
+<li>GSL_ESING<br>
+a non-integrable singularity or other bad integrand behavior was found 
+in the integration interval. 
+<li>GSL_EDIVERGE<br>
+the integral is divergent, or too slowly convergent to be integrated 
+numerically.
+</ul>
+
+<h3>References and Further Reading</h3>
+
+The following book is the definitive reference for QUADPACK, and was written 
+by the original authors. It provides descriptions of the algorithms, 
+program listings, test programs and examples. It also includes useful 
+advice on numerical integration and many references to the numerical 
+integration literature used in developing QUADPACK.
+<br>
+R. Piessens, E. de Doncker-Kapenga, C.W. Uberhuber, D.K. Kahaner. <br>
+QUADPACK A subroutine package for automatic integration Springer Verlag, 1983.
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="rng.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="sort.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Numerical Integration</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

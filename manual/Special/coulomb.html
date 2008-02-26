@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Coulomb Functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="coupling.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="clausen.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Coulomb Functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Coulomb Functions</h1>
+Both bound state and scattering solutions are available.
+
+<h3>module Coulomb</h3>
+<a href="#hydrogenicR">hydrogenicR</a> ,&nbsp
+<a href="#hydrogenicR_1">hydrogenicR_1</a> ,&nbsp
+<a href="#CL">CL_e</a> ,&nbsp
+<a href="#CL_array">CL_array</a> ,&nbsp
+<p>
+<h3>Normalized Hydrogenic Bound States</h3>
+<a name="hydrogenicR_1"></a>
+<tt>GSL::Special::Coulomb::hydrogenicR_1</tt><br>
+<tt>GSL::Special::Coulomb::hydrogenicR_1_e</tt><br>
+<tt>Coulomb::hydrogenicR_1(Z, r) -> d1</tt><br>
+Z and r are doubles.
+These routines compute the lowest-order normalized hydrogenic bound state 
+radial wavefunction R_1 := 2Z \sqrt{Z} \exp(-Z r).
+<p>
+<a name="hydrogenicR"></a>
+<tt>GSL::Special::Coulomb::hydrogenicR</tt><br>
+<tt>GSL::Special::Coulomb::hydrogenicR_e</tt><br>
+<tt>Coulomb::hydrogenicR(n,l,Z,r) -> d1</tt><br>
+These routines compute the n-th normalized hydrogenic bound state radial 
+wavefunction,<br>
+<tt>R_n := 2 (Z^{3/2}/n^2) \sqrt{(n-l-1)!/(n+l)!} \exp(-Z r/n) (2Z/n)^l L^{2l+1}_{n-l-1}(2Z/n r).</tt><br>
+The normalization is chosen such that the wavefunction \psi is given by 
+\psi(n,l,r) = R_n Y_{lm}.
+
+<h3>Coulomb Wave Functions</h3>
+The Coulomb wave functions F_L(\eta,x), G_L(\eta,x) are described in 
+Abramowitz & Stegun, Chapter 14. Because there can be a large dynamic 
+range of values for these functions, overflows are handled gracefully. 
+If an overflow occurs, GSL_EOVRFLW is signalled and exponent(s) are 
+returned through the modifiable parameters exp_F, exp_G. The full solution 
+can be reconstructed from the following relations,<br>
+<pre>
+F_L(eta,x)  =  fc[k_L] * exp(exp_F)
+G_L(eta,x)  =  gc[k_L] * exp(exp_G)
+
+F_L'(eta,x) = fcp[k_L] * exp(exp_F)
+G_L'(eta,x) = gcp[k_L] * exp(exp_G)
+</pre>
+<tt>GSL::Special::Coulomb::coulomb_wave_FG_e</tt><br>
+MISSING
+<p>
+<tt>GSL::Special::Coulomb::coulomb_wave_F_array</tt><br>
+MISSING
+<p>
+<tt>GSL::Special::Coulomb::coulomb_wave_FGp_array</tt><br>
+MISSING
+<p>
+<tt>GSL::Special::Coulomb::coulomb_wave_sphF_array</tt><br>
+MISSING
+
+<h3>Coulomb Wave Function Normalization Constant</h3>
+The Coulomb wave function normalization constant is defined in 
+Abramowitz 14.1.7.<br>
+<a name="CL"></a>
+<tt>GSL::Special::Coulomb::CL_e</tt><br>
+<tt>Coulomb::CL_e(L, eta) -> return_array</tt><br>
+L and eta are doubles.
+This function computes the Coulomb wave function normalization constant 
+C_L(\eta) for L > -1.
+<p>
+<a name="CL_array"></a>
+<tt>GSL::Special::Coulomb::CL_array</tt><br>
+<tt>Coulomb::CL_array(L, k, eta) -> anArray</tt><br>
+L and eta are doubles, k is an integer.
+This function computes the coulomb wave function normalization constant 
+C_L(\eta) for L = Lmin \dots Lmin + kmax, Lmin > -1.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+include GSL::Special; include Math
+require 'gsl_util'
+
+puts "Normalized Hydrogenic Bound States"
+x = [2.2, 0.4]; Z = x[0]; r = x[1]
+res = Coulomb::hydrogenicR_1(*x)
+assert res =~ (2 * Z * sqrt(Z) * exp(-Z*r))
+res = Coulomb::hydrogenicR_1_e(*x)
+p res.val
+p res.err
+p Coulomb::hydrogenicR(2,1,Z,r)
+
+puts "Coulomb Wave Function Normalization Constant"
+res = Coulomb::CL_e(-0.5, 0.4)
+p res.val
+p res.err
+
+res = Coulomb::CL_array(-0.5, 1, 0.4)
+p res
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="coupling.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="clausen.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Coulomb Functions</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

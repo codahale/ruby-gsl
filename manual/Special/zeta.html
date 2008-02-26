@@ -1,0 +1,154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Zeta Functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="trig.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Zeta Functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Zeta Functions</h1>
+The Riemann zeta function is defined in Abramowitz & Stegun, Section 23.2.
+
+<h3>Module Zeta</h3>
+<a href="#eta">eta</a> ,&nbsp
+<a href="#eta_int">eta_int</a> ,&nbsp
+<a href="#hzeta">hzeta</a> ,&nbsp
+<a href="#zeta">zeta</a> ,&nbsp
+<a href="#zeta_int">zeta_int</a> &nbsp
+
+<h4>Riemann Zeta Function</h4>
+
+The Riemann zeta function is defined by the infinite sum 
+\zeta(s) = \sum_{k=1}^\infty k^{-s}.
+
+<p>
+<a name="zeta_int"></a>
+<tt>GSL::Special::Zeta::zeta_int</tt><br>
+<tt>GSL::Special::Zeta::zeta_int_e</tt><br>
+<tt>Zeta::zeta_int(n) -> d1</tt><br>
+These routines compute the Riemann zeta function \zeta(n) for integer n, 
+n \ne 1.
+<p>
+<a name="zeta"></a>
+<tt>GSL::Special::Zeta::zeta</tt><br>
+<tt>Zeta::zeta(s) -> d1</tt><br>
+s is a double.
+These routines compute the Riemann zeta function \zeta(s) for arbitrary s, 
+s \ne 1.
+
+
+<h4>Hurwitz Zeta Function</h4>
+
+The Hurwitz zeta function is defined by \zeta(s,q) = \sum_0^\infty (k+q)^{-s}.
+<p>
+<a name="hzeta"></a>
+<tt>GSL::Special::Zeta::hzeta</tt><br>
+<tt>Zeta::hzeta(s, q) -> d1</tt><br>
+s and q are doubles.
+These routines compute the Hurwitz zeta function \zeta(s,q) for s > 1, q > 0.
+
+<h4>Hurwitz Zeta Function</h4>
+The Hurwitz zeta function is defined by 
+\zeta(s,q) = \sum_0^\infty (k+q)^{-s}.
+These routines compute the Hurwitz zeta function \zeta(s,q) for s > 1, q > 0.
+
+<h4>Eta Function</h4>
+The eta function is defined by \eta(s) = (1-2^{1-s}) \zeta(s).
+<p>
+<a name="eta_int"></a>
+<tt>GSL::Special::Zeta::eta_int</tt><br>
+<tt>GSL::Special::Zeta::eta_int_e</tt><br>
+<tt>Zeta::eta_int(n) -> d1</tt><br>
+These routines compute the eta function \eta(n) for integer n.
+<p>
+<a name="eta"></a>
+<tt>GSL::Special::Zeta::eta</tt><br>
+<tt>GSL::Special::Zeta::eta_e</tt><br>
+<tt>Zeta::eta(s) -> d1</tt><br>
+s is a double.
+These routines compute the eta function \eta(s) for arbitrary s.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+include GSL::Special; include Math
+require 'gsl_util'
+
+puts "zeta_int"
+r = Zeta::zeta_int(0)
+p r
+
+def zeta2(n) 
+  b2 = [1, 1.0/6, -1.0/30, 1.0/42]
+  (2*M_PI)**(2*n)/(2*Gamma::fact(2*n))*b2[n].abs
+end
+  
+(1..2).each do |i| 
+  assert Zeta::zeta_int(2*i) =~ zeta2(i)
+end
+
+puts "zeta"
+r = Zeta::zeta(0)
+p r
+
+puts "hzeta"
+r = Zeta::hzeta(2,1)
+(1..2).each do |i|
+ assert Zeta::hzeta(2*i,1) =~ Zeta::zeta_int(2*i)
+ 
+end
+
+x = [2.8, 3.4] 
+r = Zeta::hzeta(*x)
+p r
+r = Zeta::hzeta_e(*x)
+p r.val; p r.err
+
+puts "eta_int"
+r = Zeta::eta_int(2)
+p r
+p ((1 - pow(2,1-2)) * Zeta::zeta_int(2))
+
+(1..2).each do |i|
+ assert  Zeta::eta_int(2*i) =~ (1 - pow(2,1-2*i)) * Zeta::zeta_int(2*i)
+ assert Zeta::eta(2*i) =~ (1 - pow(2,1-2*i)) * Zeta::zeta_int(2*i) 
+end
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="trig.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Zeta Functions</td> 
+</tr></tbody></table><hr>
+</body>
+</ht
+ml>

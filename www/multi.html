@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: multi.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: multi.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+# Test module MSolver
+
+STDERR.puts "Running multiroot-finding tests (fsolver)..."
+
+s = Multiroot::MFSolver.new Multiroot::MFSolver::BROYDEN, 3
+puts s
+
+a = [2, 4]
+v = Vector.new a
+r = Vector.new 2
+f = MFunction.new { |x, y| puts "Ruby"; nil }
+puts f
+puts f.eval v, r
+puts f.arity
+puts f.proc
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

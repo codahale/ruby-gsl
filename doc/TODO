@@ -1,0 +1,19 @@
+Things that need to be changed/fixed:
+- more testing
+- more typechecking
+- handle return value of _e functions
+- use size_t where appropriate
+- be consistent with FIX2INT/NUM2INT etc.
+- implement missing functions:
+  Columb.c: wave functions _wave_
+  Math.c: Infinites, Not-a-number, Max/Min
+  Permutation.c: applying permutations, inverse
+  Interp.c and Spline.c: _e
+- Complex: module functions -> methods
+- Poly: module -> class
+- fix Monte Carlo Integration
+- eigensystems for complex matrices
+- fix bugs in MultiFunction
+- some of the module functions really should be methods for
+  the Ruby classes Float, Integer, etc.
+- fix bugs in Siman

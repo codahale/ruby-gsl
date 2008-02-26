@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: error.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: error.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+# how to use error handling
+
+def show(str, x, res)
+  if res.class == Result
+    printf "  %s(%g) = %g (err = %g)\n", str, x, res.val, res.err
+  else
+    printf "  %s(%g) = %g\n", str, x, res
+  end
+end
+
+STDERR.puts "Error handling..."
+
+puts "\nThis is ok:"
+x = 7.001
+r = Special::Legendre::Q1(x)
+show "Q1", x, r
+
+puts "\nFor Legendre::Q1(x) the x argument must be != 1"
+x = 1
+
+puts "\nTurn off error handling:"
+GSL::set_handler(ERR_OFF)
+r = Special::Legendre::Q1_e(x)
+show "Q1_e", x, r
+
+puts "\nCatch GSL exception:"
+GSL::set_handler(ERR_RUBY)
+begin
+  r = Special::Legendre::Q1_e(x)
+  show "Q1_e", x, r
+rescue GSLException
+  puts "Ouch: #{$!}"
+end
+
+puts "\nThis will abort the program:"
+GSL::set_handler(ERR_INTERN)
+r = Special::Legendre::Q1_e(x)
+show "Q1_e", x, r
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

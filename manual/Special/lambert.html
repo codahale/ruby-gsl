@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Lambert W functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="legendre.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="laguerre.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Lambert W functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Lambert W functions</h1>
+Lambert's W functions, W(x), are defined to be solutions of the equation 
+W(x) \exp(W(x)) = x. This function has multiple branches for x < 0; however, 
+it has only two real-valued branches. We define W_0(x) to be the principal 
+branch, where W > -1 for x < 0, and W_{-1}(x) to be the other real branch, 
+where W < -1 for x < 0.
+
+<h3>Module Lambert</h3>
+<a href="#W0">W0</a> ,&nbsp
+<a href="#Wm1">Wm1</a> &nbsp
+<p>
+<a name="W0"></a>
+<tt>GSL::Special::Lambert::W0</tt><br>
+<tt>GSL::Special::Lambert::W0_e</tt><br>
+<tt>Lambert::W0(x) -> d1</tt><br>
+These compute the principal branch of the Lambert W function, W_0(x).
+<p>
+<a name="Wm1"></a>
+<tt>GSL::Special::Lambert::Wm1</tt><br>
+<tt>GSL::Special::Lambert::Wm1_e</tt><br>
+<tt>Lambert::Wm1</tt><br>
+These compute the secondary real-valued branch of the Lambert W function,
+W_{-1}(x).
+
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+include GSL::Special
+include Math
+
+
+puts "W0"
+x = 1
+r = Lambert::W0(x)
+p r
+
+x = 8.888 
+r = Lambert::W0(x)
+p r
+r = Lambert::W0_e(x)
+p r.val; p r.err
+ 
+puts "Wm1"
+x = 1
+r = Lambert::Wm1(x)
+assert r ==  Lambert::W0(x)
+
+x = -0.1
+r = Lambert::Wm1(x)
+p r
+p  Lambert::W0(x)
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="legendre.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="laguerre.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Lambert W functions</td> 
+</tr></tbody></table><hr></body>
+</ht
+ml>

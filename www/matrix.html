@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: matrix.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: matrix.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+DUMP = "matrix.dump"
+File.delete(DUMP) if File.exists?(DUMP)
+
+STDERR.puts "Running tests for Matrix..."
+
+m = Matrix.new 10, 10
+0.upto(9) do |i|
+  0.upto(9) do |j|
+    m.set i, j, Math::sin(i) + Math::cos(j)
+  end
+end
+
+puts "writing matrix"
+f = File.open DUMP, "w"
+m.fwrite f
+f.close
+
+puts "\nreading matrix"
+n = Matrix.new 10, 10
+f = File.open DUMP, "r"
+n.fread f
+f.close
+
+k = 0
+0.upto(9) do |i|
+  0.upto(9) do |j|
+    d1 = m.get i, j
+    d2 = n.get i, j
+    k += 1 if d1 != d2
+  end
+end
+
+puts "\ndifferences = #{k} (should be zero)"
+
+0.upto(9) do |j|
+  col = m.column j
+  d = 0.0
+  col.each do |i|
+    d += i*i
+  end
+  printf "matrix column %d, norm = %g\n", j, Math::sqrt(d)
+end
+
+puts "\neigenvalues and eigenvectors"
+n = Matrix.new [1.0, 1/2.0, 1/3.0, 1/4.0], [1/2.0, 1/3.0, 1/4.0, 1/5.0],
+               [1/3.0, 1/4.0, 1/5.0, 1/6.0], [1/4.0, 1/5.0, 1/6.0, 1/7.0]
+vals, vecs = n.eigen_symmv
+Eigen.symmv_sort vals, vecs, Eigen::SORT_VAL_ASC
+vals.to_a.each_index do |i|
+  printf "l = %.3f\n", vals.get(i)
+  vecs.get_col(i).printf "%.3f"
+  puts
+end
+
+File.delete(DUMP) if File.exists?(DUMP)
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

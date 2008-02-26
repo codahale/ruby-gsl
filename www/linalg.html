@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: linalg.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: linalg.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+STDERR.puts "Running tests for Linalg..."
+
+a = [ 0.18, 0.60, 0.57, 0.96,
+      0.41, 0.24, 0.99, 0.58,
+      0.14, 0.30, 0.97, 0.66,
+      0.51, 0.13, 0.19, 0.85 ]
+b = [ 1.0, 2.0, 3.0, 4.0 ]
+
+m = Matrix.new a, 4, 4
+v = Vector.new b
+
+m, p, s = m.LU_decomp!
+x = m.LU_solve p, v
+
+puts "x = "
+x.fprintf STDOUT, "%g"
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

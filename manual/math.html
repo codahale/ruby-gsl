@@ -1,0 +1,483 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Basic mathematical functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="complex.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="intro.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Basic mathematical functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Basic mathematical functions</h1>
+This chapter describes basic mathematical functions. 
+
+<h3>Module Math</h3>
+The GSL::Math module is an extension of the
+Ruby standard library module Math .
+
+<h2>Mathematical constants</h2>
+In the Ruby standard library module Math the constants PI and E are defined.<br>
+More constants are defined in its GSL extension.
+<p>
+<a href="#M_E">M_E</a> ,&nbsp
+<a href="#M_LOG2E">M_LOG2E</a> ,&nbsp
+<a href="#M_LOG10E">M_LOG10E</a> ,&nbsp
+<a href="#M_SQRT2">M_SQRT2</a> ,&nbsp
+<a href="#M_SQRT1_2">M_SQRT1_2</a> ,&nbsp
+<a href="#M_SQRT3">M_SQRT3</a> ,&nbsp
+<a href="#M_PI">M_PI</a> ,&nbsp
+<a href="#M_PI">M_PI</a> ,&nbsp
+<a href="#M_PI_2">M_PI_2</a> ,&nbsp
+<a href="#M_PI_4">M_PI_4</a> ,&nbsp
+<a href="#M_SQRTPI">M_SQRTPI</a> ,&nbsp
+<a href="#M_2_SQRTPI">M_2_SQRTPI</a> ,&nbsp
+<a href="#M_2_PI">M_2_PI</a> ,&nbsp
+<a href="#M_1_PI">M_1_PI</a> ,&nbsp
+<a href="#M_LN10">M_LN10</a> ,&nbsp
+<a href="#M_LN2">M_LN2</a> ,&nbsp
+<a href="#M_LNPI">M_LNPI</a> ,&nbsp
+<a href="#M_EULER">M_EULER</a>
+<p>
+<a name="M_E"></a>
+<tt>Math::M_E</tt><br>
+The base of exponentials, e; same as Math::E .
+<p>
+<a name="M_LOG2E"></a>
+<tt>Math::M_LOG2E</tt><br>
+The base-2 logarithm of e, \log_2 
+<p>
+<a name="M_LOG10E"></a>
+<tt>Math::M_LOG10E</tt><br>
+The base-10 logarithm of e, \log_10 (e)
+<p>
+<a name="M_SQRT2"></a>
+<tt>Math::M_SQRT2</tt><br>
+The square root of two, \sqrt 2
+<p>
+<a name="M_SQRT1_2"></a>
+<tt>Math::M_SQRT1_2</tt><br>
+The square root of one-half, \sqrt{1/2}
+<p>
+<a name="M_SQRT3"></a>
+<tt>Math::M_SQRT3</tt><br>
+The square root of three, \sqrt 3
+<p>
+<a name="M_PI"></a>
+<tt>Math::M_PI</tt><br>
+The constant pi, \pi ; same as Math::PI
+<p>
+<a name="M_PI_2"></a>
+<tt>Math::M_PI_2</tt><br>
+Pi divided by two, \pi/2 
+<p>
+<a name="M_PI_4"></a>
+<tt>Math::M_PI_4</tt><br>
+Pi divided by four, \pi/4
+<p>
+<a name="M_SQRTPI"></a>
+<tt>Math::M_SQRTPI</tt><br>
+The square root of pi, \sqrt\pi
+<p>
+<a name="M_2_SQRTPI"></a>
+<tt>Math::M_2_SQRTPI</tt><br>
+Two divided by the square root of pi, 2/\sqrt\pi
+<p>
+<a name="M_1_PI"></a>
+<tt>Math::M_1_PI</tt><br>
+The reciprocal of pi, 1/\pi
+<p>
+<a name="M_2_PI"></a>
+<tt>Math::M_2_PI</tt><br>
+Twice the reciprocal of pi, 2/\pi
+<p>
+<a name="M_LN10"></a>
+<tt>Math::M_LN10</tt><br>
+The natural logarithm of ten, \ln(10)
+<p>
+<a name="M_LN2"></a>
+<tt>Math::M_LN2</tt><br>
+The natural logarithm of two, \ln(2) 
+<p>
+<a name="M_LNPI"></a>
+<tt>Math::M_LNPI</tt><br>
+The natural logarithm of pi, \ln(\pi)
+<p>
+<a name="M_EULER"></a>
+<tt>Math::M_EULER</tt><br>
+Euler's constant, \gamma
+<p>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'GSL'
+include Math
+
+assert PI == M_PI	#       pi
+assert E == M_E		#	e
+p M_LOG2E		#	log_2 (e) 
+p M_LOG10E		#	log_10 (e) 
+p M_SQRT2		#	sqrt(2)
+p M_SQRT1_2		#	sqrt(1/2)
+p M_SQRT3		#	sqrt(3)
+p M_PI_2		#	pi/2
+p M_PI_4                #       pi/4
+p M_SQRTPI		#	sqrt(pi)
+p M_1_PI		#	1/pi
+p M_2_PI		#	2/p1
+p M_LN10		#	ln(10)
+p M_LN2			#	ln(2)
+p M_LNPI		#	ln(pi)
+p M_EULER		#	Euler constant
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h2>Elementary functions</h2>
+In the Ruby standard library module Math the following functions are
+defined:<br>
+atan2 cos sin tan acos asin atan exp log log10 sqrt frexp ldexp; <br>
+in its GSL extension more functions are defined. 
+<p>
+<a href="#=~">=~</a> ,&nbsp
+<a href="#log1p">log1p</a> ,&nbsp
+<a href="#expm1">expm1</a> ,&nbsp
+<a href="#acos">acos</a> ,&nbsp
+<a href="#acosh">acosh</a> ,&nbsp
+<a href="#asin">asin</a> ,&nbsp
+<a href="#asinh">asinh</a> ,&nbsp
+<a href="#atan">atan</a> ,&nbsp
+<a href="#atan2">atan2</a> ,&nbsp
+<a href="#atanh">atanh</a> ,&nbsp
+<a href="#cos">cos</a> ,&nbsp
+<a href="#exp">exp</a> ,&nbsp
+<a href="#fl_eq">fl_eq</a> ,&nbsp
+<a href="#frexp">frexp</a> ,&nbsp
+<a href="#hypot">hypot</a> ,&nbsp
+<a href="#log">log</a> ,&nbsp
+<a href="#log10">log10</a> ,&nbsp
+<a href="#pow">pow</a> ,&nbsp
+<a href="#sin">sin</a> ,&nbsp
+<a href="#tan">tan</a> ,&nbsp
+<a href="#sqrt">sqrt</a> ,&nbsp
+
+<a href="#pow_int">pow_int</a> ,&nbsp
+<a href="#pow_2">pow_2</a> ,&nbsp
+<a href="#pow_3">pow_3</a> ,&nbsp
+<a href="#pow_4">pow_4</a> ,&nbsp
+<a href="#pow_5">pow_5</a> ,&nbsp
+<a href="#pow_6">pow_6</a> ,&nbsp
+<a href="#pow_7">pow_7</a> ,&nbsp
+<a href="#pow_8">pow_8</a> ,&nbsp
+<a href="#pow_9">pow_9</a> ,&nbsp
+<a href="#sign">sign</a>   ,&nbsp
+<a href="#fcmp">fcmp</a>   ,&nbsp
+<a href="#float_equal">float_equal   ,&nbsp
+<p>
+<p>
+<a name="log1p"></a>
+<tt>Math::log1p</tt><br>
+This function computes the value of \log(1+x) in a way that is accurate for 
+small x. It provides an alternative to the BSD math function log1p(x).
+<p>
+<a name="expm1"></a>
+<tt>Math::expm1</tt><br>
+This function computes the value of \exp(x)-1 in a way that is accurate 
+for small x. 
+It provides an alternative to the BSD math function expm1(x).
+<p>
+<a name="acos"></a>
+<tt>Math::acos</tt><br>
+This function computes the value of \arccos(x). 
+It is an alternative to the module method Math::acos
+<p> 
+<a name="acosh"></a>
+<tt>Math::acosh</tt><br>
+This function computes the value of \cosh(x);
+It is an alternative to the module method Math::acosh
+<p>
+<a name="asin"></a>
+<tt>Math::asin</tt><br>
+This function computes the value of \arcsin(x);
+It is an alternative to the module method Math::asin .
+
+<p>
+<a name="asinh"></a>
+<tt>Math::asinh</tt><br>
+This function computes the value of \arcsinh(x). 
+<p>
+<a name="atan"></a>
+<tt>Math::atan</tt><br>
+This function computes the value of \arctan(x);
+It is an alternative to the module method Math::atan .
+<p>
+<a name="atan2"></a>
+<tt>Math::atan2</tt><br>
+atan2(x,y) -> d1<br>
+This function computes the  arc tangent of the two
+variables x and y.  It is similar to calculating  the  arc
+tangent  of y / x, except that the signs of both arguments
+are used to determine the quadrant of the result.
+<br>It is an alternative to the module method Math::atan2
+<p>
+<a name="atanh"></a>
+<tt>Math::atanh</tt><br>
+This function computes the value of \arctanh(x). 
+<p>
+<a name="hypot"></a>
+<tt>Math::hypot</tt><br>
+This function computes the value of \sqrt{x^2 + y^2} in a way that avoids overflow. 
+<p>
+
+<a name="ldexp"></a> 
+<tt>Math::ldexp</tt><br> 
+ldexp(x, exp) -> d1<br>
+This function computes the value of <tt>x * 2^exp</tt>, where 
+<tt>exp</tt> is an integer;
+it provides an alternative to the module function Math::ldexp
+<p>
+<a name="frexp"></a>
+<tt>Math::frexp</tt><br>
+This function splits the number x into its normalized fraction f and 
+exponent e, such that x = f * 2^e and 0.5 <= f < 1. Ihe function returns 
+f and stores the exponent in e. If x is zero, both f and e are set to zero.
+It provides an alternative to the module function Math::frexp
+<p>
+<a name="cos"></a>
+<tt>Math::cos</tt><br>
+cos(x) -> d1<br>
+This function computes the cosine of x; 
+it provides an alternative to the module function Math::cos
+<p>
+<a name="exp"></a>
+<tt>Math::exp</tt><br>
+exp(x) -> d1<br>
+This function computes the exponential of x;
+it provides an alternative to the module function Math::exp
+
+<p>
+<a name="log"></a>
+<tt>Math::log</tt><br>
+log(x) -> d1<br>
+ This function returns the natural logarithm of x;
+ it provides an alternative to the module function Math::log
+<p>
+<a name="log10"></a>
+<tt>Math::log10</tt><br>
+log10(x) -> d1<br>
+This function function returns the base-10 logarithm of x
+it provides an alternative to the module function Math::log10
+
+<p>
+<a name="pow"></a>
+<tt>Math::pow</tt><br>
+pow(x,y) -> d1<br>
+d1 = x**y; x, y and d1 are Float objects; Math::pow(x,y) seems to be faster
+than x**y . 
+<p>
+<a name="sin"></a>
+<tt>Math::sin</tt><br>
+sin(x) -> d1<br>
+This function computes the sine of x;
+it provides an alternative to the module function Math::sin
+<p>
+<a name="tan"></a>
+<tt>Math::tan</tt><br>
+tan(x) -> d1<br>
+This function computes the tangent of x;
+it provides an alternative to the module function Math::sin
+<p>
+
+<a name="sqrt"></a>
+<tt>Math::sqrt</tt><br>
+sqrt(x) -> d1<br>
+This function returns the non-negative square root of x;
+it provides an alternative to the module function Math::sqrt
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'GSL'
+include Math
+require 'gsl_util'
+
+x = 0.1; y = 0.9
+
+assert log1p(x) =~ log(1 + x)
+assert expm1(x) =~ M_E**x - 1
+assert ldexp(x,3) =~ x * 2**3
+assert sin(0) =~ 0.0 &amp;&amp; sin(M_PI_2) =~ 1.0
+f1 = frexp(0.6 * 2**-15);
+assert f1[0] =~ 0.6 &amp;&amp;  f1[1] == -15
+assert pow(x,y) =~ x**y
+assert tan(atan2(x,y)) =~ x/y &amp;&amp; acos(cos(x)) =~ x &amp;&amp; asin(sin(x)) =~ x &amp;&amp; atan(tan(x)) =~ x
+assert exp(log(x)) =~ x
+assert log10(10**x) =~ x
+assert sqrt(100) =~ 10
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Small power functions</h3>
+Functions for calculating (small) integer powers.
+For reasons of efficiency, these functions do not check for overflow or 
+underflow conditions.
+<p>
+<a name="pow_int"></a>
+<tt>Math::pow_int</tt><br>
+This routine computes the power x^n for integer n. The power is computed 
+using the minimum number of multiplications. For example, x^8 is computed 
+as ((x^2)^2)^2, requiring only 3 multiplications. 
+
+<p>
+These functions can be used to compute small integer powers x^2, x^3, etc. 
+efficiently. The functions will be inlined when possible so that use of 
+these functions should be as efficient as explicitly writing the 
+corresponding product expression.
+<p>
+<a name="pow_2"></a>
+<tt>Math::pow_2</tt><br>
+<p>
+<a name="pow_3"></a>
+<tt>Math::pow_3</tt><br>
+<p>
+<a name="pow_4"></a>
+<tt>Math::pow_4</tt><br>
+<p>
+<a name="pow_5"></a>
+<tt>Math::pow_5</tt><br>
+<p>
+<a name="pow_6"></a>
+<tt>Math::pow_6</tt><br>
+<p>
+<a name="pow_7"></a>
+<tt>Math::pow_7</tt><br>
+<p>
+<a name="pow_8"></a>
+<tt>Math::pow_8</tt><br>
+<p>
+<a name="pow_9"></a>
+<tt>Math::pow_9</tt><br>
+<p>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'GSL'
+include Math
+require 'gsl_util'
+
+x = 0.1; y = 0.9
+assert pow(4.0,2) =~ pow_int(4.0,2) &amp;&amp;  pow(4.0,2) =~ pow_2(4.0) &amp;&amp;  pow_int(4.0,3) =~ pow_3(4.0)
+assert pow_int(4.0,3) =~ pow_3(4.0) &amp;&amp; pow_int(4.0,4) =~ pow_4(4.0) &amp;&amp;  pow_int(4.0,5) =~ pow_5(4.0)
+assert pow_int(4.0,6) =~ pow_6(4.0) &amp;&amp; pow_int(4.0,7) =~ pow_7(4.0) &amp;&amp; pow_int(4.0,8) =~ pow_8(4.0) 
+assert pow_int(4.0,9) =~ pow_9(4.0)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="sign"></a>
+<tt>Math::sign</tt><br>
+<tt>sign(num) -> n</tt><br>
+num is a double.
+This function returns  1 (-1) if num is positive (negative).
+<p>
+<a name="is_odd"></a>
+<tt>Math::is_odd</tt><br>
+<tt>is_odd(num) -> n</tt><br>
+This function returns 1 if num is odd and 0 if num is even.
+If <tt>num</tt> is not an integer it returns <tt>nil</tt>.
+<p> 
+<a name="is_even"></a>
+<tt>Math::is_even</tt><br>
+<tt>is_even(num) -> n</tt><br>
+This function returns 1 if num is even and 0 if num is odd.
+If <tt>num</tt> is not an integer it returns <tt>nil</tt>.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'GSL'
+include Math
+
+eps = 1.0e-15
+assert sign(-3) == -1 &amp;&amp; sign(3.0) == 1 &amp;&amp; sign(0.5) == 1 &amp;&amp; sign(-0.5) == -1
+assert is_odd(3) == 1 &amp;&amp; is_even(3) == 0 &amp;&amp; is_even(4) == 1
+assert is_odd(3.4) == nil &amp;&amp; is_even(3.4) == nil
+assert [3,4].max == 4 &amp;&amp; fcmp([3.0,4].min,3.0, eps)
+assert fcmp([3.0,4].max, 4.0, eps) == 0
+
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>Approximate Comparison of Floating Point Numbers</h3>
+<a name="fcmp"></a>
+<tt>Math::fcmp</tt><br>
+<tt>fcmp(x, y, eps) -> num1</tt><br>
+This function determines whether x and y are approximately equal to a 
+relative accuracy eps . x and y can be Float or Integer objects,
+eps must be a small positive Float.
+The relative accuracy is measured using an interval of size 2 \delta, where 
+\delta = 2^k \epsilon and k is the maximimum base-2 exponent of x and y as 
+computed by the function frexp().
+<br>
+If x and y lie within this interval, they are considered approximately equal 
+and the function returns 0. Otherwise if x < y, the function returns -1, 
+or if x > y, the function returns +1.
+<p>
+<a name="float_equal"></a>
+<tt>Math::float_equal</tt><br>
+<tt>float_equal(x, y, eps) -> bool</tt><br>
+This function determines whether x and y are approximately equal to a
+relative accuracy eps . x and y can be Float or Integer objects,
+eps must be a small positive Float.
+<br>
+If |x - y| < eps, x and y  are considered approximately equal 
+and the function returns <tt>true</tt>
+<p>
+<a name="fl_eq"</a>
+<a name="=~"></a>
+<tt>Float::=fl_eq</tt><br>
+<tt>Float::=~</tt>&nbsp; (Alias)<br>
+<tt>x =~ y -> bool</tt><br>
+double x, y<br>
+Same as float_equal(x, y, 1.0e-15)
+<p>
+<tt>x =~ [y, eps]</tt><br>
+double x, y, eps<br>
+Same as float_equal(x, y, eps)
+These methods are defined in 'gsl_util'.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'GSL'
+include Math
+require 'gsl_util'
+eps = 1.0e-15
+
+assert fcmp( 1.0, 0.5, eps) == 1 &amp;&amp; fcmp( 1.0, 1.5, eps) == -1
+assert(fcmp(1 + cos(M_PI/2), 1.0, eps) == 0) 
+# but also
+assert(fcmp(cos(M_PI/2), 0.0, eps) == 1)
+x = 1.0e-12
+y = x/8
+assert (frexp(x)[1] == -39 &amp;&amp; frexp(y)[1] == -42)
+assert fcmp(x,y,eps) == 1
+assert cos(M_PI/2) =~ 0.0
+assert 1 + eps/2 =~ 1 &amp;&amp; 1 + 10*eps !~ 1 &amp;&amp; 1 + 10*eps =~ [1, 20 * eps]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="complex.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="intro.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Basic mathematical functions</td> 
+</tr></tbody></table><hr></body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: rng.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: rng.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL::Random
+
+# Test random number generation
+
+STDERR.puts "Running tests for random number generation..."
+
+r = RNG.new2(RNG::CMRG)
+c = r.clone
+puts "\nname   : #{r.name}"
+puts "min    : #{r.min}"
+puts "max    : #{r.max}"
+puts "size   : #{r.size}"
+print "get    : "
+10.times do |k| print r.get, " " end
+print "\nclone  : "
+10.times do |k| print c.get, " " end
+print "\nuniform: "
+10.times do |k| print r.uniform, " " end
+puts
+
+# c.dump
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

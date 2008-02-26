@@ -1,0 +1,47 @@
+div.header {
+    margin-left: 3em;
+    margin-right: 3em;
+    border-style: solid;
+    border-color: #a11;
+    border-width: 1px;
+    margin-bottom: 0.5em;
+    display: inline;
+}
+
+div.header h2 {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: 110%;
+    padding: 0.2em;
+    color: #ffffff;
+    background-color: #c63200;
+}
+
+div.text {
+    margin-left: 1.5em;
+    margin-right: 1.5em;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+hr.sep {
+    display: none;
+    margin: 0px;
+}
+
+a {
+    color: #ea3a00;
+    background-color: transparent;
+}
+
+a:visited {
+    color: #c63200;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #ff6835;
+    background-color: transparent;
+}
+
+

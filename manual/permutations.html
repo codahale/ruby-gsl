@@ -1,0 +1,581 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Permutations</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="combinations.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="matrices.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Permutations</td> 
+</tr></tbody></table><hr>
+<h1>
+Permutations</h1>
+This chapter describes functions for creating and manipulating permutations.<br>
+A permutation p is represented by an array of n integers
+in the range 0 .. n-1, where each value p_i occurs once and only once.<br>
+The application of a permutation p to a vector v yields a new vector
+v' where <tt>v'_i = v_{p_i}</tt>.
+The corresponding identity permutation is <tt>(0,1,2,3)</tt>.<br>
+This is the rappresentation of a permutation in a linear form.
+
+
+<h3>The Permutation class</h3>
+Permutations belong to the <tt>Permutation</tt> class, whose superclass
+is <tt>Object</tt>. <br>
+This class is a wrapping of the GSL <tt>gsl_permutation</tt> structure,
+which looks like this,
+<pre>
+typedef struct
+{
+  size_t size;
+  size_t * data;
+} gsl_permutation;
+</pre>
+With this structure one can describe permutations in linear form,
+which is the one described before, or in canonical form, described
+later. In ruby-gsl permutations in linear form belong to the
+class <tt>Permutation</tt> while permutations in canonical form
+belong to the subclass <tt>CanPermutation</tt>.
+
+<h2>Permutations in linear form</h2>
+<h3>Permutation methods</h3>
+<a href="#new">new</a> ,&nbsp
+<a href="#memcpy">memcpy</a> ,&nbsp
+<a href="#new_ary">new_ary</a> ,&nbsp
+
+<p>
+<a name="new"></a>
+<tt>Permutation.new</tt><br>
+<tt>Permutation.new(aNum) -> perm1</tt><br>
+where <tt>perm1</tt>  is the identity permutation of size <tt>aNum</tt>.
+<p>
+<a name="new_ary"></a>
+<tt>Permutation.new_ary</tt><br>
+<tt>Permutation.new_ary(anArray) -> perm1</tt><br>
+where <tt>anArray</tt> must be an array of <tt>n</tt> integers
+in the range <tt>0 .. n-1</tt>, each value <tt>anArray[i]</tt> 
+occurring once and only once; otherwise an exception is thrown.
+<tt>perm1</tt> is the permutation represented by that array.
+<p>
+<a name="memcpy"></a>
+<tt>Permutation.memcpy</tt><br>
+<tt>Permutation.memcpy(dest, src) -> aNum</tt><br>
+copies a permutation <tt>src</tt> to a permutation <tt>dest</tt>;
+returns 0 for success.<br>
+
+
+<h3>Permutation instance methods</h3>
+<a href="#mul">*</a> ,&nbsp 
+<a href="#get">[]</a> ,&nbsp 
+<a href="#cycles">cycles</a> ,&nbsp 
+<a href="#to_a">data</a> ,&nbsp 
+<a href="#dump">dump</a> ,&nbsp 
+<a href="#each">each</a> ,&nbsp 
+<a href="#equal">equal</a> ,&nbsp 
+<a href="#fprintf">fprintf</a> ,&nbsp 
+<a href="#fread">fread</a> ,&nbsp 
+<a href="#fscanf">fscanf</a> ,&nbsp 
+<a href="#fwrite">fwrite</a> ,&nbsp 
+<a href="#get">get</a> ,&nbsp 
+<a href="#inverse">inverse</a> ,&nbsp 
+<a href="#is_valid?">valid</a> ,&nbsp
+<a href="#mul">mul</a> ,&nbsp 
+<a href="#next">next</a> ,&nbsp 
+<a href="#permute">permute</a> ,&nbsp 
+<a href="#permute_inverse">permute_inverse</a> ,&nbsp 
+<a href="#prev">prev</a> ,&nbsp 
+<a href="#reset">reset</a> ,&nbsp 
+<a href="#reverse!">reverse!</a> ,&nbsp 
+<a href="#size">size</a> ,&nbsp 
+<a href="#swap">swap</a> ,&nbsp 
+<a href="#to_a">to_a</a>, &nbsp
+<a href="#to_canonical">to_canonical</a> ,&nbsp
+<a href="#to_linear">to_linear</a> ,&nbsp 
+<a href="#undump">undump</a> ,&nbsp 
+<a href="#valid">valid</a> 
+
+
+<p>
+<a name="permute"></a>
+<tt>Permutation#permute</tt><br>
+<tt>perm1.permute(anArray1) -> anArray2</tt><br> 
+where <tt>anArray1</tt> is any Ruby array, and  <tt>anArray2</tt> 
+is the result of the application of the permutation <tt>perm1</tt>
+to <tt>anArray1</tt>.
+<p>
+<a name="equal"></a>
+<tt>Permutation#equal</tt><br>
+<tt>Permutation#==</tt> (alias) <br>
+<tt>perm1 == perm2 -> bool</tt>
+where <tt>bool</tt> is <tt>true</tt> if the two permutations are equal<br>
+<a name="reset"></a>
+<tt>Permutation#reset</tt> (mutating method)<br> 
+<tt>perm1.reset -> perm2</tt> where <tt>perm2</tt> is the identity permutation.
+<p><tt>Permutation#data</tt>
+<p>
+<a name="to_a"></a>
+<tt>Permutation#to_a</tt> (alias) <br>
+<tt>perm1.to_a -> array1</tt><br>
+where <tt>array1</tt> is the array representing <tt>perm1</tt>.
+<p>
+<a name="get"></a>
+<tt>Permutation#get</tt><br>
+<tt>Permutation#[]</tt> (alias)<br>
+<tt>perm1[anIndex] -> aNumber</tt><br>
+<tt>aNumber</tt> is <tt>anIndex</tt>-the entry of the array representing
+<tt>perm1</tt>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'perm'
+
+assert Permutation.ancestors == [GSL::Permutation, Object, GSL, Kernel]
+p1 = Permutation.new(4)
+p2 = Permutation.new_ary([0,1,3,2])
+assert p1.permute([:a,:b,:c,:d]) == [:a,:b,:c,:d]
+assert p2.permute([:a,:b,:c,:d]) == [:a,:b,:d,:c]
+assert p2.permute([1,2,"a",[3,4]]) == [1, 2, [3, 4], "a"]
+assert p1 != p2
+assert p1[2] == 2 &amp;&amp; p2[2] == 3
+assert p2.reset.to_a == [0,1,2,3]
+assert p1 == p2
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><tt>Permutation#get</tt><br>
+<tt>Permutation#[]</tt> (alias) <br>
+<tt>perm1[index1] -> integer1</tt><br>
+gives the same as <tt>perm1.to_a[index1]</tt>
+<p>
+<a name="swap"></a>
+<tt>Permutation#swap</tt> (mutating) <br>
+<tt>perm1.swap(index1,index2) -> perm2</tt><br>
+exchanges the <tt>index1-th</tt> and  <tt>index2-th</tt> elements of the 
+permutation <tt>perm1</tt>.
+<p>
+<a name="size"></a>
+<tt>Permutation#size</tt><br>
+<tt>perm1.size -> anInteger</tt>.<br>
+where </tt> is the size of the permutation <tt>perm1</tt>
+<p>
+<a name="valid"></a>
+<tt>Permutation#valid</tt><br>
+<tt>perm1.valid -> bool</tt>.<br>
+where <tt>bool</tt> is  <tt>true</tt> if <tt>perm1</tt> is a valid
+permutation.<br>
+<tt>Permutation#is_valid?</tt> alias of <tt>Permutation#valid</tt><br>
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'perm'
+
+p1 = Permutation.new_ary([2,1,0]);
+assert p1[0] == 2
+p1.swap(0,1)
+assert p1.to_a == [1, 2, 0]
+assert p1.size == 3
+assert p1.valid
+
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><a name="reverse!"></a>
+<tt>Permutation#reverse!</tt> (mutating) <br>
+<tt>perm1.reverse -> perm2</tt><br>
+This method reverses the elements of the permutation <tt>perm1</tt>.
+<p>
+<a name="inverse"></a>
+<tt>Permutation#inverse</tt>  <br>
+<tt>perm1.inverse -> perm2</tt><br>
+<tt>perm2</tt> is the inverse of the permutation <tt>perm1</tt>.
+<p>
+<a name="next"></a>
+<tt>Permutation#next</tt> (mutating) <br>
+<tt>perm1.next -> perm2</tt><br>
+This method returns the next permutation in lexicographic order.
+If no further permutations are available it raises an exception.
+<p>
+<a name="prev"></a>
+<tt>Permutation#prev</tt> (mutating) <br>
+<tt>perm1.prev -> perm2</tt><br>
+This method returns the previous permutation in lexicographic order.
+If no previous permutations are available it raises an exception.
+<p>
+<a name="each"></a>
+<tt>Permutation#each</tt> (non mutating) <br>
+This method visits each next permutation.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert' 
+require 'perm'
+
+p1 = Permutation.new_ary([2,4,1,3,0])
+assert p1.reverse!.to_a == [0,3,1,4,2] &amp;&amp; p1.to_a  == [0,3,1,4,2]
+assert p1.inverse.to_a == [0, 2, 4, 1, 3]
+vect = %w{a b c d e}
+vect1 = p1.permute(vect).to_a
+assert p1.inverse.permute(vect1) == vect
+assert p1.next.to_a == [0, 3, 2, 1, 4] &amp;&amp; p1.to_a == [0, 3, 2, 1, 4]
+assert p1.prev.to_a ==  [0,3,1,4,2]
+p2 = Permutation.new(3)
+a = []; 5.times{p2.next; a &lt;&lt; p2.to_a}
+assert a == [[0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]
+if $DEBUG then p p2.next.to_a ;end
+p3 = Permutation.new(3)
+b = []; p3.each{|e| b &lt;&lt; e.to_a}
+assert b == [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]]
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><tt>Permutation#permute</tt> (see above)
+<p>
+<a name="permute_inverse"></a>
+<tt>Permutation#permute_inverse</tt> <br>
+<tt>perm1.permute_inverse((anArray1) -> anArray2</tt><br> 
+where <tt>anArray1</tt> is any Ruby array, and  <tt>anArray2</tt>  
+is the result of the application of the permutation <tt>perm1</tt>
+to <tt>anArray1</tt>. Same result as
+<tt>perm1.inverse.permute(anArray1)</tt> but faster.
+<p>
+<a name="mul"></a> 
+<tt>Permutation#mul</tt><br>
+<tt>Permutation#* </tt> (alias)<br>
+<tt>perm1*perm2 -> perm3</tt><br>
+The permutation <tt>perm3</tt> is the product of the permutations
+<tt>perm1</tt> and <tt>perm2</tt> .
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'perm'
+
+p1 = Permutation.new_ary([2,1,3,0])
+vect = %w{ a b c d}
+vect1 = p1.permute(vect);  assert vect1 == ["c", "b", "d", "a"]
+p  vect1
+vect2 = p1.permute_inverse(vect); assert vect2.to_a == ["d", "b", "a", "c"]
+
+assert p1.permute(vect2) == vect
+assert p1.permute_inverse(vect) == p1.inverse.permute(vect)
+p2 = p1.inverse
+assert p2*p1 == Permutation.new(4)
+p3 =  Permutation.new_ary([3,2,0,1])
+assert( (p3*p1).permute(vect) == p3.permute(p1.permute(vect)))
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><h2>Permutations in Cyclic Form</h2>
+A permutation can be represented in both linear and cyclic notations. 
+The functions described in this section can be used to convert between the 
+two forms. <br>
+The linear notation is an index mapping, and has already been described above. 
+The cyclic notation represents a permutation as a series of circular 
+rearrangements of groups of elements, or <b>cycles</b>.<br>
+Any permutation can be decomposed into a combination of cycles. 
+For example, under the cycle <tt>(0 1 2)</tt>,  <tt>0 </tt> is replaced by 
+ <tt>1 </tt>,  <tt>1 </tt> is replaced by  <tt>2 </tt> and  <tt>2 </tt> 
+ is replaced by  <tt>0 </tt> in a circular fashion. <br>
+ Cycles of different sets of elements can be combined independently, for
+ example  <tt>(0 1 2) (3 4) </tt> combines the cycle  <tt>(0 1 2) </tt> 
+ with the cycle  <tt>(3 4) </tt>, which is an exchange of elements 
+  <tt>3 </tt> and  <tt>4 </tt>. A cycle of length one represents an element 
+  which is unchanged by the permutation and is referred to as a 
+  <b>singleton</b>. <br>
+
+The cyclic notation for a permutation is not unique, but can be rearranged 
+into a unique canonical form by a reordering of elements. The library 
+uses the canonical form defined in Knuth's Art of Computer Programming 
+(Vol 1, 3rd Ed, 1997) Section 1.3.3, p.178.<br>
+
+The procedure for obtaining the canonical form given by Knuth is,
+<ol}
+ <li> Write all singleton cycles explicitly
+ <li>  Within each cycle, put the smallest number first
+ <li> Order the cycles in decreasing order of the first number in the cycle.
+</ol>
+	 
+For example, the linear representation <tt>(2 4 3 0 1)</tt> is represented 
+as <tt>(1 4) (0 2 3)</tt> in canonical form. 
+The permutation corresponds to an exchange of elements <tt>1</tt> and 
+<tt>4</tt>, and rotation of elements <tt>0, 2</tt> and <tt>3</tt>.<br>
+
+The important property of the canonical form is that it can be reconstructed 
+from the contents of each cycle without the brackets. In addition, by removing
+the brackets it can be considered as a linear representation of a different 
+permutation. In the example given above the permutation <tt>(2 4 3 0 1)</tt> 
+would become <tt>(1 4 0 2 3)</tt>. <br>
+This mapping between linear permutations defined by the canonical form has 
+many important uses in the theory of permutations.<br>
+Permutations in canonical form belong to the class <tt>CanPermutation</tt>,
+which inherits from the class <tt>Permutation</tt>.<br>
+
+<h3>CanPermutation methods</h3>
+<a href="#new">new2</a> ,&nbsp
+<p>
+<a name="new"></a>
+<tt>CanPermutation.new</tt><br>
+<tt>CanPermutation.new(aNum) -> can1</tt><br>
+where <tt>can1</tt> is the identity permutation in canonical permutation 
+<tt>(0,...,aNum - 1)</tt><br>
+
+<h3>CanPermutation instance methods</h3>
+<a href="#creset">reset</a> ,&nbsp
+<a href="#csize">size</a> ,&nbsp
+<a href="#equal">equal</a> ,&nbsp
+<a href="#cget">get</a> ,&nbsp
+<a href="#cdata">data</a> ,&nbsp
+<a href="#creverse!">reverse!</a> ,&nbsp
+<a href="#cinverse">inverse</a> ,&nbsp
+<a href="#mul">mul</a> ,&nbsp
+<a href="#fwrite">fwrite</a> ,&nbsp
+<a href="#fread">fread</a> ,&nbsp
+<a href="#fprintf">fprintf</a> ,&nbsp
+<a href="#fscanf">fscanf</a> ,&nbsp
+<a href="#dump">dump</a> ,&nbsp
+<a href="#undump">undump</a> ,&nbsp
+
+<a href="#cycles">cycles</a> ,&nbsp
+<a href="#to_canonical">to_canonical</a> ,&nbsp
+<a href="#to_linear">to_linear</a> 
+<p>
+
+<a name="csize"></a>
+<tt>CanPermutation#size</tt><br>
+<tt>can1.size -> anInteger</tt>.<br>
+where </tt> is the size of the permutation <tt>can1</tt>
+<p>
+<a name="to_canonical"></a>
+<tt>Permutation#to_canonical</tt><br>
+<tt>CanPermutation#to_canonical</tt><br
+<tt>perm1.to_canonical -> can1</tt><br>
+where <tt>perm1</tt> is in linear or canonical form;
+<tt>can1</tt> is the canonical representation of <tt>perm1</tt>
+<p>
+<a name="to_linear"></a>
+<tt>Permutation#to_linear</tt><br>
+<tt>CanPermutation#to_linear</tt><br>
+<tt>perm1.to_linear -> perm2</tt><br>
+where <tt>perm1</tt> is in linear or canonical form;
+<tt>perm2</tt> is the linear  representation of  <tt>perm1</tt>.
+<p>
+<a name="cdata"></a>
+<tt>CanPermutation#data</tt><br>
+<tt>CanPermutation#to_a</tt> (alias)<br>
+<tt>can1.to_a  -> array1</tt><br>
+where <tt>array1</tt> is the array representing <tt>can1</tt>.
+<p>
+<a name="cget"></a>
+<tt>CanPermutation#get</tt><br>
+<tt>CanPermutation#[]</tt> (alias)<br>
+<tt>can1[anIndex] -> aNumber</tt><br>
+<tt>aNumber</tt> is <tt>anIndex</tt>-the entry of the array representing
+<tt>can1</tt>
+<p>
+<a name="equal"></a>
+<tt>Permutation#equal</tt><br>
+<tt>Permutation#==</tt> (alias) <br>
+<tt>CanPermutation#equal</tt><br>
+<tt>CanPermutation#==</tt> (alias) <br>
+<tt>p1 == p2 -> bool</tt><br>
+where <tt>p1,p2</tt> are in linear or canonical form.
+<p>
+<tt>CanPermutation#reset</tt> (mutating)<br>
+<tt>can1.reset -> can2</tt><br>
+where <tt>can2</tt> in the identity permutation in canonical form.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert' 
+require 'perm'
+
+assert CanPermutation.ancestors == 
+      [GSL::CanPermutation, GSL::Permutation, Object, GSL, Kernel]
+c1 = CanPermutation.new(3)
+assert c1.to_a == [2,1,0] &amp;&amp; c1.class == GSL::CanPermutation 
+
+assert c1.to_linear.to_a == [0,1, 2]
+p2 = Permutation.new_ary([2, 4, 3, 0, 1])
+c2 = p2.to_canonical
+assert c2.to_a == [1, 4, 0, 2, 3]
+assert c2[1] == 4
+assert p2 == c2 &amp;&amp; c1 != c2
+c2.reset
+assert c2.class == CanPermutation &amp;&amp; c2 == p2.reset
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="creverse!"</a></tt>
+<tt>CanPermutation#reverse!</tt>(mutating)<br>
+<tt>can1.reverse! -> can2 </tt><br>
+<tt>can2</tt> is the reverse permutation of <tt>can1</tt>.
+<p>
+<a name="cinverse"></a>
+<tt>CanPermutation#inverse </tt><br>
+<tt>can1.inverse -> can2 </tt><br>
+<tt>can2</tt> is the inverse permutation of <tt>can1</tt>.
+<p>
+<a name="cycles"></a>
+<tt>Permutation#cycles</tt><br>
+<tt>p1.cycles -> aNum</tt><br>
+where <tt>p1</tt> is in linear or canonical form, and <tt>aNum</tt>
+is the number of cycles in <tt>p1</tt>.<br>
+<tt>CanPermutation#permute</tt><br>
+<tt>can1.permute(anArray1) -> anArray2</tt><br>
+where <tt>anArray1</tt> is any Ruby array, and  <tt>anArray2</tt>
+is the result of the application of the permutation <tt>can1</tt><br>
+<tt>CanPermutation#permute_inverse</tt><br>
+<tt>can1.permute_inverse(anArray1) -> anArray2</tt><br>
+Same result as
+<tt>can1.inverse.permute(anArray1)</tt> but faster.<br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert' 
+require 'perm'
+
+p2 = Permutation.new_ary([2, 4, 3, 0, 1])
+c2 = p2.to_canonical
+assert p2 == c2 &amp;&amp; c2.to_a == [1, 4, 0, 2, 3]
+p2.reverse!; c2.reverse!
+assert p2 == c2 &amp;&amp; p2.to_a == [1, 0, 3, 4, 2] &amp;&amp; c2.to_a == [2, 3, 4, 0, 1]
+p3 = p2.inverse; assert p3.to_a == [1, 0, 4, 2, 3]
+c3 = c2.inverse; assert c3.to_a == [2, 4, 3, 0, 1]
+assert p3 == c3
+assert p3.cycles == 2 &amp;&amp; c3.cycles == 2
+v1 = [:a,:b,:c,:d,:e]
+assert c2.permute(v1) == p2.permute(v1)
+assert c2.permute_inverse(v1) == p2.permute_inverse(v1)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>where <tt>c3</tt> is <tt>(2, 4, 3)(0,1).</tt><br>
+<h2>Reading and writing permutations</h2>
+<a name="fwrite"></a>
+<tt>Permutation#fwrite</tt><br>
+<tt>CanPermutation#fwrite</tt><br>
+<tt>p1.fwrite(f)</tt><br>
+writes the elements of the permutation <tt>p1</tt>,
+written in linear or canonical form, to the stream <tt>f</tt> in binary format. 
+<p>
+<a name="fread"></a>
+<tt>Permutation#fread</tt><br>
+<tt>CanPermutation#fread</tt><br>
+<tt>p1.fread(f)</tt><br>
+reads into the permutation <tt>p1</tt> 
+from the open stream <tt>f</tt> in binary format.
+The  permutation <tt>p1</tt> must be already allocated.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert' 
+require 'perm'
+p1 = Permutation.new_ary([2,1,3,0])
+c1 = p1.to_canonical; c0 = CanPermutation.new(4)
+begin
+    f1 = File.new("perm.dump", "w")
+    p1.fwrite(f1)
+    f1.close
+    p2 = Permutation.new(4)
+    f1 = File.new("perm.dump", "r")
+    p2.fread(f1)
+    assert p1 == p2
+    f1.close
+    f2 = File.new("can.dump", "w")
+    c1.fwrite(f2)
+    f2.close
+    c2 = CanPermutation.new(4)
+    f2 = File.new("can.dump", "r")
+    c2.fread(f2)
+    assert c1 == c2 &amp;&amp; c1 != c0
+    f2.close
+rescue IOError
+    STDERR.print "Caught exception: #{$!}\n"
+end
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><a name="fprintf"></a>
+<tt>Permutation#fprintf</tt><br>
+<tt>CanPermutation#fprintf</tt><br>
+<tt>p1.printf(f, " %u")</tt><br>
+writes the elements of the permutation <tt>p1</tt>,
+written in linear or canonical form,
+line-by-line to the stream <tt>f</tt> using the format specifier format, 
+which should be suitable for a type of size_t. 
+On a GNU system the type modifier Z represents size_t, 
+so "%Zu\n" is a suitable format.
+<p>
+<a name="fscanf"></a>
+<tt>Permutation#fscanf</tt><br>
+<tt>CanPermutation#fscanf</tt><br>
+<tt>p1.fscanf(f)</tt><br>
+reads formatted data from the stream <tt>f</tt> into the permutation
+<tt>p1</tt>, written in linear or canonical form.
+<p>
+<a name="dump"></a>
+<tt>Permutation#dump</tt><br>
+<tt>CanPermutation#dump</tt><br>
+<tt>p1.dump</tt><br>
+writes the elements of the permutation <tt>p1</tt>,
+written in linear or canonical form, to the standard output.
+<p>
+<a name="undump"></a>
+<tt>Permutation#undump</tt><br>
+<tt>perm1.undump</tt><br>
+reads the elements of the permutation <tt>perm1</tt> from
+standard input.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require 'perm'
+
+p1 = Permutation.new_ary([2,1,3,0])
+File.open("perm1.dat","w"){|f| p1.fprintf(f," %u") }
+p2 = Permutation.new(4)
+File.open("perm1.dat"){|f| p2.fscanf(f) }
+assert p2.to_a == [2, 1, 3, 0]
+p1.fprintf(STDOUT, " %u"); puts
+p1.dump; puts
+
+c1 = p1.to_canonical
+File.open("perm1.dat","w"){|f| c1.fprintf(f," %u") }
+c2 = CanPermutation.new(4)
+File.open("perm1.dat"){|f| c2.fscanf(f) }
+assert c2.to_a == [1, 0, 2, 3]
+c1.fprintf(STDOUT, " %u"); puts
+c1.dump; puts
+
+puts "write a permutation of size 4 in linear form:"
+p3 = Permutation.new(4)
+p3.undump
+print "in canonical form it is "
+p p3.to_canonical.to_a
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><pre>
+write a permutation of size 4 in linear form:
+0 1 2 3
+in canonical form it is [3, 2, 1, 0]
+</pre>
+<h2>Permutation group</h2>
+We have already documented <tt>Permutation.inverse</tt> and
+<tt>CanPermutation.inverse</tt>. <br>
+We have also seen <tt>Permutation#==</tt> and <tt>CanPermutation#==</tt> .
+<p>
+</a><tt>Permutation#mul</tt><br>
+<tt>Permutation#*</tt> (alias)<br>
+<tt>CanPermutation#mul</tt><br>
+<tt>CanPermutation*</tt> (alias)<br>
+<tt>p1*p2 -> perm3</tt>
+where <tt>p1</tt> and <tt>p2</tt> are written in linear or canonical form;
+the result of the multiplication <tt>perm3</tt> is written in linear form.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert' 
+require 'perm'
+
+p1 = Permutation.new_ary([1,2,0])
+assert p1.class == Permutation
+p2 = p1*p1
+assert p2.class == Permutation &amp;&amp; p2.to_a == [2, 0, 1]
+c1 = p1.to_canonical;
+assert c1.class == CanPermutation &amp;&amp; c1 == p1 &amp;&amp; c1.inverse.class == CanPermutation
+assert c1*c1 == p2 &amp;&amp; c1*p1 == p2 &amp;&amp; p1*c1 == p2
+assert( (c1*c1).class == Permutation &amp;&amp; (c1*p1).class == Permutation )
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="combinations.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="matrices.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Permutations</td> 
+</tr></tbody></table><hr>
+</body>
+</html>

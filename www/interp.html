@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: interp.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: interp.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+# Test module Interpolation
+# generate output suitable for graph(1) from GNU plotutils:
+# interp.rb | graph -Tps > interp.ps
+
+STDERR.puts "Running interpolation tests (interp)..."
+
+x = []
+y = []
+puts "#m=0,S=2"
+0.upto(9) do |i|
+  x[i] = i + 0.5 * Special::Trig::sin(i)
+  y[i] = i + Special::Trig::cos(i * i)
+  printf "%g %g\n", x[i], y[i]
+end
+
+acc = Interpolation::Accel.new
+type = [Interpolation::Interp::LINEAR, Interpolation::Interp::CSPLINE, Interpolation::Interp::AKIMA]
+type.each_index do |k|
+  i = Interpolation::Interp.new type[k], 10
+  #STDERR.print "#{i.name}\n"
+  ret = i.init x, y
+  STDERR.puts strerror(ret) if ret != GSL_SUCCESS
+
+  puts "#m=#{k},S=0"
+  xi = x[0]
+  d = Result.new
+  while (xi < x[9]) do
+    yi = i.eval x, y, xi, acc
+    printf "%g %g\n", xi, yi
+    xi += 0.01
+  end
+
+  acc.reset
+end
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

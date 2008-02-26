@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: const.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: const.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL::Const
+
+# Test physical constants
+
+STDERR.puts "Running tests for physical constants..."
+
+c = MKS::SPEED_OF_LIGHT
+au = MKS::ASTRONOMICAL_UNIT
+minutes = MKS::MINUTE
+
+r_earth = 1.00 * au
+r_mars = 1.52 * au
+
+t_min = (r_mars - r_earth) / c
+t_max = (r_mars + r_earth) / c
+
+puts "\nlight travel time from Earth to Mars:"
+printf "min = %.1f minutes\n", t_min / minutes
+printf "max = %.1f minutes\n", t_max / minutes
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

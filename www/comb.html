@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: comb.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: comb.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL
+
+# Test combinations
+
+STDERR.puts "Running tests for combinations..."
+
+n = 4
+k = 3
+0.upto(4) do |k|
+  c = Combination.new n, k
+  c.init_first
+
+  printf "\nn = %d, k = %d\n", c.n, c.k
+  #puts c.is_valid?
+  #puts "first combination: " +  c.to_a.join(" ")
+
+  #0.upto(k-1) do |i|
+  #  puts c.get(i)
+  #end
+
+  puts "  each: "
+  c.each do |cc|
+    puts "    " + cc.to_a.join(" ")
+  end
+
+  puts "  reverse_each: "
+  c.reverse_each do |cc|
+    puts "    " + cc.to_a.join(" ")
+  end
+end
+
+c2 = Combination.new_ary [0,1,3], 4
+puts "\nnew_ary: "
+c2.each do |k|
+  puts "  " + k.to_a.join(" ")
+end
+
+# generate all "Lotto" numbers :-)
+#c = Combination.new(49, 6)
+#c.init_first
+#File.open("lotto.dat", "w") do |f|
+  #c.each do |k|
+    #k.fprintf(f, "%Zu\t") 
+    #f.puts
+  #end
+#end
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

@@ -1,0 +1,42 @@
+Building and installing ruby-gsl is pretty straight-forward:
+
+$ tar -zxf ruby-gsl-0.2.0.tar.gz
+$ cd ruby-gsl-0.2.0/ext
+$ ruby extconf.rb
+$ make
+
+To install:
+
+$ make install
+
+or
+
+$ make site-install
+
+To run one of the samples:
+
+$ ruby samples/special.rb
+
+If you want to run the samples without installing the library first:
+
+$ ruby -Iext -Icontrib samples/special.rb
+
+To check if everything is working properly, do
+
+$ for i in *.rb; do ruby -I../ext -I../contrib $i > /dev/null; done
+
+in the samples directory. Except for error.rb there should be no errors.
+
+Notes:
+If you have installed GSL in a place where it is not easily found
+by the installation scripts, try using "--with-gsl-include=<dir>"
+and "--with-gsl-lib=<dir>" as arguments to extconf.rb
+
+To use ruby-gsl you need a complete installation of GSL (i.e. library
+and header files, in some Linux distributions this is separated).
+
+Notes for Cygwin users:
+The GSL library that comes with Cygwin is missing some functions. Therefore
+these functions will not be included in ruby-gsl. If you have a GSL
+installation built from source (and you know what you're doing), you can 
+comment out the Cygwin check in extconf.rb

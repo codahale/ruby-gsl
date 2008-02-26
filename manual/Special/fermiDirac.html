@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Fermi-Dirac Function</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="gamma.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="expInt.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Fermi-Dirac Function</td> 
+</tr></tbody></table><hr>
+<h1>
+Fermi-Dirac Function</h1>
+
+<h3>Module FermiDirac</h3>
+<a href="#F0">F0</a> ,&nbsp
+<a href="#F1">F1</a> ,&nbsp
+<a href="#F2">F2</a> ,&nbsp
+<a href="#F3half">F3half</a> ,&nbsp
+<a href="#Fhalf">Fhalf</a> ,&nbsp
+<a href="#Finc_0">Finc_0</a> ,&nbsp
+<a href="#Fint">Fint</a> ,&nbsp
+<a href="#Fm1">Fm1</a> ,&nbsp
+<a href="#Fmhalf">Fmhalf</a> ,&nbsp
+<p>
+<h4>Complete Fermi-Dirac Integrals</h4>
+The complete Fermi-Dirac integral F_j(x) is given by,<br>
+F_j(x)   := (1/r\Gamma(j+1)) \int_0^\infty (t^j / (\exp(t-x) + 1))
+
+<a name="Fm1"></a>
+<a name="Fm1"></a>
+<tt>GSL::Special::FermiDirac::Fm1</tt><br>
+<tt>GSL::Special::FermiDirac::Fm1_e</tt><br>
+<tt>Exp::Fm1(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral with an index of -1. 
+This integral is given by F_{-1}(x) = e^x / (1 + e^x).
+<p>
+<a name="F0"></a>
+<tt>GSL::Special::FermiDirac::F0</tt><br>
+<tt>GSL::Special::FermiDirac::F0_e</tt><br>
+<tt>FermiDirac::F0(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral with an index of 0. 
+This integral is given by F_0(x) = \ln(1 + e^x).
+<p>
+<a name="F1"></a>
+<tt>GSL::Special::FermiDirac::F1</tt><br>
+<tt>GSL::Special::FermiDirac::F1_e</tt><br>
+<tt>FermiDirac::F1(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral with an index of 1, 
+F_1(x) = \int_0^\infty dt (t /(\exp(t-x)+1)).
+<p>
+<a name="F2"></a>
+<tt>GSL::Special::FermiDirac::F2</tt><br>
+<tt>GSL::Special::FermiDirac::F2_e</tt><br>
+<tt>FermiDirac::F2(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral with an index of 2, 
+F_2(x) = (1/2) \int_0^\infty dt (t^2 /(\exp(t-x)+1)).
+<p>
+<a name="Fint"></a>
+<tt>GSL::Special::FermiDirac::Fint</tt><br>
+<tt>GSL::Special::FermiDirac::Fint_e</tt><br>
+<tt>FermiDirac::Fint(j, d1) -> d2</tt><br>
+j is an integer.
+These routines compute the complete Fermi-Dirac integral with an integer 
+index of j, F_j(x) = (1/\Gamma(j+1)) \int_0^\infty dt (t^j /(\exp(t-x)+1)).
+<p>
+<a name="Fmhalf"></a>
+<tt>GSL::Special::FermiDirac::Fmhalf</tt><br>
+<tt>GSL::Special::FermiDirac::Fmhalf_e</tt><br>
+<tt>FermiDirac::Fmhalf(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral F_{-1/2}(x).
+<p>
+<a name="Fhalf"></a>
+<tt>GSL::Special::FermiDirac::Fhalf</tt><br>
+<tt>GSL::Special::FermiDirac::Fhalf_e</tt><br>
+<tt>FermiDirac::Fhalf(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral F_{1/2}(x).
+<p>
+<a name="F3half"></a>
+<tt>GSL::Special::FermiDirac::F3half</tt><br>
+<tt>GSL::Special::FermiDirac::F3half_e</tt><br>
+<tt>FermiDirac::F3half(d1) -> d2</tt><br>
+These routines compute the complete Fermi-Dirac integral F_{3/2}(x).
+
+<h4>Incomplete Fermi-Dirac Integrals</h4>
+The incomplete Fermi-Dirac integral F_j(x,b) is given by,<br>
+F_j(x,b)   := (1/\Gamma(j+1)) \int_b^\infty (t^j / (\Exp(t-x) + 1))
+<p>
+<a name="Finc_0"></a>
+<tt>GSL::Special::FermiDirac::Finc_0</tt><br>
+<tt>GSL::Special::FermiDirac::Finc_0_e</tt><br>
+<tt>FermiDirac::Finc_0(d1, d2) -> d3</tt><br>
+These routines compute the incomplete Fermi-Dirac integral with an index 
+of zero, F_0(x,b) = \ln(1 + e^{b-x}) - (b-x).
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require "GSL"
+include GSL
+include GSL::Special
+
+x = 0.7
+puts "Fm1"
+r = FermiDirac::Fm1(x)
+p r
+
+puts "F0"
+r = FermiDirac::F0(x)
+p r
+
+puts "F1"
+r = FermiDirac::F1(x)
+p r
+r = FermiDirac::F1_e(x)
+p r.val; p r.err
+
+puts "F2"
+r = FermiDirac::F2(x)
+p r
+
+puts "Fint"
+r = FermiDirac::Fint(2, x)
+p r
+
+puts "Fmhalf"
+r = FermiDirac::Fmhalf(x)
+p r
+
+puts "Fhalf"
+r = FermiDirac::Fhalf(x)
+p r
+
+puts "F3half"
+r = FermiDirac::F3half(x)
+p r
+
+puts "Finc_0"
+y = 0.8
+r = FermiDirac::Finc_0(x,y)
+p r
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="gamma.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="expInt.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Fermi-Dirac Function</td> 
+</tr></tbody></table><hr>
+</body>
+</ht
+ml>

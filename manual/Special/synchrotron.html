@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Synchrotron Functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="transport.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="psi.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Synchrotron Functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Synchrotron Functions</h1>
+<h3>Module Synchrotron</h3>
+<a href="#S1">S1</a> ,&nbsp
+<a href="#S2">S2</a> &nbsp
+<p>
+<a name="S1"></a>
+<tt>GSL::Special::Synchrotron::S1</tt><br>
+<tt>GSL::Special::Synchrotron::S1_e</tt><br>
+<tt>Synchrotron::S1(x) -> d1</tt><br>
+x is a double.
+These routines compute the first synchrotron function 
+x \int_x^\infty dt K_{5/3}(t) for x >= 0.
+<p>
+<a name="S2"></a>
+<tt>GSL::Special::Synchrotron::S2</tt><br>
+<tt>GSL::Special::Synchrotron::S2_e</tt><br>
+<tt>Synchrotron::S2(x) -> d1</tt><br>
+These routines compute the second synchrotron function x K_{2/3}(x) for x >= 0.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require "GSL"
+include GSL
+include GSL::Special
+include Math
+
+puts "S1"
+x = 42.0
+r = Synchrotron::S1(x)
+p r
+r = Synchrotron::S1_e(x)
+p r.val; p r.err
+
+puts "S2"
+x = 42.0
+r = Synchrotron::S2(x)
+p r
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="transport.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="psi.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Synchrotron Functions</td> 
+</tr></tbody></table><hr>
+</body>
+</ht
+ml>

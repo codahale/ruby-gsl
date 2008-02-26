@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="Author" content="Arno Erpenbeck">
+  <title>ruby-gsl Sample: qrng.rb</title>
+</head>
+<body bgcolor="gray">
+<h1 align="center">ruby-gsl Sample: qrng.rb</h1>
+
+<br>
+<div style="background-color:white">
+<pre>
+#!/usr/local/bin/ruby
+
+
+require "GSL"
+include GSL::Random
+
+# Test quasi-random sequences
+# generate output suitable for graph(1) from GNU plotutils:
+# qrng.rb | graph -Tps > qrng.ps
+
+STDERR.puts "Running tests for quasi-random sequences..."
+
+q = QRNG.new QRNG::SOBOL, 2
+
+#puts "\nname : #{q.name}"
+#puts "dim  : #{q.dim}"
+#puts "size : #{q.size}"
+a = [0, 0]
+puts "#m=0,S=2"
+1024.times do |i|
+  a = q.get
+  puts a.join " "
+  #print a.join(" "), "\n"
+end
+
+#q.reset
+
+STDERR.puts "\ndone."
+</pre>
+</div>
+<hr>
+<br>
+<a href="samples.html">Back</a>
+</body>
+</html>

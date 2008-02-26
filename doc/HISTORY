@@ -1,0 +1,89 @@
+0.2.0: using GSL 1.5
+       sorting vectors
+       fixes in Vector and Linalg_complex
+       check if complex_householder_hv is available
+       check for Cygwin
+       faster MonteCarlo implementation
+       more and renamed constants (MKS -> MKSA, CGS -> CGSM)
+       better (meaning more sensible) error handling
+       fixed initialization bug in Spline
+       more samples
+
+0.1.9: fixed a bug for Vector.div
+       added methods to Minimizer
+       added new random number generators to RNG
+       added new numerical & physical constants to Const
+       added solve_tridiag, solve_cyc_tridiag to Linalg
+       added householder transformations to Linalg
+       added scaled functions to ExpInt
+       added new functions to Multiroot
+       added Dirichlet and Multinomial distributions to RND
+       added poisson_array to RND
+       added MISER and VEGAS routines to MonteCarlo
+
+0.1.8: global symbols now have prefix rbgsl_
+       Math module puts stuff into Ruby's Math module
+       more methods for Permutations/Combinations
+       
+0.1.7: Vector and Matrix classes
+       Eigensystems for real symmetric matrices
+
+0.1.6: new constants for Const
+       more random number generators
+       polynomial interpolation
+       divided difference representation of polynomials
+       statistics for Hist, Hist2D
+       combinations
+       shuffling and sampling in RND
+       small fixes in Coulomb, Chebyshev, Permutation
+
+0.1.5: License is now GPL (instead of LGPL)
+       compiles with GSL 1.1
+       bugfixes in Hist
+       (some) numerical integration
+       (broken) Monte Carlo integration
+
+0.1.4: bugfixes for Histogram, Stats
+       _e functions no longer take an Result argument but return one
+       error handling with exceptions
+       Numerical Differentiation
+       Series Acceleration
+
+0.1.3: moved constants from GSL::Errno to GSL to avoid
+       conflict with Ruby's builtin Errno
+       one-dimensional root finding
+       one-dimensional minimization
+       fixed some bugs with (2D) Histogramms
+       included documentation
+
+0.1.2: Chebyshev Approximation, Discrete Hankel Transforms
+       Function class, Least-Squares Fitting
+       Many thanks to Yoshiki Tsunesada for his source code!
+
+0.1.1: use rb_eArgError, small bug fixes
+
+0.1.0: first "release"
+
+0.0.9: class Hist2D, fixed wrong arity for RND functions,
+       small bug fixes
+
+0.0.8: moved all random number stuff to module Random
+       more random number distributions
+       use NUM2... instead of FIX2... (includes type check)
+       class Result10
+
+0.0.7: started with random number distributions (RND)
+
+0.0.6: implemented class Complex, Histogram, Permutation, 
+       random number generation (RNG)
+       quasi-random sequences (RNG)
+
+0.0.5: implemented module Stats, Const; class Interpolation
+
+0.0.4: added _e functions with error estimate
+
+0.0.3: Most Special functions implemented
+
+0.0.2:
+
+0.0.1:

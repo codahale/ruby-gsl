@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Numerical Differentiation</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+<body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="cheb.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="interp.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Numerical Differentiation</td> 
+</tr></tbody></table><hr><h1>
+Numerical Differentiation</h1>
+<hr>
+
+The functions described in this chapter compute numerical derivatives by
+finite differencing. An adaptive algorithm is used to find the best choice
+of finite difference and to estimate the error in the derivative. These
+functions are declared in the header file `gsl_diff.h' 
+
+<h3>Module Diff</h3>
+
+<tt>GSL::Diff::central</tt><br>
+<tt>Diff::central(f, x) -> [result, abserr]</tt><br>
+This function computes the numerical derivative
+of the function f at the point x using an adaptive central difference
+algorithm. The derivative is returned in <tt>result</tt> and an estimate 
+of its absolute error is returned in <tt>abserr</tt>.
+<p>
+<tt>GSL::Diff::forward</tt><br>
+<tt>Diff::forward(f, x) -> [result, abserr]</tt><br>
+
+This function computes the numerical derivative
+of the function f at the point x using an adaptive forward difference
+algorithm. The function is evaluated only at points greater than x and
+at x itself. The derivative is returned in <tt>result</tt>  and an estimate of
+its absolute error is returned in <tt>abserr</tt> . 
+This function should be used if f(x) has a singularity or is 
+undefined for values less than x.
+<p> 
+<tt>GSL::Diff::backward</tt><br> 
+<tt>Diff::backward(f, x) -> [result, abserr]</tt><br> 
+
+This function computes the numerical derivative
+of the function f at the point x using an adaptive backward difference
+algorithm. The function is evaluated only at points less than x and at
+x itself. The derivative is returned in <tt>result</tt> and an estimate of its
+absolute error is returned in <tt>abserr</tt>. 
+This function should be used if f(x)
+has a singularity or is undefined for values greater than x.
+
+
+<h3>Example</h3>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require "GSL"; include GSL
+include Math
+
+f = Function.new { |x| pow(x, 1.5) }
+
+puts "f(x) = x^(3/2)"
+
+res, err = Diff::central(f, 2.0)
+puts "x = 2.0"
+printf("f'(x) = %.10f +/- %.5f\n", res, err)
+printf("exact = %.10f\n\n", 1.5 * sqrt(2))
+
+res, err = Diff::forward(f, 0.0)
+puts "x = 0.0"
+printf("f'(x) = %.10f +/- %.5f\n", res, err)
+printf("exact = %.10f\n\n", 0)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<h3>References and Further Reading</h3>
+The algorithms used by these functions are described in the following book,
+<ul>
+<li>
+S.D. Conte and Carl de Boor, Elementary Numerical Analysis: 
+An Algorithmic Approach, McGraw-Hill, 1972.
+</ul>
+
+    
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="cheb.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="index.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="interp.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Numerical Differentiation</td> 
+</tr></tbody></table><hr></body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+Error functions</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="exp.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="ellJac.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Error functions</td> 
+</tr></tbody></table><hr>
+<h1>
+Error functions</h1>
+The error function is described in Abramowitz & Stegun, Chapter 7.
+<h3>Module Error</h3>
+
+<h4>Error Function</h4>
+<tt>GSL::Special::Error::erf</tt><br>
+<tt>GSL::Special::Error::erf_e</tt><br>
+<tt>Error::erf(d1) -> d2</tt><br>
+These routines compute the error function
+erf(x) = (2/\sqrt(\pi)) \int_0^x dt \exp(-t^2).
+
+<h4>Complementary Error Function</h4>
+<tt>GSL::Special::Error::erfc<tt><br>
+<tt>GSL::Special::Error::erfc_e</tt><br>
+<tt>Error::erfc(d1) -> d2</tt><br>
+These routines compute the complementary error function 
+erfc(x) = 1 - erf(x) = (2/\sqrt(\pi)) \int_x^\infty \exp(-t^2).
+
+<h4>Log Complementary Error Function</h4>
+<tt>GSL::Special::Error::log_erf</tt><br>
+<tt>GSL::Special::Error::log_erf_e</tt><br>
+<tt>Error::log_erf(d1) -> d2</tt><br>
+These routines compute the logarithm of the complementary error function 
+\log(\erfc(x)).
+
+<h4>Probability functions</h4>
+The probability functions for the Normal or Gaussian distribution are 
+described in Abramowitz & Stegun, Section 26.2.
+<tt>GSL::Special::Error::erf_Z</tt><br>
+<tt>GSL::Special::Error::erf_Z_e</tt><br>
+<tt>GSL::Special::Error::erf_Z(d1) -> d2</tt><br>
+These routines compute the Gaussian probability function 
+Z(x) = (1/\sqrt(2\pi)) \exp(-x^2/2).<br>
+<p>
+<tt>GSL::Special::Error::erf_Q</tt><br>
+<tt>GSL::Special::Error::erf_Q_e</tt><br>
+<tt>GSL::Special::Error::erf_Q(d1) -> d2</tt><br>
+These routines compute the upper tail of the Gaussian probability function<br>
+Q(x) = (1/\sqrt(2\pi)) \int_x^\infty dt \exp(-t^2/2).
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"
+include GSL
+include GSL::Special
+include Math
+
+
+eps = 1.0e-15
+
+puts "Error function"
+x = 0.5
+r = Error::erf(x)
+p r
+r = Error::erf_e(x)
+p r.val; p r.err
+
+
+puts "Complementary Error Function"
+x = 2.0
+r = Error::erfc(x)
+p r * x * exp(x*x)
+assert float_equal(r, 1 - Error::erf(x), eps/10)
+
+puts "Log Complementary Error Function"
+r = Error::log_erf(x)
+assert r == log(Error::erfc(x))
+
+puts "Probability functions"
+r = Error::erf_Z(x)
+assert float_equal(r, 1/sqrt(2*M_PI) * exp(-x*x/2), eps)
+
+r = Error::erf_Q(x)
+p 1 - r 
+
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="exp.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="../special.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="ellJac.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">Error functions</td> 
+</tr></tbody></table><hr>
+</body>
+</ht
+ml>

@@ -1,0 +1,839 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>
+BLAS Support for complex type</title>
+
+  
+<style type="text/css">
+<!--
+body {background-color: white; color: black;}
+a {background-color: white; color: blue; text-decoration: underline;}
+a:hover {text-decoration: none;}
+td.head,td.headcenter {background-color: #99ccff; color: black;}
+td.headcenter {width: 100%; text-align: center;}
+img {border-style: none;}
+-->
+  </style>
+                
+<style type="text/css">
+<!--
+.code {font-family: Courier; font-size: 85%;}
+.keyword {color: #0000ff;}
+.comment {color: #008000;}
+.quote {color: #ff0000;}
+.function {color: #0000ff;}
+-->
+</style></head>
+  <body>
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="blas_double.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">BLAS Support for complex type</td> 
+</tr></tbody></table><hr>
+<h1>
+BLAS Support for complex type</h1>
+<ul>
+<li><a href="#l1">Level 1</a>
+<li><a href="#l2">Level 2</a>
+<li><a href="#l3">Level 3</a>
+</ul>
+<hr>
+
+<h2>Module Blas_complex</h2>
+<h3>Constants</h3>
+<ul>The following conventions are used:<br>
+<li> Blas_complex::Trans, Blas_complex::NoTrans, Blas_complex::ConjTrans
+are equal to true, false and nil respectively
+<li>Blas_complex::Upper, Blas_complex::lower 
+are equal to true,  false  respectively
+<li>Blas_complex::Unit, Blas_complex::NonUnit
+are equal to true,  false  respectively
+<li>Blas_complex::Left, Blas_complex::Right
+are equal to true,  false  respectively
+</ul>
+<p>
+<h3>Methods</h3>
+<a name="l1"></a>
+<h3>Level 1</h3>
+</ul>
+<a name="zdotu"></a>
+<tt>GSL::Blas#zdotu</tt><br>
+<tt>x.zdotu(y) -> result</tt><br>
+GSL::Vector_complex x, y; GSL::Complex result<br>
+These methods computes the scalar product x^T y for the vectors x and y.
+<p>
+
+<a name="zdotc"></a>
+<tt>GSL::Blas#zdotc</tt><br>
+<tt>x.zdotc(y) -> result</tt><br>
+<tt>x * y  -> result</tt>&nbsp; (alias)<br>
+This method computes
+the complex conjugate scalar product x^H y for the vectors x and y.
+
+<p>
+<a name="dznrm2"></a>
+<tt>GSL::Blas#dznrm2</tt><br>
+<tt>x.dznrm2() -> result</tt><br>
+GSL::Vector_complex x; double result<br>
+This method computes the Euclidean norm of the complex vector x,<br>
+||x||_2 = \sqrt {\sum (\Re(x_i)^2 + \Im(x_i)^2)}.
+<p>
+<a name="dzasum"></a>
+<tt>GSL::Blas#dzasum</tt><br>
+<tt>x.dzasum() -> result</tt><br>
+This method computes the absolute sum \sum |\Re(x_i)| + |\Im(x_i)| of the 
+elements of the vector x.
+<p>
+<a name="izamax"></a>
+<tt>GSL::Blas#izamax</tt><br>
+<tt>x.izamax() -> anIndex</tt><br>
+This method returns the index of the largest element of the vector x. 
+The largest element is determined by 
+by the sum of the magnitudes of the real and imaginary 
+parts |\Re(x_i)| + |\Im(x_i)| for complex vectors.
+If the largest value occurs 
+several times then the index of the first occurrence is returned.
+<p>
+<a name="zswap"></a>
+<tt>GSL::Blas#zswap</tt><br>
+<tt>Blas::zswap(x, y)</tt><br>
+GSL::Vector_complex x, y<br>
+These functions exchange the elements of the vectors x and y.
+<p>
+<a name="zcopy"></a>
+<tt>y.zcopy(x)</tt><br>
+GSL::Vector_complex x, y;<br>
+This function copies the elements of the vector x into the vector y.<br>
+See also GSL::Vector_complex#clone<br>
+<p>
+<a name="zaxpy"></a>
+<tt>GSL::Blas#zaxpy</tt><br>
+<tt>y.zaxpy(alpha, x) -> y'</tt><br>
+GSL::Vector_complex x, y, y'; GSL::Complex alpha<br>
+This method computes the sum y' = \alpha x + y for the vectors x and y.
+<p>
+<a name="zaxpy!"></a>
+<tt>GSL::Blas#zaxpy!</tt><br>
+<tt>y.zaxpy!(alpha, x) -> y</tt><br>
+Mutating version.<br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL";  include GSL; include Math
+require 'gsl_util'
+
+puts "zdotu"
+cv1 = Vector_complex.new([1,0,0,1])
+cv2 = Vector_complex.new([3,0,0,2]);
+assert cv1.zdotu(cv2) == Complex.new2(1,0)
+
+puts "zdotc"
+assert cv1.zdotc(cv2) == Complex.new2(5,0)
+assert cv1 * cv2 == Complex.new2(5,0)
+
+puts "dznrm2"
+cv2_sq = cv2*cv2
+assert cv2.dznrm2 == sqrt(cv2_sq.real)
+
+puts "dzasum"
+assert cv2.dzasum == 5
+
+puts "izamax"
+cv3 = Vector_complex.new([1,0, 3,3, 1,4]);
+assert cv3.izamax == 1
+
+puts "zswap"
+cv4 = Vector_complex.new([2,3, 4,5, 6,7])
+cv3d = cv3.clone 
+cv4d = cv4.clone
+Blas_complex::zswap(cv3d, cv4d)
+assert cv3d == cv4 &amp;&amp; cv4d == cv3
+
+puts "zcopy"
+cv5 = Vector_complex.new([1,2, 3,4, 5,6])
+cv5.zcopy(cv4)
+assert cv5 == cv4
+
+puts "zaxpy and zaxpy!"
+alpha_c = Complex.new2(0,1)
+cv6 = Vector_complex.new([1,2, 3,4])
+cv7 = Vector_complex.new([1,0, 1,2])
+cv6_dup = cv6.clone
+cv6_dup.zaxpy!(cv7, alpha_c)
+assert cv6_dup == Vector_complex.new([1,3,1,5])
+cv8 = cv6.zaxpy(cv7, alpha_c)
+assert cv8 == cv6_dup
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<tt>GSL::Blas_complex#zscal</tt><br>
+MISSING<br>
+See GSL::Vector_complex#scale and GSL::Vector_complex#scale!<br>
+
+<a name="l2"></a>
+<h3>Level 2</h3>
+<a name="zgemv"></a>
+<tt>GSL::Vector#zgemv</tt><br>
+<tt>y.zgemv(TransA, alpha, A, x, beta) -> y'</tt><br>
+Bool TransA; GSL::Matrix_complex A; GSL::Vector_complex x, y'; 
+GSL::Complex alpha, beta<br>
+This method computes the matrix-vector product and sum<br>
+y' = \alpha op(A) x + \beta y,<br> 
+where op(A) = A, A^T, A^H for TransA = false, true, nil respectively<br>
+<p>
+<a name="zgemv!"></a>
+<tt>GSL::Vector#zgemv!</tt><br>
+<tt>y.zgemv!(TransA, alpha, A, x, beta) -> y</tt><br>
+Corresponding mutating method.<br>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'; require 'gsl_linalg'
+
+c1 = Complex.new2(1,2);				c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5]); 	cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+
+puts "y.zgemv(TransA, alpha, A, x, beta) -&gt; y'"
+assert cv2.zgemv(false, c1, cm1, cv1, c2) == cm1 * cv1 * c1 + cv2 * c2
+assert cv2.zgemv(true, c1, cm1, cv1, c2) == cm1.t * cv1 * c1 + cv2 * c2
+assert cv2.zgemv(nil, c1, cm1, cv1, c2) == cm1.herm * cv1 * c1 + cv2 * c2
+
+cv2d = cv2.clone
+cv2d.zgemv!(false, c1, cm1, cv1, c2)
+assert cv2d == cm1 * cv1 * c1 + cv2 * c2
+
+cv2d = cv2.clone
+cv2d.zgemv!(true, c1, cm1, cv1, c2)
+assert cv2d == cm1.t * cv1 * c1 + cv2 * c2
+
+cv2d = cv2.clone
+cv2d.zgemv!(nil, c1, cm1, cv1, c2)
+assert cv2d == cm1.h * cv1 * c1 + cv2 * c2
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="ztrmv"></a>
+<tt>GSL::Vector#ztrmv</tt><br>
+<tt>x.ztrmv(Uplo, TransA, DiagUnit, A) -> x'</tt><br>
+GSL::Vector_complex x, x'; GSL::Matrix_complex A<br>
+These methods compute the matrix-vector product<br> 
+x =\alpha op(A) x for the triangular matrix A, where<br>
+op(A) = A, A^T for TransA = true, false, nil.
+When Uplo is true then the upper triangle of A is used, and when Uplo is 
+false then the lower triangle of A is used. If DiagUnit is false then 
+the diagonal of the matrix is used, but if DiagUnit is true then the 
+diagonal elements of the matrix A are taken as unity.
+<p>
+<a name="ztrmv!"></a>
+<tt>GSL::Vector_complex#ztrmv!</tt><br>
+<tt>x.ztrmv!(Uplo, TransA, DiagUnit, A) -> x</tt><br>
+Mutating version.<br>
+This method computes the matrix-vector product<br>
+x =\alpha op(A) x for the triangular matrix A, where<br>
+op(A) = A, A^T for TransA = true, false, nil.
+When Uplo is true then the upper triangle of A is used, and when Uplo is
+false then the lower triangle of A is used. If DiagUnit is false then
+the diagonal of the matrix is used, but if DiagUnit is true then the
+diagonal elements of the matrix A are taken as unity.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'; require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2);				 c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5]);	 cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+
+puts "x.ztrmv(Uplo, TransA, DiagUnit, A) -&gt; x'"
+cn1 = cm1.upper(false) + Matrix_complex.identity(cm1.size1)
+assert cv1.ztrmv(true, true, true, cm1) == cn1.t * cv1
+assert cv1.ztrmv(true, false, true, cm1) == cn1 * cv1
+assert cv1.ztrmv(true, nil, true, cm1) == cn1.h * cv1
+cn1 = cm1.upper(true)
+assert cv1.ztrmv(true, true, false, cm1) == cn1.t * cv1
+assert cv1.ztrmv(true, false, false, cm1) == cn1 * cv1
+
+cn1 = cm1.lower(false) + Matrix_complex.identity(cm1.size1)
+assert cv1.ztrmv(false, true, true, cm1) == cn1.t * cv1
+assert cv1.ztrmv(false, false, true, cm1) == cn1 * cv1
+assert cv1.ztrmv(false, nil, true, cm1) == cn1.h * cv1
+cn1 = cm1.lower(true)
+assert cv1.ztrmv(false, true, false, cm1) == cn1.t * cv1
+assert cv1.ztrmv(false, false, false, cm1) == cn1 * cv1
+assert cv1.ztrmv(false, nil, false, cm1) == cn1.h * cv1
+
+puts "x.ztrmv!(Uplo, TransA, DiagUnit, A) -&gt; x"
+cn1 = cm1.upper(false) + Matrix_complex.identity(cm1.size1)
+cv1d = cv1.clone;	cv1d.ztrmv!(true, true, true, cm1);	assert cv1d == cn1.t * cv1
+cv1d = cv1.clone;	cv1d.ztrmv!(true, false, true, cm1);	assert cv1d == cn1 * cv1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="ztrsv"></a>
+<tt>GSL::Vector#ztrsv</tt><br>
+<tt>x.ztrsv(Uplo, TransA, DiagUnit, A) -> x'</tt><br>
+GSL::Vector_complex x, x'; GSL::Matrix_complex A<br>
+
+This method computes x' = inv(op(A)) x ,<br>
+where op(A) = A, A^T  for TransA = CblasNoTrans, CblasTrans, CblasConjTrans.
+When Uplo is true then the upper triangle of A is used, 
+and when Uplo is false then the lower triangle of A is used. 
+If DiagUnit is false then the diagonal of
+the matrix is used, but if DiagUnit is true then the diagonal elements
+of the matrix A are taken as unity.
+<p>
+<a name="ztrsv!"></a>
+<tt>GSL::Vector_complex#ztrsv!</tt><br>
+<tt>x.ztrsv!(Uplo, TransA, DiagUnit, A) -> x</tt><br>
+GSL::Vector_complex x; GSL::Matrix_complex A<br>
+Mutating version<br>
+This method computes x = inv(op(A)) x ,<br>
+where op(A) = A, A^T  for TransA = true of false.
+When Uplo is true then the upper triangle of A is used,
+and when Uplo is false then the lower triangle of A is used.
+If DiagUnit is false then the diagonal of
+the matrix is used, but if DiagUnit is true then the diagonal elements
+of the matrix A are taken as unity.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'; require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2);				 c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5]);	 cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm1U =  Matrix_complex.new([1,2, 2,3, 3,4],[0,0, 6,7, 7,8],[0,0, 0,0, 7,6])
+cm1U_inv = Matrix_complex.new([1.0/5,-2.0/5, -41.0/425,62.0/425, -8.0/425,16.0/425],
+       [0,0, 6.0/85, -7.0/85,-8.0/85,7.0/85], [0,0, 0,0, 7.0/85, -6.0/85])
+cm1UD =  Matrix_complex.new([1,0, 2,3, 3,4],[0,0, 1,0, 7,8],[0,0, 0,0, 1,0])
+cm1UD_inv = Matrix_complex.new([1,0, -2,-3, -13, 33], [0,0, 1,0, -7,-8],[0,0, 0,0, 1,0])
+assert cm1U * cm1U_inv =~ Matrix_complex::identity(3) &amp;&amp; cm1UD * cm1UD_inv =~ Matrix_complex::identity(3)
+
+cm1L = Matrix_complex.new([1,2, 0,0, 0,0],[5,6, 6,7, 0,0],[9,8, 8,7, 7,6])  
+cm1L_inv = Matrix_complex.new([1.0/5, -2.0/5, 0,0, 0,0],
+ [-74.0/425, 143.0/425, 6.0/85,-7.0/85, 0,0], [-28.0/425,56.0/425, -7.0/85, 8.0/85, 7.0/85,-6.0/85])
+cm1LD = Matrix_complex.new([1,0, 0,0, 0,0],[5,6, 1,0, 0,0],[9,8, 8,7, 1,0])
+cm1LD_inv = Matrix_complex.new([1,0, 0,0, 0,0], [-5,-6, 1,0, 0,0], [-11,75, -8,-7, 1,0])
+assert cm1L * cm1L_inv =~ Matrix_complex::identity(3) &amp;&amp; cm1LD * cm1LD_inv =~ Matrix_complex::identity(3)
+
+puts "x.ztrsv(Uplo, TransA, DiagUnit, A) -&gt; x'"
+assert cm1U_inv.t * cv1 =~  cv1.ztrsv(true, true, false, cm1)
+assert cm1U_inv * cv1 =~  cv1.ztrsv(true, false, false, cm1)
+assert cm1U_inv.h * cv1 =~  cv1.ztrsv(true, nil, false, cm1)
+assert cm1UD_inv.t * cv1 =~ cv1.ztrsv(true, true, true, cm1)
+assert cm1UD_inv * cv1 =~ cv1.ztrsv(true, false, true, cm1)
+assert cm1UD_inv.h * cv1 =~ cv1.ztrsv(true, nil, true, cm1)
+assert cm1L_inv.t * cv1 =~  cv1.ztrsv(false, true, false, cm1)
+assert cm1L_inv * cv1 =~  cv1.ztrsv(false, false, false, cm1)
+assert cm1L_inv.h * cv1 =~  cv1.ztrsv(false, nil, false, cm1)
+assert cm1LD_inv.t * cv1 =~ cv1.ztrsv(false, true, true, cm1)
+assert cm1LD_inv * cv1 =~ cv1.ztrsv(false, false, true, cm1)
+assert cm1LD_inv.h * cv1 =~ cv1.ztrsv(false, nil, true, cm1)
+
+cv1d = cv1.clone;	cv1d.ztrsv!(true, true, false, cm1);	assert cv1d =~ cm1U_inv.t * cv1
+cv1d = cv1.clone; cv1d.ztrsv!(true, false, false, cm1);	assert cv1d =~ cm1U_inv * cv1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<p>
+<a name="zhemv"></a>
+<tt>GSL::Blas#zhemv</tt><br>
+<tt>y.zhemv(Uplo, alpha, A, x, beta) -> y'</tt><br>
+GSL::Matrix_complex A; GSL::Vector_complex y, y'; GSL::Complex alpha, beta<br>
+This function computes the matrix-vector product and sum 
+y = \alpha A x + \beta y for the hermitian matrix A. Since the matrix 
+A is hermitian only its upper half or lower half need to be stored. 
+When Uplo is CblasUpper then the upper triangle and diagonal of A are 
+used, and when Uplo is CblasLower then the lower triangle and diagonal of A 
+are used. The imaginary elements of the diagonal are automatically assumed 
+to be zero and are not referenced.
+<p>
+<a name="zhemv!"></a>
+<tt>GSL::Blas#zhemv!</tt><br>
+<tt>y.zhemv!(Uplo, alpha, A, x, beta) -> y</tt><br>
+Corresponding mutating method.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5])
+cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+
+csm1 = Matrix_complex.new([1,0,  3,4, 5,6],
+                          [3,-4, 6,0, 6,5],
+			  [5,-6, 6,-5,2,0])
+assert csm1.herm == csm1			  
+
+m_U = csm1.upper(true)
+m_L = csm1.lower(true)
+w1 = csm1 * cv1 * c1 + cv2 * c2
+assert cv2.zhemv(true, c1, m_U, cv1, c2) == w1 &amp;&amp; cv2.zhemv(true, c1, csm1, cv1, c2) == w1
+assert cv2.zhemv(false, c1, m_L, cv1, c2) == w1 &amp;&amp; cv2.zhemv(false, c1, csm1, cv1, c2) == w1
+
+cv2d = cv2.clone; cv2d.zhemv!(true, c1, m_U, cv1, c2);	assert cv2d == w1
+cv2d = cv2.clone; cv2d.zhemv!(false, c1, m_L, cv1, c2);    assert cv2d == w1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<p>
+<a name="zgeru"></a>
+<tt>GSL::Blas#zgeru</tt><br>
+<tt>A.zgeru(alpha, x, y) -> A'</tt><br>
+GSL::Matrix_complex A, A'; GSL::Vector_complex x, y<br>
+This function computes the rank-1 update A' = \alpha x y^T + A of the matrix A.
+<br>
+<a name="zgeru!"></a>
+<tt>GSL::Blas#zgeru!</tt><br>
+<tt>A.zgeru!(alpha, x, y) -> A</tt><br>
+Corresponding mutating method.
+<p>
+<a name="zgerc"></a>
+<tt>GSL::Blas#zgerc</tt><br>
+<tt>A.zgerc(alpha, x, y) -> A'</tt><br>
+GSL::Matrix_complex A, A'; GSL::Vector_complex x, y<br>
+This function computes the rank-1 update A' = \alpha x y^H + A of the matrix A.
+<br>
+<a name="zgerc!"></a>
+<tt>GSL::Blas#zgerc!</tt><br>
+<tt>A.zgerc!(alpha, x, y) -> A</tt><br>
+Corresponding mutating method.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2);				 c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5]);	 cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+
+assert cm1.zgeru(c1, cv1, cv2) == cm1 + cv1.outer(cv2) * c1
+assert cm1.zgerc(c1, cv1, cv2) == cm1 + cv1.outerc(cv2) * c1
+
+cm1d = cm1.clone;	cm1d.zgeru!(c1, cv1, cv2);	assert cm1d == cm1 + cv1.outer(cv2) * c1
+cm1d = cm1.clone; cm1d.zgerc!(c1, cv1, cv2);	assert cm1d ==  cm1 + cv1.outerc(cv2) * c1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="zher"></a>
+<tt>GSL::Matrix#zher</tt><br>
+<tt>A.zher(Uplo, alpha, x) -> A'</tt><br>
+GSL::Matrix_complex A, A'; bool Uplo; double alpha; GSL::Vector_complex x<br>
+This method computes the symmetric
+rank-1 update A = \alpha x x^H + A of the hermitian matrix A. Since
+the matrix A is hermitian only its upper half or lower half need to be
+stored. When Uplo is  true then the upper triangle and diagonal
+of A are used, and when Uplo is false then the lower triangle and
+diagonal of A are used.<br>
+<a name="zher!"></a>
+<tt>GSL::Matrix#zher!</tt><br>
+<tt>A.zher!(Uplo, alpha, x) -> A</tt><br>
+Corresponding mutating method.
+<p>
+<a name="zher2"></a>
+<tt>GSL::Blas#zher2</tt><br>
+<tt>A.zher2(Uplo, alpha, x,y) -> A'</tt><br>
+GSL::Matrix_complex A, A'; bool Uplo; GSL::Complex alpha; GSL::Vector_complex x,y<br>
+This method computes the hermitian rank-2 update<br>
+A = \alpha x y^H + \alpha^* y x^H +
+A of the hermitian matrix A. Since the matrix A is hermitian only its
+upper half or lower half need to be stored. When Uplo is true
+then the upper triangle and diagonal of A are used, and when Uplo is
+false then the lower triangle and diagonal of A are used.
+<p>
+<a name="zher2!"></a>
+<tt>GSL::Blas#zher2!</tt><br>
+<tt>A.zher2!(Uplo, alpha, x) -> A</tt><br>
+Corresponding mutating method. 
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2);				c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5]);	cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+
+csm1 = Matrix_complex.new([1,0,  3,4, 5,6],
+                          [3,-4, 6,0, 6,5],
+			  [5,-6, 6,-5,2,0])
+
+alpha = 2			  
+w = cv1.outerc(cv1) * Complex.new2(alpha,0) + csm1
+assert csm1.upper(true).zher(true, alpha, cv1) == w.upper(true)
+assert csm1.lower(true).zher(false, alpha, cv1) == w.lower(true)
+
+c = Complex.new2(alpha,0)
+w2 = cv1.outerc(cv2) * c + cv2.outerc(cv1) * c + csm1
+assert csm1.upper(true).zher2(true, c, cv1, cv2) == w2.upper(true)
+assert csm1.lower(true).zher2(false, c, cv1, cv2) == w2.lower(true)
+
+w2 = cv1.outerc(cv2) * c1 + cv2.outerc(cv1) * c1.conjugate + csm1
+assert csm1.upper(true).zher2(true, c1, cv1, cv2) == w2.upper(true)
+assert csm1.lower(true).zher2(false, c1, cv1, cv2) == w2.lower(true)
+
+csm1d = csm1.upper(true).clone; csm1d.zher!(true, alpha, cv1);	assert csm1d == w.upper(true)
+csm1d = csm1.lower(true).clone; csm1d.zher!(false, alpha, cv1);	assert csm1d == w.lower(true)
+
+csm1d = csm1.upper(true).clone; csm1d.zher2!(true, c1, cv1, cv2);	assert csm1d == w2.upper(true)
+csm1d = csm1.lower(true).clone; csm1d.zher2!(false, c1, cv1, cv2);	assert csm1d == w2.lower(true)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="l3"></a>
+<h3>Level 3</h3>
+<a name="zgemm"></a>
+<tt>GSL::Matrix#zgemm</tt><br>
+<tt>C.zgemm(TransA, TransB, alpha, A, B, beta) -> C'</tt><br>
+GSL::Matrix_complex A, B, C, C'; GSL::Complex alpha, beta<br>
+This method computes the matrix-matrix product and sum<br>
+C' = \alpha op(A) op(B) + \beta C<br>
+where op(A) = A, A^T, A^H for TransA = false, true, nil respectively; 
+similarly for the parameter TransB.
+<p>
+<a name="zgemm!"></a>
+<tt>GSL::Matrix#zgemm!</tt><br>
+<tt>C.zgemm!(TransA, TransB, alpha, A, B, beta) -> C</tt><br>
+Corresponding mutating method.<br>
+This method computes the matrix-matrix product and sum<br>
+C = \alpha op(A) op(B) + \beta C<br>
+where op(A) = A, A^T for TransA = false, true, nil respectively; 
+similarly for the parameter TransB.
+
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'; require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2);				c2 = Complex.new2(2,3)
+cv1 = Vector_complex.new([7,1, 3,2, 4,5]);	cv2 = Vector_complex.new([1,2, 3,1, 5,6])
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+cm3 = Matrix_complex.new([1,4, 2,5, 3,6],[4,1, 5,2, 6,3],[5,1, 4,1, 3,1])
+
+puts "C.zgemm(TransA, TransB, alpha, A, B, beta) -&gt; C'"
+assert cm3.zgemm(true, true, c1, cm1, cm2, c2) == cm1.t * cm2.t * c1 + cm3 * c2 
+assert cm3.zgemm(false, true, c1, cm1, cm2, c2) == cm1 * cm2.t * c1 + cm3 * c2
+assert cm3.zgemm(nil, true, c1, cm1, cm2, c2) == cm1.h * cm2.t * c1 + cm3 * c2
+assert cm3.zgemm(true, false, c1, cm1, cm2, c2) == cm1.t * cm2 * c1 + cm3 * c2
+assert cm3.zgemm(false, false, c1, cm1, cm2, c2) == cm1 * cm2 * c1 + cm3 * c2
+assert cm3.zgemm(nil, false, c1, cm1, cm2, c2) == cm1.h * cm2 * c1 + cm3 * c2
+assert cm3.zgemm(true, nil, c1, cm1, cm2, c2) == cm1.t * cm2.h * c1 + cm3 * c2
+assert cm3.zgemm(false, nil, c1, cm1, cm2, c2) == cm1 * cm2.h * c1 + cm3 * c2
+assert cm3.zgemm(nil, nil, c1, cm1, cm2, c2) == cm1.h * cm2.h * c1 + cm3 * c2
+
+cm3d = cm3.clone; cm3d.zgemm!(true, true, c1, cm1, cm2, c2);
+assert cm3d == cm1.t * cm2.t * c1 + cm3 * c2
+cm3d = cm3.clone; cm3d.zgemm!(false, true, c1, cm1, cm2, c2);
+assert cm3d == cm1 * cm2.t * c1 + cm3 * c2
+cm3d = cm3.clone; cm3d.zgemm!(nil, true, c1, cm1, cm2, c2);
+assert cm3d == cm1.h * cm2.t * c1 + cm3 * c2
+cm3d = cm3.clone; cm3d.zgemm!(true, false, c1, cm1, cm2, c2);
+assert cm3d == cm1.t * cm2 * c1 + cm3 * c2
+cm3d = cm3.clone; cm3d.zgemm!(false, false, c1, cm1, cm2, c2);
+assert cm3d == cm1 * cm2 * c1 + cm3 * c2
+cm3d = cm3.clone; cm3d.zgemm!(nil, false, c1, cm1, cm2, c2);
+assert cm3d == cm1.h * cm2 * c1 + cm3 * c2
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="zsymm"></a>
+<tt>GSL::Blas#zsymm</tt><br>
+<tt>C.zsymm(SideLeft, Uplo, alpha, A, B, beta) -> C'</tt><br>
+This method computes the matrix-matrix product and sum<br>
+C = \alpha A B + \beta C when SideLeft = true<br>
+C = \alpha B A + \beta C when SideLeft = false 
+where the matrix A is symmetric.<br>
+When Uplo = true the upper triangle and diagonal of A are used;
+when Uplo is false the lower triangle and diagonal of A are used.
+<p>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(2,3)
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+csym1 = Matrix_complex.new([1,0, 3,4, 5,6],
+                          [3,4, 6,0, 6,5],
+			  [5,6, 6,5, 2,0])
+assert csym1.t == csym1			  
+
+m_U = csym1.upper(true)
+m_L = csym1.lower(true)
+w1 = csym1 * cm1 * c1 + cm2 * c2
+w2 = cm1 * csym1 * c1 + cm2 * c2
+
+assert cm2.zsymm(true, true, c1, m_U, cm1, c2) == w1
+assert cm2.zsymm(false, true, c1, m_U, cm1, c2) == w2
+assert cm2.zsymm(true, false, c1, m_L, cm1, c2) == w1
+assert cm2.zsymm(false, false, c1, m_L, cm1, c2) == w2
+cm2d = cm2.clone; cm2d.zsymm!(true, true, c1, m_U, cm1, c2); assert cm2d == w1
+cm2d = cm2.clone; cm2d.zsymm!(false, true, c1, m_U, cm1, c2); assert cm2d == w2
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="zhemm"></a>
+<tt>GSL::Blas#zhemm</tt><br>
+<tt>C.zhemm(SideLeft, Uplo, alpha, A, B, beta) -> C'</tt><br>
+This method computes the matrix-matrix product and sum<br>
+C = \alpha A B + \beta C when SideLeft = true<br>
+C = \alpha B A + \beta C when SideLeft = false
+where the matrix A is hermitian.<br>
+When Uplo = true the upper triangle and diagonal of A are used;
+when Uplo is false the lower triangle and diagonal of A are used.
+<p>
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(2,3)
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+csm1 = Matrix_complex.new([1,0,  3,4, 5,6],
+                          [3,-4, 6,0, 6,5],
+			  [5,-6, 6,-5,2,0])
+assert csm1.herm == csm1			  
+m_U = csm1.upper(true)
+m_L = csm1.lower(true)
+w1 = csm1 * cm1 * c1 + cm2 * c2
+w2 = cm1 * csm1 * c1 + cm2 * c2
+
+puts "C.zhemm(SideLeft, Uplo, alpha, A, B, beta) -&gt; C'"
+assert cm2.zhemm(true, true, c1, m_U, cm1, c2) == w1 &amp;&amp; cm2.zhemm(true, true, c1, csm1, cm1, c2) == w1
+assert cm2.zhemm(false, true, c1, m_U, cm1, c2) == w2 &amp;&amp; cm2.zhemm(false, true, c1, csm1, cm1, c2) == w2
+assert cm2.zhemm(true, false, c1, m_L, cm1, c2) == w1 
+assert cm2.zhemm(false, false, c1, m_L, cm1, c2) == w2
+
+cm2d = cm2.clone; cm2d.zhemm!(true, true, c1, m_U, cm1, c2);	assert cm2d == w1
+cm2d = cm2.clone; cm2d.zhemm!(true, false, c1, m_L, cm1, c2);    assert cm2d == w1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="ztrmm"></a>
+<tt>GSL::Blas#ztrmm</tt><br>
+<tt>B.ztrmm(SideLeft, Uplo, TransA, DiagUnit, A) -> B'</tt><br>
+This method computes the matrix-matrix product<br> 
+B = \alpha op(A) B for SideLeft true and<br> 
+B = \alpha B op(A) for SideLeft false. 
+The matrix A is triangular and op(A) = A, A^T,A^Hfor TransA = false, true, nil
+respectively.
+ When Uplo is true then the upper triangle of A is used, and when Uplo is 
+ false then the lower triangle of A is used. 
+ If DiagUnit is false then the diagonal of A is used, but if Diag is true 
+ then the diagonal elements of the matrix A are taken as unity and are 
+ not referenced.
+<a name="ztrmm!"></a>
+<tt>GSL::Blas#ztrmm!</tt><br>
+<tt>B.ztrmm!(SideLeft, Uplo, TransA, DiagUnit, A) -> B'</tt><br>
+ Corresponding mutating method.
+<p>
+<a name="ztrmm!"></a>
+<tt>GSL::Blas#ztrmm!</tt><br>
+<tt>B.ztrmm!(SideLeft, Uplo, TransA, DiagUnit, A) -> B</tt><br>
+Corresponding mutating method.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(2,3)
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+
+m_U = cm1.upper(true)
+m_L = cm1.lower(true)
+m_UD = cm1.upper(false) + Matrix_complex::identity(3)
+m_LD = cm1.lower(false) + Matrix_complex::identity(3)
+
+puts "B.ztrmm(SideLeft, Uplo, TransA, DiagUnit, A) -&gt; B'"
+assert m_U.t * cm2 * c1 == cm2.ztrmm(true, true, true, false, c1, cm1)
+assert m_U * cm2 * c1 == cm2.ztrmm(true, true, false, false, c1, cm1)
+assert m_U.h * cm2 * c1 == cm2.ztrmm(true, true, nil, false, c1, cm1)
+assert m_UD.t * cm2 * c1 == cm2.ztrmm(true, true, true, true, c1, cm1)
+assert m_UD * cm2 * c1 == cm2.ztrmm(true, true, false, true, c1, cm1)
+assert m_UD.h * cm2 * c1 == cm2.ztrmm(true, true, nil, true, c1, cm1)
+assert m_L.t * cm2 * c1 == cm2.ztrmm(true, false, true, false, c1, cm1)
+assert m_L * cm2 * c1 == cm2.ztrmm(true, false, false, false, c1, cm1)
+assert m_L.h * cm2 * c1 == cm2.ztrmm(true, false, nil, false, c1, cm1)
+assert cm2 * m_U.t * c1 == cm2.ztrmm(false, true, true, false, c1, cm1)
+assert cm2 * m_U * c1 == cm2.ztrmm(false, true, false, false, c1, cm1)
+assert cm2 * m_U.h * c1 == cm2.ztrmm(false, true, nil, false, c1, cm1)
+
+cm2d = cm2.clone; cm2d.ztrmm!(true, true, true, false, c1, cm1);	assert cm2d == m_U.t * cm2 * c1
+cm2d = cm2.clone; cm2d.ztrmm!(true, true, false, false, c1, cm1);  assert cm2d == m_U * cm2 * c1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+<a name="ztrsm"></a>
+<tt>GSL::Blas#ztrsm</tt><br>
+<tt>B.ztrsm(SideLeft, Uplo, TransA, DiagUnit, A) -> B'</tt><br>
+This method computes the matrix-matrix product<br> 
+B = \alpha op(inv(A)) B for SideLeft true and<br> 
+B = \alpha B op(inv(A)) for SideLeft false. 
+The matrix A is triangular and op(A) = A, A^T, A^H for TransA = false, true, nil
+respectively.
+ When Uplo is true then the upper triangle of A is used, and when Uplo is 
+ false then the lower triangle of A is used. 
+ If DiagUnit is false then the diagonal of A is used, but if Diag is true 
+ then the diagonal elements of the matrix A are taken as unity and are 
+ not referenced.
+<p>
+<a name="ztrsm!"></a>
+<tt>GSL::Blas#ztrsm!</tt><br>
+<tt>B.ztrsm!(SideLeft, Uplo, TransA, DiagUnit, A) -> B</tt><br>
+Corresponding mutating method.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(2,3)
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+
+m_U = cm1.upper(true)
+m_L = cm1.lower(true)
+m_UD = cm1.upper(false) + Matrix_complex::identity(3)
+m_LD = cm1.lower(false) + Matrix_complex::identity(3)
+m_U_inv = Matrix_complex.new([1.0/5,-2.0/5, -41.0/425,62.0/425, -8.0/425,16.0/425],
+       [0,0, 6.0/85, -7.0/85,-8.0/85,7.0/85], [0,0, 0,0, 7.0/85, -6.0/85])
+       
+m_UD_inv = Matrix_complex.new([1,0, -2,-3, -13, 33], [0,0, 1,0, -7,-8],[0,0, 0,0, 1,0])
+
+m_L_inv = Matrix_complex.new([1.0/5, -2.0/5, 0,0, 0,0],
+ [-74.0/425, 143.0/425, 6.0/85,-7.0/85, 0,0], [-28.0/425,56.0/425, -7.0/85, 8.0/85, 7.0/85,-6.0/85])
+ 
+m_LD_inv = Matrix_complex.new([1,0, 0,0, 0,0], [-5,-6, 1,0, 0,0], [-11,75, -8,-7, 1,0])
+
+puts "B.ztrsm(SideLeft, Uplo, TransA, DiagUnit, A) -&gt; B'"
+assert m_U_inv.t * cm2 * c1 =~ cm2.ztrsm(true, true, true, false, c1, cm1)
+assert m_U_inv * cm2 * c1 =~ cm2.ztrsm(true, true, false, false, c1, cm1)
+assert m_U_inv.h * cm2 * c1 =~ cm2.ztrsm(true, true, nil, false, c1, cm1)
+assert m_UD_inv.t * cm2 * c1 =~ cm2.ztrsm(true, true, true, true, c1, cm1)
+assert m_UD_inv * cm2 * c1 =~ cm2.ztrsm(true, true, false, true, c1, cm1)
+assert m_UD_inv.h * cm2 * c1 =~ cm2.ztrsm(true, true, nil, true, c1, cm1)
+
+assert m_L_inv.t * cm2 * c1 =~ cm2.ztrsm(true, false, true, false, c1, cm1)
+assert m_L_inv * cm2 * c1 =~ cm2.ztrsm(true, false, false, false, c1, cm1)
+assert m_L_inv.h * cm2 * c1 =~ cm2.ztrsm(true, false, nil, false, c1, cm1)
+assert m_LD_inv.t * cm2 * c1 =~ cm2.ztrsm(true, false, true, true, c1, cm1)
+assert m_LD_inv * cm2 * c1 =~ cm2.ztrsm(true, false, false, true, c1, cm1)
+assert m_LD_inv.h * cm2 * c1 =~ cm2.ztrsm(true, false, nil, true, c1, cm1)
+
+assert cm2 * m_L_inv.t * c1 =~ cm2.ztrsm(false, false, true, false, c1, cm1)
+assert cm2 * m_L_inv * c1 =~ cm2.ztrsm(false, false, false, false, c1, cm1)
+assert cm2 * m_L_inv.h * c1 =~ cm2.ztrsm(false, false, nil, false, c1, cm1)
+assert cm2 * m_LD_inv.t * c1 =~ cm2.ztrsm(false, false, true, true, c1, cm1)
+assert cm2 * m_LD_inv * c1 =~ cm2.ztrsm(false, false, false, true, c1, cm1)
+assert cm2 * m_LD_inv.h * c1 =~ cm2.ztrsm(false, false, nil, true, c1, cm1)
+
+cm2d = cm2.clone; cm2d.ztrsm!(true, true, true, false, c1, cm1)
+assert cm2d =~  m_U_inv.t * cm2 * c1
+cm2d = cm2.clone; cm2d.ztrsm!(true, false, false, false, c1, cm1)
+assert cm2d =~ m_L_inv * cm2 * c1
+cm2d = cm2.clone; cm2d.ztrsm!(false, false, nil, false, c1, cm1)
+assert cm2d =~ cm2 * m_L_inv.h * c1
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="zsyr2k"></a>
+<tt>GSL::Blas#zsyr2k</tt><br>
+<tt>C.zsyr2k(Uplo, Trans, alpha, A, B, beta) -> C'</tt><br>
+This method computes<br>
+C' = alpha A^T B + alpha B^T A + beta C when Trans = true and<br>
+C' = alpha A B^T + alpha B A^T + beta C when Trans = false<br>
+where C is a symmetric matrix.
+ When Uplo is true (false) then the upper (lower) triangle of A is used.
+<p>
+<a name="zsyr2k!"></a>
+<tt>GSL::Blas#zsyr2k!</tt><br>
+<tt>C.zsyr2k!(Uplo, Trans, alpha, A, B, beta) -> C</tt><br>
+Corresponding mutating method.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(2,3)
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+csym1 = Matrix_complex.new([1,0, 3,4, 5,6],
+                          [3,4, 6,0, 6,5],
+			  [5,6, 6,5, 2,0])
+assert csym1.t == csym1			  
+
+m_U = csym1.upper(true)
+m_L = csym1.lower(true)
+w1 = cm1.t * cm2 * c1 + cm2.t * cm1 * c1 + csym1 * c2
+w2 = cm1 * cm2.t * c1 + cm2 * cm1.t * c1 + csym1 * c2
+
+puts "C.zsyr2k(Uplo, Trans, alpha, A, B, beta) -&gt; C'"
+assert m_U.zsyr2k(true, true, c1, cm1, cm2, c2) == w1.upper(true)
+assert m_U.zsyr2k(true, false, c1, cm1, cm2, c2) == w2.upper(true)
+assert m_L.zsyr2k(false, true, c1, cm1, cm2, c2) == w1.lower(true)
+assert m_L.zsyr2k(false, false, c1, cm1, cm2, c2) == w2.lower(true)
+
+m_Ud = m_U.clone; m_Ud.zsyr2k!(true, true, c1, cm1, cm2, c2);	assert m_Ud == w1.upper(true)
+m_Ud = m_U.clone; m_Ud.zsyr2k!(true, false, c1, cm1, cm2, c2);     assert m_Ud == w2.upper(true)
+m_Ld = m_L.clone; m_Ld.zsyr2k!(false, true, c1, cm1, cm2, c2);     assert m_Ld == w1.lower(true)
+m_Ld = m_L.clone; m_Ld.zsyr2k!(false, false, c1, cm1, cm2, c2);     assert m_Ld == w2.lower(true)
+
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE><p>
+<a name="zher2k"></a>
+<tt>GSL::Blas#zher2k</tt><br>
+<tt>C.zher2k(Uplo, Trans, alpha, A, B, beta) -> C'</tt><br>
+This method computes<br>
+C' = alpha A^H B + alpha^* B^H A + beta C when Trans = nil and<br>
+C' = alpha A B^H + alpha^* B A^H + beta C when Trans = false<br>
+where C is a hermitian matrix, alpha complex and beta real.<br>
+ When Uplo is true (false) then the upper (lower) triangle of A is used.
+<p>
+<a name="zher2k!"></a>
+<tt>GSL::Blas#zher2k!</tt><br>
+<tt>C.zher2k!(Uplo, Trans, alpha, A, B, beta) -> C</tt><br>
+Corresponding mutating method.
+<TABLE BORDER="0" BGCOLOR="#E0E0E0" WIDTH="100%" ><TR><TD><PRE>&#13;require 'assert'
+require "GSL"; include GSL
+require 'gsl_util'
+require 'gsl_linalg'
+
+eps = 1.0e-15
+beta = 2.4
+c1 = Complex.new2(1,2)
+c2 = Complex.new2(beta,0)
+cm1 = Matrix_complex.new([1,2, 2,3, 3,4],[5,6, 6,7, 7,8],[9,8, 8,7, 7,6])
+cm2 = Matrix_complex.new([5,1, 1,4, 2,6],[1,3, 2,4, 3,5],[6,4, 5,3, 2,1])
+cs1 = Matrix_complex.new([1,0, 3,4, 5,6],
+                          [3,-4, 6,0, 6,5],
+			  [5,-6, 6,-5, 2,0])
+
+assert cs1.h == cs1			  
+m_U = cs1.upper(true)
+m_L = cs1.lower(true)
+w1 = cm1.h * cm2 * c1 + cm2.h * cm1 * c1.conjugate + cs1 * c2
+w2 = cm1 * cm2.h * c1 + cm2 * cm1.h * c1.conjugate + cs1 * c2
+
+puts "C.zher2k(Uplo, Trans, alpha, A, B, beta) -&gt; C'"
+
+assert m_U.zher2k(true, nil, c1, cm1, cm2, beta) =~ [w1.upper(true), 1.0e-14]
+assert m_U.zher2k(true, false, c1, cm1, cm2, beta) == w2.upper(true)
+assert m_L.zher2k(false, nil, c1, cm1, cm2, beta) =~ [w1.lower(true), 1.0e-14]
+assert m_L.zher2k(false, false, c1, cm1, cm2, beta) == w2.lower(true)
+
+m_Ud = m_U.clone; m_Ud.zher2k!(true, nil, c1, cm1, cm2, beta)
+assert m_Ud =~ [w1.upper(true), 1.0e-14]
+m_Ud = m_U.clone; m_Ud.zher2k!(true, false, c1, cm1, cm2, beta)
+assert m_Ud == w2.upper(true)
+m_Ld = m_L.clone; m_Ld.zher2k!(false, nil, c1, cm1, cm2, beta)
+assert m_Ld  =~ [w1.lower(true), 1.0e-14]
+m_Ld = m_L.clone; m_Ld.zher2k!(false, false, c1, cm1, cm2, beta)
+assert m_Ld  == w2.lower(true)
+</PRE></TD></TR></TABLE></DIV></TD></TR></TABLE>
+
+<hr>
+<table width="100%" cellpadding="0" cellspacing="2" border="0"><tbody>
+<tr>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="next" src="next.png"></a></td>
+<td width="20" class="head"><a href="blas.html"><img border="0" alt="up" src="up.png"></a></td>
+<td width="20" class="head"><a href="blas_double.html"><img border="0" alt="previous" src="prev.png"></a></td>
+<td width="100%" class="headcenter">BLAS Support for complex type</td> 
+</tr></tbody></table><hr>
+</body>
+</html>
